@@ -2,33 +2,36 @@ import java.util.*;
 
 public class Stok implements  IBookStok {
     private List<Book> books = new ArrayList<>();
-    private List<BookOrder> request = new ArrayList<>();
-    
+    private List<Request> requests = new ArrayList<>();
+    private  Request toRemove = null;
     
     @Override
     public void addBookToStock(Book book) {
         books.add(book);
         book.setStatusStok();
+             
+        toRemove=null;
         
-        
-        List<BookOrder> toRemove = new ArrayList<>();
-        
-        for (BookOrder order : request) {
-            if (order.getBook().equals(book) && order.getStatus().equals("Новый")) {
-                order.setStatus("Выполнен");
+        for (Request request : requests) {
+            if (request.getBook().equals(book)) {
+                request.ContinueRequest();
                 removeBookFromStock(book);
-                System.out.println("Выдана книга по запросу: " + book.getName());
-                toRemove.add(order); 
+                toRemove = request; 
                 break;
             }
         }
-        
-        request.removeAll(toRemove);
+        if(toRemove != null) {  requests.remove(toRemove);}
+        else {
+            
+        }
     }
     
     @Override
     public void removeBookFromStock(Book book) {
-        book.setStatusNo();
+         books.remove(book);
+         if (!books.contains(book)) {
+             book.setStatusNo();
+         }
     }
     
     @Override
@@ -36,8 +39,9 @@ public class Stok implements  IBookStok {
         BookOrder order = new BookOrder(book);
         
         if (book.getStatus().equals("Отсутствует")) {
-            request.add(order);
-            System.out.println("Создан запрос на книгу: " + book.getName());
+            Request request = new Request(order);
+            requests.add(request);
+           
         } else {
             order.setStatus("Выполнен");
             System.out.println("Выдана книга: " + book.getName());
@@ -48,7 +52,7 @@ public class Stok implements  IBookStok {
     @Override
    public void cancelOrder(BookOrder order) {
         order.setStatus("Отменен");
-        request.remove(order); 
+        requests.removeIf(request -> request.getOrder().equals(order));
     }
     
 }

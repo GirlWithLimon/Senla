@@ -1,4 +1,4 @@
-class bye{
+class Bye{
     public static void main(String[] args) {
         Flower whiteRose = new WhiteRose();
         Flower redRose = new RedRose();
