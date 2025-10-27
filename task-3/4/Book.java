@@ -1,6 +1,6 @@
 public class Book{
-    private String name;
-    private String author;
+    private final String name;
+    private final String author;
     private Boolean status;
 
     public Book(String name, String author) {

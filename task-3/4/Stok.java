@@ -1,15 +1,16 @@
 import java.util.*;
 
-public class Stok {
+public class Stok implements  IBookStok {
     private List<Book> books = new ArrayList<>();
     private List<BookOrder> request = new ArrayList<>();
     
-    // Добавить книгу на склад
+    
+    @Override
     public void addBookToStock(Book book) {
         books.add(book);
         book.setStatusStok();
         
-        // Временный список для удаления
+        
         List<BookOrder> toRemove = new ArrayList<>();
         
         for (BookOrder order : request) {
@@ -17,20 +18,20 @@ public class Stok {
                 order.setStatus("Выполнен");
                 removeBookFromStock(book);
                 System.out.println("Выдана книга по запросу: " + book.getName());
-                toRemove.add(order); // Помечаем для удаления
+                toRemove.add(order); 
                 break;
             }
         }
         
-        // Удаляем выполненные заказы
         request.removeAll(toRemove);
     }
     
-    // Остальные методы без изменений
+    @Override
     public void removeBookFromStock(Book book) {
         book.setStatusNo();
     }
     
+    @Override
     public void createOrder(Book book) {
         BookOrder order = new BookOrder(book);
         
@@ -44,17 +45,10 @@ public class Stok {
         }
     }
     
+    @Override
    public void cancelOrder(BookOrder order) {
         order.setStatus("Отменен");
-        request.remove(order); // Важно: удаляем из списка запросов
+        request.remove(order); 
     }
     
-    public Integer countRequest(Book book){
-        int count = 0;
-        for(BookOrder order : request){
-            if(order.getBook().equals(book)) count++;
-        }
-        System.out.println("Количество запросов на книгу: " + count);
-        return count;
-    }
 }

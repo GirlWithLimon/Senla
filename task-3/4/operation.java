@@ -1,27 +1,19 @@
-public class operation {
+public class Operation {
     public static void main(String[] args) {
-        Stok shop = new Stok();
+        IBookStok shop = new Stok();
         
-        // Создаем книги
-        Book book1 = new Book("Война и мир", "Толстой");
-        Book book2 = new Book("Преступление и наказание", "Достоевский");
-        
-        // Добавляем на склад
+        Book book1 = new Book("Война и мир", "Л.Н.Толстой");
+        Book book2 = new Book("Мастер и Маргарита", "М.А.Булгаков");
         shop.addBookToStock(book1);
         shop.addBookToStock(book2);
         
-        // Создаем заказ
         shop.createOrder(book1);
-        
-        // Списываем книгу
-        shop.removeBookFromStock(book1);
-       
-
-        // Пытаемся заказать отсутствующую книгу
-        shop.createOrder(book1); // Должен создать запрос
+               
+        shop.createOrder(book1); 
          shop.createOrder(book1);
           shop.createOrder(book1);
          shop.addBookToStock(book1);
-         shop.countRequest(book1);
+         shop.removeBookFromStock(book2);
+         shop.createOrder(book2);
     }
 }

@@ -1,5 +1,5 @@
 public class BookOrder {
-    private Book book;
+    private final Book book;
     private String status; 
     
     public BookOrder(Book book) {
