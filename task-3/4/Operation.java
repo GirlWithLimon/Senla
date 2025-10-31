@@ -14,6 +14,6 @@ public class Operation {
         shop.createOrder(book1);
         shop.addBookToStock(book1);
         shop.removeBookFromStock(book2);
-        shop.createOrder(book2);
+        shop.createOrder(book2); 
     }
 }
