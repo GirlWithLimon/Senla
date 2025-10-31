@@ -1,7 +1,7 @@
 import java.util.*;
 import java.time.LocalDate;
 
-public class Stok implements  IBookStok {
+public class Stok implements  IBookStok, StokOperation {
     private List<BookAtStok> books = new ArrayList<>();
     private List<Request> requests = new ArrayList<>();
     private  Request toRemove = null;

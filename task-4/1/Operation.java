@@ -4,4 +4,4 @@ public  class Operation{
     void addBookToStock(Book book, LocalDate date){
         stokOperation.addBookToStock(book, date);
     }
-} 
+}  
