@@ -2,16 +2,15 @@ import java.util.*;
 import java.time.LocalDate;
 
 public class Stok implements  IBookStok, StokOperation {
-    private List<BookAtStok> books = new ArrayList<>();
+    private List<BookCopy> books = new ArrayList<>();
     private List<Request> requests = new ArrayList<>();
     private  Request toRemove = null;
     
     //добавление книги в хранилище и проверка, что нет заявок на эту книгу, иначе книгу сразу отправить по заявке
     @Override
     public void addBookToStock(Book book, LocalDate date) {
-        BookAtStok newBook = new BookAtStok(book, date);
+        BookCopy newBook = new BookCopy(book, date);
         books.add(newBook);
-        newBook.setStatusStok();
              
         toRemove=null;
         
@@ -30,17 +29,17 @@ public class Stok implements  IBookStok, StokOperation {
     }
     
     @Override
-    public void removeBookFromStock(BookAtStok book) {
+    public void removeBookFromStock(BookCopy book) {
          books.remove(book);
          if (!books.contains(book)) {
-             book.setStatusNo();
+             book.getBook().setStatusNo();
          }
     }
     
     @Override
     public void createOrder(Book book) {
         
-        BookAtStok availableInstance = findBook(book);
+        BookCopy availableInstance = findBook(book);
         BookOrder order = new BookOrder(book);
         if (availableInstance != null) {
             

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 public class Book{
     private final String name;
     private final String author;
+    private Boolean status;
     private  double price;
     private final LocalDate publicationDate;
 
@@ -21,6 +22,21 @@ public class Book{
     public String getName() {
         return name;
     }
+    public String getStatus() {
+        if(status) return  "В наличии";
+        else return "Отсутствует";
+    }
+    public Boolean getBoolStatus() {
+        return  this.status;
+    }
+    public void setStatusStok(){
+        this.status = true;
+        System.out.println("Добавлена на склад книга: " + this);
+    }
+    public void setStatusNo(){
+        this.status = false;
+    }
+
     public void setPrice(Double price) {
        this.price = price;
     }
