@@ -1,19 +1,20 @@
-
 import java.time.LocalDate;
 
-public class Book{
+public class Book {
     private final String name;
     private final String author;
-    private Boolean status;
-    private  double price;
+    private BookStatus status;
+    private double price;
     private final LocalDate publicationDate;
     private String information;
+    
     public Book(String name, String author, Double price, LocalDate date) {
         this.name = name;
         this.author = author;
         this.price = price;
-        this.information = "Автор: "+ author+". Название книги: "+name;
+        this.information = "Автор: " + author + ". Название книги: " + name;
         this.publicationDate = date;
+        this.status = BookStatus.OUT_OF_STOCK;
     }
 
     public Book(String name, String author, Double price, String information, LocalDate date) {
@@ -22,6 +23,7 @@ public class Book{
         this.price = price;
         this.information = information;
         this.publicationDate = date;
+        this.status = BookStatus.OUT_OF_STOCK;
     }
     
     public String getAuthor() {
@@ -31,39 +33,46 @@ public class Book{
     public String getName() {
         return name;
     }
-    public String getStatus() {
-        if(status) return  "В наличии";
-        else return "Отсутствует";
+    
+    public BookStatus getStatus() {
+        return status;
     }
+    
     public Boolean getBoolStatus() {
-        return  this.status;
+        return status == BookStatus.IN_STOCK;
     }
-    public void setStatusStok(){
-        this.status = true;
+    
+    public void setStatusStok() {
+        this.status = BookStatus.IN_STOCK;
         System.out.println("Добавлена на склад книга: " + this);
     }
-    public void setStatusNo(){
-        this.status = false;
+    
+    public void setStatusNo() {
+        this.status = BookStatus.OUT_OF_STOCK;
     }
 
     public void setPrice(Double price) {
-       this.price = price;
+        this.price = price;
     }
 
     public Double getPrice() {
         return price;
     }
+    
     public String getInfo() {
         return information;
     }
-    public void  setInfo(String info) {
-       this.information = info;
+    
+    public void setInfo(String info) {
+        this.information = info;
     }
+    
     public LocalDate getPublicationDate() {
         return publicationDate;
     }
+    
     @Override
-    public String toString(){
+    public String toString() {
         return this.name;
     }
 }

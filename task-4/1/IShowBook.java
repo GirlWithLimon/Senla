@@ -1,8 +1,12 @@
+import java.util.List;
 
-public interface IShowBook{
-   public void SortByABC();
-   public void SortByPublicationDate();
-   public void SortByPrice();
-   public void SortByNumberCopies();
-   public String showBookInformation(Book book);
+public interface IShowBook {
+    void sortByABC();
+    void sortByPublicationDate();
+    void sortByPrice();
+    void sortByNumberCopies();
+    String showBookInformation(Book book);
+    void showOldBooks();
+    List<BookCopy> getOldBooksSortedByDate();
+    List<BookCopy> getOldBooksSortedByPrice();
 }

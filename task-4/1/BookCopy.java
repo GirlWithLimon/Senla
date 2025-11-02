@@ -1,16 +1,17 @@
 import java.time.LocalDate;
-public  class BookCopy {//экземпляр книги, которая отправляется на склад
-    
+
+public class BookCopy {
     private final Book book;
     private final LocalDate arrivalDate;
 
     public BookCopy(Book book, LocalDate date) {
-         this.book = book;
-         this.arrivalDate = date;
-         this.book.setStatusStok();
+        this.book = book;
+        this.arrivalDate = date;
+        this.book.setStatusStok();
     }
-     public Book getBook() {
-        return  this.book;
+    
+    public Book getBook() {
+        return this.book;
     }
     
     public LocalDate getArrivalDate() {
@@ -18,8 +19,7 @@ public  class BookCopy {//экземпляр книги, которая отпр
     }
     
     @Override
-    public String toString(){
+    public String toString() {
         return this.book.getName();
     }
-    
 }
