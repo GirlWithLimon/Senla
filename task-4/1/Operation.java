@@ -1,7 +1,16 @@
 import java.time.LocalDate;
 public  class Operation{
-    StokOperation stokOperation = new  Stok();
+    IBookStok bookStok = new  Stok(); //операции добавления и удаления книг на складе
+    IShowBook bookShow = new  Stok(); //операции демонстрации информации о книгах
+    IOrderOperation order = new Stok(); //операции с запросами и заявками
+
     void addBookToStock(Book book, LocalDate date){
-        stokOperation.addBookToStock(book, date);
+        bookStok.addBookToStock(book, date);
+    }
+    void removeBookFromStock(BookCopy bookCopy){
+        bookStok.removeBookFromStock(bookCopy);
+    }
+    String showBookInformation(Book book){
+       return bookShow.showBookInformation(book);
     }
 }  

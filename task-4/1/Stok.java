@@ -1,9 +1,10 @@
 import java.util.*;
 import java.time.LocalDate;
 
-public class Stok implements  IBookStok, StokOperation {
+public class Stok implements  IShowBook, IOrderOperation, IBookStok {
     private List<BookCopy> books = new ArrayList<>();
     private List<Request> requests = new ArrayList<>();
+     private List<BookOrder> orders = new ArrayList<>();
     private  Request toRemove = null;
     
     //добавление книги в хранилище и проверка, что нет заявок на эту книгу, иначе книгу сразу отправить по заявке
@@ -38,14 +39,17 @@ public class Stok implements  IBookStok, StokOperation {
     
     @Override
     public void createOrder(Book book) {
-        
-        BookCopy availableInstance = findBook(book);
+        BookCopy bookCopy = findBook(book);
         BookOrder order = new BookOrder(book);
-        if (availableInstance != null) {
-            
-            availableInstance.setStatusNo();
+        orders.add(order);
+        if (bookCopy != null) {
+            order.setBookCopy(bookCopy);
             order.setStatus("Выполнен");
-            System.out.println("Продан экземпляр книги: " + availableInstance);
+            System.out.println("Продан экземпляр книги: " + bookCopy);
+            books.remove(bookCopy);
+            if(findBook(book)==null){
+                book.setStatusNo();
+            }
         } else {
             // Нет в наличии - создаем запрос
             Request request = new Request(order);
@@ -55,18 +59,46 @@ public class Stok implements  IBookStok, StokOperation {
         }
       
     }
-      private BookAtStok findBook(Book book) {
-        for (BookAtStok bookAtStok : books) {
-            if (bookAtStok.getBook().equals(book) && bookAtStok.getBoolStatus()) {
-                return bookAtStok;
-            }
+    private BookCopy findBook(Book book) {
+    if(!book.getBoolStatus()) return null;
+    for (BookCopy bookCopy : books) {
+        if (bookCopy.getBook().equals(book)) {
+            return bookCopy;
         }
-        return null;
+    }
+    return null;
     }
     @Override
-   public void cancelOrder(BookOrder order) {
-        order.setStatus("Отменен");
-        requests.removeIf(request -> request.getOrder().equals(order));
+    public void cancelOrder(BookOrder order) {
+            orders.remove(order);
+            order.setStatus("Отменен");
+            books.add(order.getBookCopy());
+            order.setBookCopy(null);
+            order.getBook().setStatusStok();
+            requests.removeIf(request -> request.getOrder().equals(order));
     }
     
+    //функции для просмотра списка книг с разными видами сортировки
+    @Override
+    public void SortByABC(){}
+    @Override
+    public void SortByPublicationDate(){}
+    @Override
+    public void SortByPrice(){}
+    @Override
+    public void SortByNumberCopies(){}
+
+    @Override
+    public String showBookInformation(Book book){
+       return book.getInfo();
+    }
+
+
+    //функции для просмотра списка заказов с разными видами сортировки
+    @Override
+    public void showOrdersByDate(){}
+    @Override
+    public void showOrdersByPrice(){}
+    @Override
+    public void showOrdersByStatus(){}
 }

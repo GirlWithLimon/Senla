@@ -7,11 +7,20 @@ public class Book{
     private Boolean status;
     private  double price;
     private final LocalDate publicationDate;
-
+    private String information;
     public Book(String name, String author, Double price, LocalDate date) {
         this.name = name;
         this.author = author;
         this.price = price;
+        this.information = "Автор: "+ author+". Название книги: "+name;
+        this.publicationDate = date;
+    }
+
+    public Book(String name, String author, Double price, String information, LocalDate date) {
+        this.name = name;
+        this.author = author;
+        this.price = price;
+        this.information = information;
         this.publicationDate = date;
     }
     
@@ -43,6 +52,12 @@ public class Book{
 
     public Double getPrice() {
         return price;
+    }
+    public String getInfo() {
+        return information;
+    }
+    public void  setInfo(String info) {
+       this.information = info;
     }
     public LocalDate getPublicationDate() {
         return publicationDate;

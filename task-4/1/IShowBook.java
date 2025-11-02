@@ -4,4 +4,5 @@ public interface IShowBook{
    public void SortByPublicationDate();
    public void SortByPrice();
    public void SortByNumberCopies();
+   public String showBookInformation(Book book);
 }
