@@ -1,8 +1,6 @@
 import java.time.LocalDate;
 
-public interface IBookStok{
+public interface IBookStok {
     void addBookToStock(Book book, LocalDate date);
-    void createOrder(Book book);
-    void cancelOrder(BookOrder order);
-    void removeBookFromStock(BookAtStok book);
+    void removeBookFromStock(BookCopy book);
 }

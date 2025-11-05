@@ -1,19 +1,21 @@
-public class Request{
-    private final BookOrder order;
-
-    public Request(BookOrder order) {
-        this.order = order;
-         System.out.println("Создан запрос на книгу: " +  this.getBook().getName());
-    }
-    public Book getBook(){
-        return order.getBook();
-    }
-    public BookOrder getOrder(){
-        return order;
-    }
-    public void ContinueRequest(){
-        order.setStatus("Выполнен");
-        System.out.println("Выдана книга по запросу: " + this.getBook().getName());
+public class Request {
+    private final BookOrderItem orderItem;
+    
+    public Request(BookOrderItem orderItem) {
+        this.orderItem = orderItem;
     }
     
+    public Book getBook() {
+        return orderItem.getBook();
+    }
+    
+    public BookOrderItem getOrderItem() {
+        return orderItem;
+    }
+    
+    public void ContinueRequest(BookCopy bookCopy) {
+        orderItem.setBookCopy(bookCopy);
+        orderItem.setStatus(OrderItemStatus.COMPLETED);
+        System.out.println("Выдана книга по запросу: " + this.getBook().getName());
+    }
 }
