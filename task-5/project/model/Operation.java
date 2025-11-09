@@ -3,9 +3,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class Operation {
-    private IBookStok bookStok;
-    private IShowBook bookShow;
-    private IOrderOperation orderOperation;
+    private final IBookStok bookStok;
+    private final IShowBook bookShow;
+    private final IOrderOperation orderOperation;
     
     public Operation(IBookStok bookStok, IShowBook bookShow, IOrderOperation orderOperation) {
         this.bookStok = bookStok;
