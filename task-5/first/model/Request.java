@@ -17,6 +17,5 @@ public class Request {
     public void ContinueRequest(BookCopy bookCopy) {
         orderItem.setBookCopy(bookCopy);
         orderItem.setStatus(OrderItemStatus.COMPLETED);
-        System.out.println("Выдана книга по запросу: " + this.getBook().getName());
     }
 }

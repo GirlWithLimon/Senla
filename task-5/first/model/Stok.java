@@ -71,7 +71,7 @@ public class Stok implements IShowBook, IOrderOperation, IBookStok {
     
     private int countBookCopies(Book book) {
         return (int) booksCopy.stream()
-                .filter(copy -> copy.getBook().equals(book))
+                .filter(copy -> copy.getBook().getName().equals(book.getName())&&copy.getBook().getAuthor().equals(book.getAuthor()))
                 .count();
     }
     

@@ -45,7 +45,6 @@ public class Book {
     
     public void setStatusStok() {
         this.status = BookStatus.IN_STOCK;
-        System.out.println("Добавлена на склад книга: " + this);
     }
     
     public void setStatusNo() {
