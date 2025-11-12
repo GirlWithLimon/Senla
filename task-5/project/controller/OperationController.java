@@ -2,32 +2,35 @@ package project.controller;
 
 import project.model.*;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class OperationController {
-    private final Operation operation;
     private final Stok stok;
+    private final IBookStok bookInStok;
+    private final IShowBook showBook;
+    private final IShowOrdersAndRequests showOrdersAndRequests;
+    private final IOrderOperation orderOperation;
 
     public OperationController() {
         this.stok = new Stok();
-        this.operation = new Operation(stok, stok, stok);
+        this.showBook = new ShowBook(stok);
+        this.showOrdersAndRequests = new ShowOrdersAndRequests(stok);
+        this.bookInStok = stok;
+        this.orderOperation = stok;
     }
     
     // тестовыt данные
     public void initializeTestData() {
-        Book book1 = new Book("Война и мир", "Л.Н.Толстой", 250.0, LocalDate.of(2014, 10, 24));
-        Book book2 = new Book("Мастер и Маргарита", "М.А.Булгаков", 260.0, LocalDate.of(2014, 10, 24));
-        Book book3 = new Book("Преступление и наказание", "Ф.М.Достоевский", 200.0, LocalDate.of(2015, 5, 10));
-        Book book4 = new Book("1984", "Дж.Оруэлл", 300.0, LocalDate.of(2019, 1, 15));
+         Book book1 = addBookToStock("Война и мир", "Л.Н.Толстой", 250.0, LocalDate.of(2014, 10, 24), LocalDate.now());
+        Book book2 = addBookToStock("Мастер и Маргарита", "М.А.Булгаков", 260.0, LocalDate.of(2014, 10, 24), LocalDate.now().minusMonths(1));
+        Book book3 = addBookToStock("Преступление и наказание", "Ф.М.Достоевский", 200.0, LocalDate.of(2015, 5, 10), LocalDate.now().minusYears(1));
+        Book book4 =  addBookToStock("1984", "Дж.Оруэлл", 300.0, LocalDate.of(2019, 1, 15), LocalDate.now().minusMonths(5));
         
-        Book book5 = new Book("Старая книга", "Автор", 150.0, LocalDate.of(2020, 1, 1));
-        addBookToStock(book5, LocalDate.now().minusMonths(8));
+        Book book5 = addBookToStock("Старая книга", "Автор", 150.0, LocalDate.of(2020, 1, 1), LocalDate.now().minusMonths(24));
         
-        addBookToStock(book1, LocalDate.now().minusMonths(3));
-        addBookToStock(book2, LocalDate.now().minusMonths(7));
-        addBookToStock(book1, LocalDate.now().minusMonths(1));
-        addBookToStock(book3, LocalDate.now().minusMonths(2));
-        addBookToStock(book4, LocalDate.now().minusMonths(1));
         
         List<Book> order1Books = List.of(book1, book2);
         createOrder(order1Books, "Иван Иванов", "ivan@mail.com");
@@ -38,99 +41,141 @@ public class OperationController {
         System.out.println("Тестовые данные инициализированы!");
     }
         
-    public void addBookToStock(Book book, LocalDate date) {
-        operation.addBookToStock(book, date);
+    public Book addBookToStock(String name, String author, Double price, LocalDate datePublication, LocalDate date) {
+        Book book = new Book(name, author, price, datePublication);
+        bookInStok.addBookToStock(book, date);
+        return book;
     }
     
     public void removeBookFromStock(BookCopy bookCopy) {
-        operation.removeBookFromStock(bookCopy);
+        bookInStok.removeBookFromStock(bookCopy);
     }
-    
+    public List<Book> getBooks(){
+        return  showBook.sortABCBook();
+    }
+    public void showsortABCBook() {
+        showBook.showAllBook();
+    }
+
     public String showBookInformation(Book book) {
-        return operation.showBookInformation(book);
+        return bookInStok.showBookInformation(book);
     }
     
+    public void checkOrderDate(String booksInput, String customerName, String customerContact){
+        List<Book> selectedBooks = Arrays.stream(booksInput.split(","))
+                .map(String::trim)
+                .map(indexStr -> {
+                    try {
+                        int index = Integer.parseInt(indexStr);
+                        return index > 0 && index <= showBook.sortABCBook().size() ? showBook.sortABCBook().get(index - 1) : null;
+                    } catch (NumberFormatException e) {
+                        System.out.println("Некорректный номер: " + indexStr);
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        if (!selectedBooks.isEmpty()) {
+                BookOrder order = createOrder(selectedBooks, customerName, customerContact);
+                System.out.println("Заказ создан! ID: " + order.getOrderId());
+        } else {
+            System.out.println("Не выбрано ни одной книги!");
+        }
+    }
+
+    public  List<BookOrder> getOrder(){
+        return showOrdersAndRequests.sortOrderByDate();
+    }
+
     public BookOrder createOrder(List<Book> books, String customerName, String customerContact) {
-        return operation.createOrder(books, customerName, customerContact);
+        return orderOperation.createOrder(books, customerName, customerContact);
     }
     
     public void cancelOrder(BookOrder order) {
-        operation.cancelOrder(order);
+        orderOperation.cancelOrder(order);
     }
     
     public void cancelOrderItem(BookOrder order, Book book) {
-        operation.cancelOrderItem(order, book);
+        orderOperation.cancelOrderItem(order, book);
     }
     
     public void showBooksByABC() {
-        operation.showBooksByABC();
+        showBook.sortByABC();
     }
     
     public void showBooksByPublicationDate() {
-        operation.showBooksByPublicationDate();
+        showBook.sortByPublicationDate();
     }
     
     public void showBooksByPrice() {
-        operation.showBooksByPrice();
+        showBook.sortByPrice();
     }
     
     public void showBooksByNumberCopies() {
-        operation.showBooksByNumberCopies();
-    }
-    
-    public void showOldBooks() {
-        operation.showOldBooks();
-    }
-
-    public void showRequestsByCount() {
-        operation.showRequestsByCount();
-    }
-    
-    public void showRequestsByAlphabet() {
-        operation.showRequestsByAlphabet();
-    }
-    
-    public void showOrderDetails(BookOrder order) {
-        operation.showOrderDetails(order);
-    }
-    
-    public void showOrdersByDate() {
-        operation.showOrdersByDate();
-    }
-    
-    public void showOrdersByPrice() {
-        operation.showOrdersByPrice();
-    }
-    
-    public void showOrdersByStatus() {
-        operation.showOrdersByStatus();
-    }
-    
-    public void showCompletedOrdersByPeriod(LocalDate start, LocalDate end) {
-       operation.showCompletedOrdersByPeriod(start, end);
-    }
-    
-    public void showEarnedMoneyByPeriod(LocalDate start, LocalDate end) {
-       operation.showEarnedMoneyByPeriod(start, end);
-    }
-    
-    public void showCompletedOrdersCountByPeriod(LocalDate start, LocalDate end) {
-       operation.showCompletedOrdersCountByPeriod(start, end);
+        showBook.sortByNumberCopies();
     }
     
     public void showOldBooksSortedByDate() {
-        operation.showOldBooksSortedByDate();
+        List<BookCopy> oldBooks = showBook.getOldBooksSortedByDate();
+        System.out.println("Залежавшиеся книги по дате поступления:");
+        oldBooks.forEach(copy -> 
+            System.out.println(" - " + copy.getBook() + " | Поступление: " + 
+                             copy.getArrivalDate() + " | Цена: " + 
+                             copy.getBook().getPrice() + " руб."));
     }
     
     public void showOldBooksSortedByPrice() {
-        operation.showOldBooksSortedByPrice();
+        List<BookCopy> oldBooks = showBook.getOldBooksSortedByPrice();
+        System.out.println("Залежавшиеся книги по цене:");
+        oldBooks.forEach(copy -> 
+            System.out.println(" - " + copy.getBook() + " | Цена: " + 
+                             copy.getBook().getPrice() + " руб. | Поступление: " + 
+                             copy.getArrivalDate()));
+    }
+
+    public void showRequestsByCount() {
+        showOrdersAndRequests.showRequestsByCount();
     }
     
-    public List<Book> getAllBooks() {
-        return stok.getBooks();
+    public void showRequestsByAlphabet() {
+        showOrdersAndRequests.showRequestsByAlphabet();
     }
     
-    public List<BookOrder> getAllOrders() {
-        return stok.getOrders();
+    public void showOrderDetails(BookOrder order) {
+        showOrdersAndRequests.showOrderDetails(order);
     }
+    
+    public void showOrdersByDate() {
+        showOrdersAndRequests.showOrdersByDate();
+    }
+    
+    public void showOrdersByPrice() {
+        showOrdersAndRequests.showOrdersByPrice();
+    }
+    
+    public void showOrdersByStatus() {
+        showOrdersAndRequests.showOrdersByStatus();
+    }
+    
+   
+    public void showCompletedOrdersByPeriod(LocalDate start, LocalDate end) {
+        List<BookOrder> completedOrders = showOrdersAndRequests.getCompletedOrdersByPeriod(start, end);
+        System.out.println("Выполненные заказы за период " + start + " - " + end + ":");
+        completedOrders.forEach(order -> 
+            System.out.println(" - " + order.getOrderId() + " | " + 
+                             order.getOrderDate() + " | " + order.getTotalPrice() + " руб."));
+    }
+    
+    public void showEarnedMoneyByPeriod(LocalDate start, LocalDate end) {
+        double earned = showOrdersAndRequests.getEarnedMoneyByPeriod(start, end);
+        System.out.println("Заработанные средства за период " + start + " - " + end + 
+                          ": " + earned + " руб.");
+    }
+    
+    public void showCompletedOrdersCountByPeriod(LocalDate start, LocalDate end) {
+        int count = showOrdersAndRequests.getCompletedOrdersCountByPeriod(start, end);
+        System.out.println("Количество выполненных заказов за период " + start + " - " + 
+                          end + ": " + count);
+    }  
+    
 }

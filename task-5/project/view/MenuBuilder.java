@@ -1,10 +1,9 @@
 package project.view;
 
 import project.controller.OperationController;
-import project.model.*;
+
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public final class MenuBuilder {
     private static MenuBuilder instance;
@@ -52,44 +51,40 @@ public final class MenuBuilder {
             System.out.print("Цена: ");
             double price = scanner.nextDouble();
             scanner.nextLine();
-            
-            Book book = new Book(name, author, price, LocalDate.now());
-            controller.addBookToStock(book, LocalDate.now());
+            boolean dateParsing=false;
+            LocalDate datePublication = LocalDate.now();
+            while (!dateParsing) { 
+                System.out.print("Дата публикации (гггг-мм-дд): "); // ← ДОБАВИТЬ ЭТУ СТРОКУ
+                String dateString = scanner.nextLine();
+                try {
+                    datePublication = LocalDate.parse(dateString);
+                    dateParsing = true;
+                } catch (Exception e) {
+                    System.out.println("Ошибка формата даты! Используйте гггг-мм-дд");
+                }
+            }
+            controller.addBookToStock(name, author, price, datePublication, LocalDate.now());
             System.out.println("Книга добавлена на склад!");
         }));
         
         menu.addMenuItem(new MenuItem("Показать информацию о книге", () -> {
             System.out.println("\n=== Информация о книге ===");
-            List<Book> allBooks = controller.getAllBooks();
-            if (allBooks.isEmpty()) {
-                System.out.println("В каталоге нет книг!");
-                return;
-            }
-            
+                       
             System.out.println("Доступные книги:");
-            for (int i = 0; i < allBooks.size(); i++) {
-                Book book = allBooks.get(i);
-                System.out.println((i + 1) + ". " + book.getName() + " - " + book.getAuthor());
-            }
+            controller.showBooksByABC();
             
             System.out.print("Выберите номер книги: ");
             int choice = scanner.nextInt();
             scanner.nextLine();
             
-            if (choice > 0 && choice <= allBooks.size()) {
-                Book selectedBook = allBooks.get(choice - 1);
-                String info = controller.showBookInformation(selectedBook);
+            if (choice > 0 && choice <= controller.getBooks().size()) {
+                String info = controller.showBookInformation(controller.getBooks().get(choice-1));
                 System.out.println("Информация о книге: " + info);
             } else {
                 System.out.println("Неверный выбор!");
             }
         }));
-        
-        menu.addMenuItem(new MenuItem("Показать залежавшиеся книги", () -> {
-            System.out.println("\n=== Залежавшиеся книги ===");
-            controller.showOldBooks();
-        }));
-        
+                 
         return menu;
     }
     
@@ -103,66 +98,23 @@ public final class MenuBuilder {
             System.out.print("Контактные данные: ");
             String customerContact = scanner.nextLine();
             
-            List<Book> allBooks = controller.getAllBooks();
-            if (allBooks.isEmpty()) {
-                System.out.println("В каталоге нет книг для заказа!");
-                return;
-            }
-            
-            System.out.println("Доступные книги:");
-            for (int i = 0; i < allBooks.size(); i++) {
-                Book book = allBooks.get(i);
-                System.out.println((i + 1) + ". " + book.getName() + " - " + book.getAuthor() + " - " + book.getPrice() + " руб.");
-            }
-            
+            controller.showsortABCBook();
             System.out.print("Выберите номера книг через запятую: ");
             String booksInput = scanner.nextLine();
             
-            List<Book> selectedBooks = Arrays.stream(booksInput.split(","))
-                .map(String::trim)
-                .map(indexStr -> {
-                    try {
-                        int index = Integer.parseInt(indexStr);
-                        return index > 0 && index <= allBooks.size() ? allBooks.get(index - 1) : null;
-                    } catch (NumberFormatException e) {
-                        System.out.println("Некорректный номер: " + indexStr);
-                        return null;
-                    }
-                })
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
-            
-            if (!selectedBooks.isEmpty()) {
-                BookOrder order = controller.createOrder(selectedBooks, customerName, customerContact);
-                System.out.println("Заказ создан! ID: " + order.getOrderId());
-            } else {
-                System.out.println("Не выбрано ни одной книги!");
-            }
+            controller.checkOrderDate(booksInput, customerName, customerContact);            
         }));
         
         menu.addMenuItem(new MenuItem("Отменить заказ", () -> {
             System.out.println("\n=== Отмена заказа ===");
-            List<BookOrder> allOrders = controller.getAllOrders();
-            if (allOrders.isEmpty()) {
-                System.out.println("Нет активных заказов!");
-                return;
-            }
-            
-            System.out.println("Активные заказы:");
-            for (int i = 0; i < allOrders.size(); i++) {
-                BookOrder order = allOrders.get(i);
-                System.out.println((i + 1) + ". ID: " + order.getOrderId() + 
-                                 " | Клиент: " + order.getCustomerName() + 
-                                 " | Статус: " + order.getStatus());
-            }
+            controller.showOrdersByDate();
             
             System.out.print("Выберите номер заказа для отмены: ");
             int choice = scanner.nextInt();
             scanner.nextLine();
             
-            if (choice > 0 && choice <= allOrders.size()) {
-                BookOrder selectedOrder = allOrders.get(choice - 1);
-                controller.cancelOrder(selectedOrder);
+            if (choice > 0 && choice <= controller.getOrder().size()) {
+                controller.cancelOrder(controller.getOrder().get(choice - 1));
                 System.out.println("Заказ отменен!");
             } else {
                 System.out.println("Неверный выбор!");
@@ -176,26 +128,23 @@ public final class MenuBuilder {
         
         menu.addMenuItem(new MenuItem("Детали заказа", () -> {
             System.out.println("\n=== Детали заказа ===");
-            List<BookOrder> allOrders = controller.getAllOrders();
-            if (allOrders.isEmpty()) {
+            if (controller.getOrder().isEmpty()) {
                 System.out.println("Нет активных заказов!");
                 return;
             }
             
             System.out.println("Активные заказы:");
-            for (int i = 0; i < allOrders.size(); i++) {
-                BookOrder order = allOrders.get(i);
-                System.out.println((i + 1) + ". ID: " + order.getOrderId() + 
-                                 " | Клиент: " + order.getCustomerName());
+            for (int i = 0; i < controller.getOrder().size(); i++) {
+                System.out.println((i + 1) + ". ID: " + controller.getOrder().get(i).getOrderId() + 
+                                 " | Клиент: " + controller.getOrder().get(i).getCustomerName());
             }
             
             System.out.print("Выберите номер заказа: ");
             int choice = scanner.nextInt();
             scanner.nextLine();
             
-            if (choice > 0 && choice <= allOrders.size()) {
-                BookOrder selectedOrder = allOrders.get(choice - 1);
-                controller.showOrderDetails(selectedOrder);
+            if (choice > 0 && choice <= controller.getOrder().size()) {
+                controller.showOrderDetails(controller.getOrder().get(choice - 1));
             } else {
                 System.out.println("Неверный выбор!");
             }

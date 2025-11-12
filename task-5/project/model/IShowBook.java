@@ -7,8 +7,9 @@ public interface IShowBook {
     void sortByPublicationDate();
     void sortByPrice();
     void sortByNumberCopies();
-    String showBookInformation(Book book);
     void showOldBooks();
     List<BookCopy> getOldBooksSortedByDate();
     List<BookCopy> getOldBooksSortedByPrice();
+    void showAllBook();
+    List<Book> sortABCBook();
 }
