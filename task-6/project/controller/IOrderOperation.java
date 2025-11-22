@@ -1,6 +1,9 @@
-package project.model;
+package project.controller;
 
 import java.util.List;
+
+import project.model.Book;
+import project.model.BookOrder;
 
 public interface IOrderOperation {
     BookOrder createOrder(List<Book> books, String customerName, String customerContact);

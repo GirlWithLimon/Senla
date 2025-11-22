@@ -1,10 +1,14 @@
-package project.model;
+package project.controller;
 
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import project.model.Book;
+import project.model.BookCopy;
+import project.model.Stok;
 
 public class ShowBook implements IShowBook{
     Stok stok;

@@ -3,6 +3,9 @@ import java.util.*;
 import java.time.LocalDate;
 import java.util.stream.Collectors;
 
+import project.controller.IBookStok;
+import project.controller.IOrderOperation;
+
 public class Stok implements IOrderOperation, IBookStok {
     private final List<BookCopy> booksCopy = new ArrayList<>();
     private final List<Request> requests = new ArrayList<>();

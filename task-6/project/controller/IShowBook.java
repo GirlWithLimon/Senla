@@ -1,6 +1,9 @@
-package project.model;
+package project.controller;
 
 import java.util.List;
+
+import project.model.Book;
+import project.model.BookCopy;
 
 public interface IShowBook {
     void sortByABC();

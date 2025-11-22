@@ -1,7 +1,9 @@
-package project.model;
+package project.controller;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import project.model.BookOrder;
 
 public interface IShowOrdersAndRequests {
     void showOrdersByDate();

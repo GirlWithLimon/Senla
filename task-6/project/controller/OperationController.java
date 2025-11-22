@@ -18,8 +18,8 @@ public class OperationController {
         this.stok = new Stok();
         this.showBook = new ShowBook(stok);
         this.showOrdersAndRequests = new ShowOrdersAndRequests(stok);
-        this.bookInStok = stok;
-        this.orderOperation = stok;
+        this.bookInStok = new BooksController(stok);
+        this.orderOperation = new OrdersController(stok);
     }
     
     // тестовыt данные
