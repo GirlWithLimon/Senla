@@ -21,7 +21,6 @@ public class ImportExportService {
     private void initializeServices() {
         services.put("books", new BookCSVService(stok));
         services.put("orders", new BookOrderCSVService(stok));
-        // Добавьте другие сервисы по аналогии
     }
     
     public void exportEntities(String entityType, String filePath) throws IOException {

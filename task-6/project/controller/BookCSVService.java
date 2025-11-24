@@ -70,12 +70,10 @@ public class BookCSVService implements ICSVImportExport<Book> {
     public void saveEntities(List<Book> importedBooks) {
         List<Book> currentBooks = stok.getBooks();
         
-        // Создаем карту импортированных книг по ID для быстрого поиска
         Map<String, Book> importedBooksMap = importedBooks.stream()
             .collect(Collectors.toMap(Book::getId, book -> book));
-        
-        // Обновляем существующие книги и добавляем новые
-        for (int i = 0; i < currentBooks.size(); i++) {
+       
+			  for (int i = 0; i < currentBooks.size(); i++) {
             Book currentBook = currentBooks.get(i);
             Book importedBook = importedBooksMap.get(currentBook.getId());
             
@@ -86,10 +84,8 @@ public class BookCSVService implements ICSVImportExport<Book> {
             }
         }
         
-        // Добавляем новые книги (те, что остались в карте)
         currentBooks.addAll(importedBooksMap.values());
         
-        // Синхронизируем BookCopy с импортированными книгами
         syncBookCopiesWithImportedBooks(importedBooks);
         
         System.out.println("Импорт книг завершен. Обработано: " + importedBooks.size() + 
@@ -97,11 +93,9 @@ public class BookCSVService implements ICSVImportExport<Book> {
     }
     
     private void updateBookData(Book currentBook, Book importedBook) {
-        // Обновляем все поля, кроме ID
         currentBook.setInfo(importedBook.getInfo());
         currentBook.setPrice(importedBook.getPrice());
         
-        // Обновляем статус
         if (importedBook.getStatus() == BookStatus.IN_STOCK) {
             currentBook.setStatusStok();
         } else {
@@ -117,7 +111,6 @@ public class BookCSVService implements ICSVImportExport<Book> {
         List<BookCopy> copiesToRemove = new ArrayList<>();
         List<BookCopy> currentCopies = stok.getBooksCopy();
         
-        // Удаляем копии книг, которых нет в импорте
         for (BookCopy copy : currentCopies) {
             String bookId = copy.getBook().getId();
             if (!importedBooksMap.containsKey(bookId)) {
@@ -127,12 +120,10 @@ public class BookCSVService implements ICSVImportExport<Book> {
         
         copiesToRemove.forEach(stok::removeBooksCopy);
         
-        // Обновляем ссылки на книги в оставшихся копиях
-        for (BookCopy copy : currentCopies) {
+       for (BookCopy copy : currentCopies) {
             if (!copiesToRemove.contains(copy)) {
                 Book updatedBook = importedBooksMap.get(copy.getBook().getId());
                 if (updatedBook != null) {
-                    // Обновляем статус книги в зависимости от наличия копий
                     if (hasBookCopies(updatedBook.getId())) {
                         updatedBook.setStatusStok();
                     } else {
@@ -142,7 +133,6 @@ public class BookCSVService implements ICSVImportExport<Book> {
             }
         }
         
-        // Обновляем статусы всех импортированных книг
         for (Book book : importedBooks) {
             if (hasBookCopies(book.getId())) {
                 book.setStatusStok();

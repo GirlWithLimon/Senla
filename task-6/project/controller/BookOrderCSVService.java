@@ -51,7 +51,6 @@ public class BookOrderCSVService implements ICSVImportExport<BookOrder> {
         
         BookOrder order = new BookOrder(id, customerName, customerContact);
         order.setStatus(status);
-        // Note: Order items will need separate import/export
         
         return order;
     }
@@ -65,23 +64,19 @@ public class BookOrderCSVService implements ICSVImportExport<BookOrder> {
     public void saveEntities(List<BookOrder> importedOrders) {
         List<BookOrder> currentOrders = stok.getOrders();
         
-        // Создаем карту импортированных заказов по ID
         Map<String, BookOrder> importedOrdersMap = importedOrders.stream()
             .collect(Collectors.toMap(BookOrder::getId, order -> order));
         
-        // Обновляем существующие заказы
         for (int i = 0; i < currentOrders.size(); i++) {
             BookOrder currentOrder = currentOrders.get(i);
             BookOrder importedOrder = importedOrdersMap.get(currentOrder.getId());
             
             if (importedOrder != null) {
-                // Обновляем существующий заказ
                 updateOrderData(currentOrder, importedOrder);
                 importedOrdersMap.remove(currentOrder.getId());
             }
         }
         
-        // Добавляем новые заказы
         currentOrders.addAll(importedOrdersMap.values());
         
         System.out.println("Импорт заказов завершен. Обработано: " + importedOrders.size() + 
@@ -89,13 +84,10 @@ public class BookOrderCSVService implements ICSVImportExport<BookOrder> {
     }
     
     private void updateOrderData(BookOrder currentOrder, BookOrder importedOrder) {
-        // Обновляем поля заказа
         currentOrder.setCustomerName(importedOrder.getCustomerName());
         currentOrder.setCustomerContact(importedOrder.getCustomerContact());
         currentOrder.setStatus(importedOrder.getStatus());
         
-        // Примечание: Order items не импортируются через CSV
-        // Для полного импорта нужно реализовать отдельный сервис для BookOrderItem
     }
     
     private String escape(String field) {

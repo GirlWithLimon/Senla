@@ -40,7 +40,6 @@ public class CSVUtils {
             }
         }
         
-        // Сохраняем импортированные сущности (заменяем существующие)
         service.saveEntities(importedEntities);
         
         System.out.println("Успешно импортировано сущностей: " + importedEntities.size());

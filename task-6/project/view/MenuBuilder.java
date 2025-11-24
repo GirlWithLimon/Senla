@@ -56,7 +56,7 @@ public final class MenuBuilder {
             boolean dateParsing=false;
             LocalDate datePublication = LocalDate.now();
             while (!dateParsing) { 
-                System.out.print("Дата публикации (гггг-мм-дд): "); // ← ДОБАВИТЬ ЭТУ СТРОКУ
+                System.out.print("Дата публикации (гггг-мм-дд): "); 
                 String dateString = scanner.nextLine();
                 try {
                     datePublication = LocalDate.parse(dateString);
