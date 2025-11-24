@@ -11,18 +11,17 @@ import project.model.BookCopy;
 import project.model.Stok;
 
 public class ShowBook implements IShowBook{
-    Stok stok;
+    final Stok stok;
     
-
     public ShowBook(Stok stok) {
         this.stok = stok;
+       
     }
-    List<BookCopy> booksCopy = stok.getBooksCopy();
-    List<Book> books = stok.getBooks();
+    
     @Override
     public List<BookCopy> getOldBooksSortedByDate() {
         LocalDate sixMonthsAgo = LocalDate.now().minusMonths(6);
-        return booksCopy.stream()
+        return stok.getBooksCopy().stream()
             .filter(copy -> copy.getArrivalDate().isBefore(sixMonthsAgo))
             .sorted(Comparator.comparing(BookCopy::getArrivalDate))
             .collect(Collectors.toList());
@@ -31,7 +30,7 @@ public class ShowBook implements IShowBook{
     @Override
     public List<BookCopy> getOldBooksSortedByPrice() {
         LocalDate sixMonthsAgo = LocalDate.now().minusMonths(6);
-        return booksCopy.stream()
+        return stok.getBooksCopy().stream()
             .filter(copy -> copy.getArrivalDate().isBefore(sixMonthsAgo))
             .sorted(Comparator.comparing(copy -> copy.getBook().getPrice()))
             .collect(Collectors.toList());
@@ -53,7 +52,7 @@ public class ShowBook implements IShowBook{
     
     @Override
     public void sortByABC() {
-        if (books.isEmpty()) {
+        if (stok.getBooks().isEmpty()) {
             System.out.println("Каталог книг пуст");
             return;
         }
@@ -66,11 +65,11 @@ public class ShowBook implements IShowBook{
 
     @Override
     public void sortByPublicationDate() {
-        if (books.isEmpty()) {
+        if (stok.getBooks().isEmpty()) {
             System.out.println("Каталог книг пуст");
             return;
         }
-        List<Book> sortedBooks = books.stream()
+        List<Book> sortedBooks = stok.getBooks().stream()
             .sorted(Comparator.comparing(Book::getPublicationDate))
             .collect(Collectors.toList());
             
@@ -81,11 +80,11 @@ public class ShowBook implements IShowBook{
 
     @Override
     public void sortByPrice() {
-        if (books.isEmpty()) {
+        if (stok.getBooks().isEmpty()) {
             System.out.println("Каталог книг пуст");
             return;
         }
-        List<Book> sortedBooks = books.stream()
+        List<Book> sortedBooks = stok.getBooks().stream()
             .sorted(Comparator.comparing(Book::getPrice))
             .collect(Collectors.toList());
             
@@ -96,18 +95,18 @@ public class ShowBook implements IShowBook{
     
     @Override
     public void sortByNumberCopies() {
-        if (books.isEmpty()) {
+        if (stok.getBooks().isEmpty()) {
             System.out.println("Каталог книг пуст");
             return;
         }
         
-        Map<Book, Long> bookCount = booksCopy.stream()
+        Map<Book, Long> bookCount = stok.getBooksCopy().stream()
             .collect(Collectors.groupingBy(
                 BookCopy::getBook,
                 Collectors.counting()
             ));
         
-        List<Book> sortedBooks = books.stream()
+        List<Book> sortedBooks = stok.getBooks().stream()
             .sorted((b1, b2) -> Long.compare(
                 bookCount.getOrDefault(b2, 0L),
                 bookCount.getOrDefault(b1, 0L)
@@ -123,7 +122,7 @@ public class ShowBook implements IShowBook{
 
     @Override
     public List<Book> sortABCBook(){
-        return  books.stream()
+        return  stok.getBooks().stream()
                 .sorted(Comparator.comparing(Book::getName))
                 .collect(Collectors.toList());
     }

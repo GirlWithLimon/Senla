@@ -14,8 +14,10 @@ import project.model.Stok;
 public class OrdersController implements IOrderOperation{
     Stok stok;
     ID idNew;
+    
     public OrdersController(Stok stok) {
         this.stok = stok;
+        this.idNew = new ID();
     }
 
     private BookCopy findBook(Book book) {
@@ -26,23 +28,24 @@ public class OrdersController implements IOrderOperation{
     }
 
     @Override
-    public BookOrder createOrder(List<Book> bookList, String customerName, String customerContact) {
-        BookOrder bookOrder = new BookOrder(customerName, customerContact);
+    public BookOrder createOrder(String id, List<Book> bookList, String customerName, String customerContact) {
+        BookOrder bookOrder = new BookOrder(id, customerName, customerContact);
         bookList.stream()
-            .map(createOrderItem(this))
+            .map(this::createOrderItem)
             .forEach(bookOrder::addBookToOrder);
             
         stok.addOrder(bookOrder);
         updateOrderStatus(bookOrder);
        
-        System.out.println("Создан заказ #" + bookOrder.getOrderId() + 
+        System.out.println("Создан заказ #" + bookOrder.getId() + 
                          " на " + bookList.size() + " книг(и)");
         return bookOrder;
     }
    
     private BookOrderItem createOrderItem(Book book) {
         BookCopy bookCopy = findBook(book);
-        String id = idNew.generateOrderItemId();
+        String id = idNew.generateOrderItemId(stok.getOrders());
+        
         BookOrderItem orderItem = new BookOrderItem(id, book);
         
         if (bookCopy != null) {
@@ -54,7 +57,7 @@ public class OrdersController implements IOrderOperation{
                 book.setStatusNo();
             }
         } else {
-            String idRequest = idNew.generateRequestId();
+            String idRequest = idNew.generateRequestId(stok.getRequests());
             Request request = new Request(idRequest, orderItem);
             stok.addRequest(request);
             orderItem.setStatus(OrderItemStatus.PENDING);
@@ -62,7 +65,8 @@ public class OrdersController implements IOrderOperation{
         }
         return orderItem;
     }
-     @Override
+    
+    @Override
     public void cancelOrder(BookOrder order) {
         stok.removeOrder(order);
         order.setStatus(OrderStatus.CANCELLED);
@@ -72,11 +76,8 @@ public class OrdersController implements IOrderOperation{
                 stok.addBooksCopy(orderItem.getBookCopy());
                 orderItem.getBook().setStatusStok();
             }
-            List <Request> request = stok.getRequests();
-            request.stream()
-            .filter(request -> request.getOrderItem().equals(orderItem))
-            .forEach(stok.removeRequest(this)));
-            stok.removeRequest(request -> request.getOrderItem().equals(orderItem));
+            stok.getRequests().removeIf(request -> 
+                request.getOrderItem().equals(orderItem));
         });
     }
     
@@ -87,14 +88,16 @@ public class OrdersController implements IOrderOperation{
             .findFirst()
             .ifPresent(itemToRemove -> {
                 if (itemToRemove.getBookCopy() != null) {
-                    booksCopy.add(itemToRemove.getBookCopy());
+                    stok.addBooksCopy(itemToRemove.getBookCopy());
                     itemToRemove.getBook().setStatusStok();
                 }
-                requests.removeIf(request -> request.getOrderItem().equals(itemToRemove));
+                stok.getRequests().removeIf(request -> 
+                    request.getOrderItem().equals(itemToRemove));
                 order.getOrderItems().remove(itemToRemove);
                 updateOrderStatus(order);
             });
     }
+    
     private void updateOrderStatus(BookOrder order) {
         long completedCount = order.getOrderItems().stream()
             .filter(item -> OrderItemStatus.COMPLETED.equals(item.getStatus()))

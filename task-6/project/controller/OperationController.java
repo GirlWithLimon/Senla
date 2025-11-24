@@ -1,6 +1,8 @@
 package project.controller;
 
 import project.model.*;
+
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -13,6 +15,8 @@ public class OperationController {
     private final IShowBook showBook;
     private final IShowOrdersAndRequests showOrdersAndRequests;
     private final IOrderOperation orderOperation;
+    private final ImportExportService importExportService;
+    ID newId;
 
     public OperationController() {
         this.stok = new Stok();
@@ -20,17 +24,17 @@ public class OperationController {
         this.showOrdersAndRequests = new ShowOrdersAndRequests(stok);
         this.bookInStok = new BooksController(stok);
         this.orderOperation = new OrdersController(stok);
+        this.importExportService = new ImportExportService(stok);
+        this.newId = new ID();
     }
     
-    // тестовыt данные
     public void initializeTestData() {
-         Book book1 = addBookToStock("Война и мир", "Л.Н.Толстой", 250.0, LocalDate.of(2014, 10, 24), LocalDate.now());
+        Book book1 = addBookToStock("Война и мир", "Л.Н.Толстой", 250.0, LocalDate.of(2014, 10, 24), LocalDate.now());
         Book book2 = addBookToStock("Мастер и Маргарита", "М.А.Булгаков", 260.0, LocalDate.of(2014, 10, 24), LocalDate.now().minusMonths(1));
         Book book3 = addBookToStock("Преступление и наказание", "Ф.М.Достоевский", 200.0, LocalDate.of(2015, 5, 10), LocalDate.now().minusYears(1));
         Book book4 =  addBookToStock("1984", "Дж.Оруэлл", 300.0, LocalDate.of(2019, 1, 15), LocalDate.now().minusMonths(5));
         
         Book book5 = addBookToStock("Старая книга", "Автор", 150.0, LocalDate.of(2020, 1, 1), LocalDate.now().minusMonths(24));
-        
         
         List<Book> order1Books = List.of(book1, book2);
         createOrder(order1Books, "Иван Иванов", "ivan@mail.com");
@@ -41,18 +45,27 @@ public class OperationController {
         System.out.println("Тестовые данные инициализированы!");
     }
         
+    public Book addBookToStock(String id, String name, String author, Double price, LocalDate datePublication, LocalDate date) {
+        Book book = new Book(id, name, author, price, datePublication);
+        bookInStok.addBookToStock(id, book, date);
+        return book;
+    }
+    
     public Book addBookToStock(String name, String author, Double price, LocalDate datePublication, LocalDate date) {
-        Book book = new Book(name, author, price, datePublication);
-        bookInStok.addBookToStock(book, date);
+        String id = newId.generateBookId(stok.getBooks());
+        Book book = new Book(id, name, author, price, datePublication);
+        bookInStok.addBookToStock(id, book, date);
         return book;
     }
     
     public void removeBookFromStock(BookCopy bookCopy) {
         bookInStok.removeBookFromStock(bookCopy);
     }
+    
     public List<Book> getBooks(){
         return  showBook.sortABCBook();
     }
+    
     public void showsortABCBook() {
         showBook.showAllBook();
     }
@@ -77,7 +90,7 @@ public class OperationController {
                 .collect(Collectors.toList());
         if (!selectedBooks.isEmpty()) {
                 BookOrder order = createOrder(selectedBooks, customerName, customerContact);
-                System.out.println("Заказ создан! ID: " + order.getOrderId());
+                System.out.println("Заказ создан! ID: " + order.getId());
         } else {
             System.out.println("Не выбрано ни одной книги!");
         }
@@ -87,8 +100,13 @@ public class OperationController {
         return showOrdersAndRequests.sortOrderByDate();
     }
 
+    public BookOrder createOrder(String id, List<Book> books, String customerName, String customerContact) {
+        return orderOperation.createOrder(id, books, customerName, customerContact);
+    }
+    
     public BookOrder createOrder(List<Book> books, String customerName, String customerContact) {
-        return orderOperation.createOrder(books, customerName, customerContact);
+        String id = newId.generateOrderId(stok.getOrders());
+        return orderOperation.createOrder(id, books, customerName, customerContact);
     }
     
     public void cancelOrder(BookOrder order) {
@@ -157,12 +175,11 @@ public class OperationController {
         showOrdersAndRequests.showOrdersByStatus();
     }
     
-   
     public void showCompletedOrdersByPeriod(LocalDate start, LocalDate end) {
         List<BookOrder> completedOrders = showOrdersAndRequests.getCompletedOrdersByPeriod(start, end);
         System.out.println("Выполненные заказы за период " + start + " - " + end + ":");
         completedOrders.forEach(order -> 
-            System.out.println(" - " + order.getOrderId() + " | " + 
+            System.out.println(" - " + order.getId() + " | " + 
                              order.getOrderDate() + " | " + order.getTotalPrice() + " руб."));
     }
     
@@ -177,5 +194,23 @@ public class OperationController {
         System.out.println("Количество выполненных заказов за период " + start + " - " + 
                           end + ": " + count);
     }  
+
+    public void exportToCSV(String entityType, String filePath) throws IOException {
+        importExportService.exportEntities(entityType, filePath);
+    }
     
+    public void importFromCSV(String entityType, String filePath) throws IOException {
+        System.out.println("Начало импорта " + entityType + " из " + filePath);
+        System.out.println("До импорта - Книги: " + stok.getBooks().size() + 
+                        ", Заказы: " + stok.getOrders().size());
+        
+        importExportService.importEntities(entityType, filePath);
+        
+        System.out.println("После импорта - Книги: " + stok.getBooks().size() + 
+                        ", Заказы: " + stok.getOrders().size());
+    }
+    
+    public String getAvailableEntityTypes() {
+        return importExportService.getAvailableEntityTypes();
+    }
 }

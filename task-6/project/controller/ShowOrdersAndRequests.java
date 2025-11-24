@@ -25,7 +25,7 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests{
             
         System.out.println("Заказы по дате:");
         sortedOrders.forEach(order -> 
-            System.out.println(" - " + order.getOrderId() + " | " + 
+            System.out.println(" - " + order.getId() + " | " + 
                              order.getOrderDate() + " | " + order.getStatus()));
     }
     
@@ -37,7 +37,7 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests{
             
         System.out.println("Заказы по цене:");
         sortedOrders.forEach(order -> 
-            System.out.println(" - " + order.getOrderId() + " | " + 
+            System.out.println(" - " + order.getId() + " | " + 
                              order.getTotalPrice() + " руб. | " + order.getStatus()));
     }
     
@@ -49,7 +49,7 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests{
             
         System.out.println("Заказы по статусу:");
         sortedOrders.forEach(order -> 
-            System.out.println(" - " + order.getOrderId() + " | " + order.getStatus() +
+            System.out.println(" - " + order.getId() + " | " + order.getStatus() +
                              " | " + order.getOrderItems().size() + " книг(и)"));
     }
     
@@ -108,7 +108,7 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests{
     
     @Override
     public void showOrderDetails(BookOrder order) {
-        System.out.println("=== Детали заказа #" + order.getOrderId() + " ===");
+        System.out.println("=== Детали заказа #" + order.getId() + " ===");
         System.out.println("Клиент: " + order.getCustomerName());
         System.out.println("Контакт: " + order.getCustomerContact());
         System.out.println("Дата: " + order.getOrderDate());

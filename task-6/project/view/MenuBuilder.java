@@ -32,11 +32,13 @@ public final class MenuBuilder {
         Menu orderMenu = createOrderMenu();
         Menu reportMenu = createReportMenu();
         Menu searchMenu = createSearchMenu();
-        
+          Menu importExportMenu = createImportExportMenu();
+
         rootMenu.addMenuItem(new MenuItem("Управление складом", stockMenu));
         rootMenu.addMenuItem(new MenuItem("Управление заказами", orderMenu));
         rootMenu.addMenuItem(new MenuItem("Отчеты и аналитика", reportMenu));
         rootMenu.addMenuItem(new MenuItem("Поиск и сортировка", searchMenu));
+        rootMenu.addMenuItem(new MenuItem("Импорт/Экспорт данных", importExportMenu));
     }
     
     private Menu createStockMenu() {
@@ -135,7 +137,7 @@ public final class MenuBuilder {
             
             System.out.println("Активные заказы:");
             for (int i = 0; i < controller.getOrder().size(); i++) {
-                System.out.println((i + 1) + ". ID: " + controller.getOrder().get(i).getOrderId() + 
+                System.out.println((i + 1) + ". ID: " + controller.getOrder().get(i).getId() + 
                                  " | Клиент: " + controller.getOrder().get(i).getCustomerName());
             }
             
@@ -238,7 +240,68 @@ public final class MenuBuilder {
         
         return menu;
     }
-    
+     private Menu createImportExportMenu() {
+        Menu menu = new Menu("Импорт/Экспорт данных");
+        
+        menu.addMenuItem(new MenuItem("Экспорт книг в CSV", () -> {
+            System.out.println("\n=== Экспорт книг в CSV ===");
+            System.out.print("Введите путь для сохранения файла (например: C:/books.csv): ");
+            String filePath = scanner.nextLine();
+            
+            try {
+                controller.exportToCSV("books", filePath);
+                System.out.println("Книги успешно экспортированы в: " + filePath);
+            } catch (Exception e) {
+                System.out.println("Ошибка при экспорте: " + e.getMessage());
+            }
+        }));
+        
+        menu.addMenuItem(new MenuItem("Импорт книг из CSV", () -> {
+            System.out.println("\n=== Импорт книг из CSV ===");
+            System.out.print("Введите путь к CSV файлу: ");
+            String filePath = scanner.nextLine();
+            
+            try {
+                controller.importFromCSV("books", filePath);
+                System.out.println("Книги успешно импортированы из: " + filePath);
+            } catch (Exception e) {
+                System.out.println("Ошибка при импорте: " + e.getMessage());
+            }
+        }));
+        
+        menu.addMenuItem(new MenuItem("Экспорт заказов в CSV", () -> {
+            System.out.println("\n=== Экспорт заказов в CSV ===");
+            System.out.print("Введите путь для сохранения файла: ");
+            String filePath = scanner.nextLine();
+            
+            try {
+                controller.exportToCSV("orders", filePath);
+                System.out.println("Заказы успешно экспортированы в: " + filePath);
+            } catch (Exception e) {
+                System.out.println("Ошибка при экспорте: " + e.getMessage());
+            }
+        }));
+        
+        menu.addMenuItem(new MenuItem("Импорт заказов из CSV", () -> {
+            System.out.println("\n=== Импорт заказов из CSV ===");
+            System.out.print("Введите путь к CSV файлу: ");
+            String filePath = scanner.nextLine();
+            
+            try {
+                controller.importFromCSV("orders", filePath);
+                System.out.println("Заказы успешно импортированы из: " + filePath);
+            } catch (Exception e) {
+                System.out.println("Ошибка при импорте: " + e.getMessage());
+            }
+        }));
+        
+        menu.addMenuItem(new MenuItem("Показать доступные типы данных", () -> {
+            System.out.println("\n=== Доступные типы данных для импорта/экспорта ===");
+            System.out.println(controller.getAvailableEntityTypes());
+        }));
+        
+        return menu;
+    }
     public Menu getRootMenu() {
         return rootMenu;
     }

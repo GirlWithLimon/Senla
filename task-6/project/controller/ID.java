@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import project.model.Book;
 import project.model.BookCopy;
+import project.model.BookOrder;
 import project.model.BookOrderItem;
 import project.model.Request;
 
@@ -17,10 +18,10 @@ public class ID {
         
         do {
             id = prefix + "-" + UUID.randomUUID().toString().substring(0, 8);
-            isUnique = items.stream().noneMatch(item -> idExtractor.apply(item).equals(id));
+            final String newId = id;
+            isUnique = items.stream().noneMatch(item -> idExtractor.apply(item).equals(newId));
             attempts++;
             
-            // На всякий случай ограничим количество попыток
             if (attempts > 100) {
                 throw new RuntimeException("Не удалось сгенерировать уникальный ID после 100 попыток");
             }
@@ -28,24 +29,25 @@ public class ID {
         
         return id;
     }
-
-    public  String generateBookId() {
+    public  String generateOrderId(List<BookOrder> order) {
+        return generateUniqueId("ORDER", order, item -> ((BookOrder) item).getId());
+    }
+    public  String generateBookId(List<Book> books) {
         return generateUniqueId("BOOK", books, item -> ((Book) item).getId());
     }
     
-    public String generateCopyId() {
+    public String generateCopyId(List<BookCopy> booksCopy) {
         return generateUniqueId("COPY", booksCopy, item -> ((BookCopy) item).getId());
     }
     
-    public String generateOrderItemId() {
-        // Для OrderItem нужно проверить все заказы
-        List<BookOrderItem> allItems = orders.stream()
+    public String generateOrderItemId(List<BookOrder> orders) {
+       List<BookOrderItem> allItems = orders.stream()
             .flatMap(order -> order.getOrderItems().stream())
             .collect(Collectors.toList());
         return generateUniqueId("ITEM", allItems, item -> ((BookOrderItem) item).getId());
     }
     
-    public String generateRequestId() {
-        return generateUniqueId("REQ", requests, item -> ((Request) item).getId());
+    public String generateRequestId(List<Request> requests) {
+        return generateUniqueId("REQUEST", requests, item -> ((Request) item).getId());
     }
 }

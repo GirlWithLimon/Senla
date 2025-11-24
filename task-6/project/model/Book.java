@@ -2,6 +2,7 @@ package project.model;
 import java.time.LocalDate;
 
 public class Book {
+    private final String id;
     private final String name;
     private final String author;
     private BookStatus status;
@@ -9,7 +10,8 @@ public class Book {
     private final LocalDate publicationDate;
     private String information;
     
-    public Book(String name, String author, Double price, LocalDate date) {
+    public Book(String id, String name, String author, Double price, LocalDate date) {
+        this.id = id;
         this.name = name;
         this.author = author;
         this.price = price;
@@ -18,7 +20,8 @@ public class Book {
         this.status = BookStatus.OUT_OF_STOCK;
     }
 
-    public Book(String name, String author, Double price, String information, LocalDate date) {
+    public Book(String id, String name, String author, Double price, String information, LocalDate date) {
+        this.id = id;
         this.name = name;
         this.author = author;
         this.price = price;
@@ -27,6 +30,9 @@ public class Book {
         this.status = BookStatus.OUT_OF_STOCK;
     }
     
+    public  String getId(){
+        return this.id;
+    }
     public String getAuthor() {
         return author;
     }

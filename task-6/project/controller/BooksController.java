@@ -9,24 +9,25 @@ import java.util.stream.Collectors;
 import project.model.Book;
 import project.model.BookCopy;
 import project.model.BookOrder;
+import project.model.OrderItemStatus;
+import project.model.OrderStatus;
 import project.model.Request;
 import project.model.Stok;
 
 public class BooksController implements IBookStok{
     Stok stok;
-    ID idNew;
-
-    public BooksController (Stok stok) {
+   
+    public BooksController(Stok stok) {
         this.stok = stok;
     }
 
     public void addBookToCatalog(Book book) {
-        boolean bookExists = books.stream()
+        boolean bookExists = stok.getBooks().stream()
             .anyMatch(b -> b.getId().equals(book.getId()));
             
         if (!bookExists) {
-            books.add(book);
-            System.out.println("Книга добавлена в каталог: " + book.getName() + " | ID: " + book.getId() + " | Всего в каталоге: " + books.size());
+            stok.addBook(book);
+            System.out.println("Книга добавлена в каталог: " + book.getName() + " | ID: " + book.getId() + " | Всего в каталоге: " + stok.getBooks().size());
         } else {
             System.out.println("Книга уже есть в каталоге: " + book.getName() + " | ID: " + book.getId());
         }
@@ -36,18 +37,19 @@ public class BooksController implements IBookStok{
     public String showBookInformation(Book book) {
         return book.getInfo();
     }
+
     @Override
     public void addBookToStock(String id, Book book, LocalDate date) {
         addBookToCatalog(book);
         BookCopy newBook = new BookCopy(id, book, date);
-        booksCopy.add(newBook);
+        stok.addBooksCopy(newBook);
         book.setStatusStok();     
         
         System.out.println("Добавлена книга на склад: " + book.getName() + 
                       " | Копий: " + countBookCopies(book) + 
-                      " | Книг в каталоге: " + books.size());
+                      " | Книг в каталоге: " + stok.getBooks().size());
         
-        List<Request> requestsToRemove = requests.stream()
+        List<Request> requestsToRemove = stok.getRequests().stream()
             .filter(request -> request.getBook().equals(book))
             .collect(Collectors.toList());
             
@@ -61,11 +63,11 @@ public class BooksController implements IBookStok{
             removeBookFromStock(newBook);
         });
         
-        requests.removeAll(requestsToRemove);
+        requestsToRemove.forEach(stok::removeRequest);
         
         ordersToUpdate.forEach(order -> {
             updateOrderStatus(order);
-            System.out.println("Обновлен статус заказа #" + order.getOrderId() + 
+            System.out.println("Обновлен статус заказа #" + order.getId() + 
                           " на: " + order.getStatus());
         });
         
@@ -76,25 +78,47 @@ public class BooksController implements IBookStok{
     }
     
     private BookOrder findOrderByRequest(Request request) {
-        return orders.stream()
+        return stok.getOrders().stream()
             .filter(order -> order.getOrderItems().contains(request.getOrderItem()))
             .findFirst()
             .orElse(null);
     }
     
     private int countBookCopies(Book book) {
-        return (int) booksCopy.stream()
+        return (int) stok.getBooksCopy().stream()
                 .filter(copy -> copy.getBook().equals(book))
                 .count();
     }
     
     @Override
     public void removeBookFromStock(BookCopy book) {
-        booksCopy.remove(book);
-        boolean hasOtherCopies = booksCopy.stream()
+        stok.removeBooksCopy(book);
+        boolean hasOtherCopies = stok.getBooksCopy().stream()
             .anyMatch(copy -> copy.getBook().equals(book.getBook()));
         if (!hasOtherCopies) {
             book.getBook().setStatusNo();
+        }
+    }
+
+    private void updateOrderStatus(BookOrder order) {
+        long completedCount = order.getOrderItems().stream()
+            .filter(item -> OrderItemStatus.COMPLETED.equals(item.getStatus()))
+            .count();
+        
+        long pendingCount = order.getOrderItems().stream()
+            .filter(item -> OrderItemStatus.PENDING.equals(item.getStatus()))
+            .count();
+        
+        long totalCount = order.getOrderItems().size();
+        
+        if (completedCount == totalCount) {
+            order.setStatus(OrderStatus.COMPLETED);
+        } else if (pendingCount > 0) {
+            order.setStatus(OrderStatus.PARTIALLY_COMPLETED);
+        } else if (completedCount > 0) {
+            order.setStatus(OrderStatus.IN_PROCESS);
+        } else {
+            order.setStatus(OrderStatus.NEW);
         }
     }
 }
