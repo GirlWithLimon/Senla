@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class BookOrder {
-    private final String id;
+    private final int id;
     private final List<BookOrderItem> orderItems;
     private OrderStatus status;
     private final LocalDate orderDate;
@@ -14,7 +14,7 @@ public class BookOrder {
     private String customerContact;
     private double totalPrice;
     
-    public BookOrder(String id, String customerName, String customerContact) {
+    public BookOrder(int id, String customerName, String customerContact) {
         this.id = id;
         this.orderItems = new ArrayList<>();
         this.status = OrderStatus.NEW;
@@ -57,7 +57,7 @@ public class BookOrder {
                 .anyMatch(item -> OrderItemStatus.PENDING.equals(item.getStatus()));
     }
     
-    public String getId() { 
+    public int getId() { 
         return this.id; 
     }
     

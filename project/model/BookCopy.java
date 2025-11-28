@@ -2,18 +2,18 @@ package project.model;
 import java.time.LocalDate;
 
 public class BookCopy {
-    private final String id;
+    private final int id;
     private final Book book;
     private final LocalDate arrivalDate;
 
-    public BookCopy(String id, Book book, LocalDate date) {
+    public BookCopy(int  id, Book book, LocalDate date) {
         this.id = id;
         this.book = book;
         this.arrivalDate = date;
         this.book.setStatusStok();
     }
     
-    public String getId(){
+    public int getId(){
         return this.id;
     }
     public Book getBook() {

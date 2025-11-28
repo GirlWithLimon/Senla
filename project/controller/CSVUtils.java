@@ -20,7 +20,7 @@ public class CSVUtils {
         List<T> importedEntities = new ArrayList<>();
         
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
-            String line = reader.readLine(); // Пропускаем заголовки
+            String line = reader.readLine(); 
             
             if (line == null || !line.equals(service.getHeaders())) {
                 System.out.println("Предупреждение: заголовки CSV не совпадают с ожидаемыми");

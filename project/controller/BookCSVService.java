@@ -31,7 +31,7 @@ public class BookCSVService implements ICSVImportExport<Book> {
     @Override
     public String toCSV(Book book) {
         return String.join(",",
-            escape(book.getId()),
+            escape(Integer.toString(book.getId())),
             escape(book.getName()),
             escape(book.getAuthor()),
             String.valueOf(book.getPrice()),
@@ -44,7 +44,7 @@ public class BookCSVService implements ICSVImportExport<Book> {
     @Override
     public Book fromCSV(String csvLine) {
         String[] parts = parseCSVLine(csvLine);
-        String id = unescape(parts[0]);
+        int id = Integer.parseInt(unescape(parts[0]));
         String name = unescape(parts[1]);
         String author = unescape(parts[2]);
         double price = Double.parseDouble(parts[3]);
@@ -112,7 +112,7 @@ public class BookCSVService implements ICSVImportExport<Book> {
         List<BookCopy> currentCopies = stok.getBooksCopy();
         
         for (BookCopy copy : currentCopies) {
-            String bookId = copy.getBook().getId();
+            int bookId = copy.getBook().getId();
             if (!importedBooksMap.containsKey(bookId)) {
                 copiesToRemove.add(copy);
             }
@@ -146,9 +146,9 @@ public class BookCSVService implements ICSVImportExport<Book> {
         }
     }
     
-    private boolean hasBookCopies(String bookId) {
+    private boolean hasBookCopies(int bookId) {
         return stok.getBooksCopy().stream()
-            .anyMatch(copy -> copy.getBook().getId().equals(bookId));
+            .anyMatch(copy -> copy.getBook().getId()==bookId);
     }
     
     private String escape(String field) {

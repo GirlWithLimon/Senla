@@ -23,7 +23,7 @@ public class BooksController implements IBookStok{
 
     public void addBookToCatalog(Book book) {
         boolean bookExists = stok.getBooks().stream()
-            .anyMatch(b -> b.getId().equals(book.getId()));
+            .anyMatch(b -> b.getId()==book.getId());
             
         if (!bookExists) {
             stok.addBook(book);
@@ -39,7 +39,7 @@ public class BooksController implements IBookStok{
     }
 
     @Override
-    public void addBookToStock(String id, Book book, LocalDate date) {
+    public void addBookToStock(int id, Book book, LocalDate date) {
         addBookToCatalog(book);
         BookCopy newBook = new BookCopy(id, book, date);
         stok.addBooksCopy(newBook);

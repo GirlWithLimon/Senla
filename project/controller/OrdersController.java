@@ -28,7 +28,7 @@ public class OrdersController implements IOrderOperation{
     }
 
     @Override
-    public BookOrder createOrder(String id, List<Book> bookList, String customerName, String customerContact) {
+    public BookOrder createOrder(int id, List<Book> bookList, String customerName, String customerContact) {
         BookOrder bookOrder = new BookOrder(id, customerName, customerContact);
         bookList.stream()
             .map(this::createOrderItem)
@@ -44,7 +44,7 @@ public class OrdersController implements IOrderOperation{
    
     private BookOrderItem createOrderItem(Book book) {
         BookCopy bookCopy = findBook(book);
-        String id = idNew.generateOrderItemId(stok.getOrders());
+        int id = idNew.generateOrderItemId(stok.getOrders());
         
         BookOrderItem orderItem = new BookOrderItem(id, book);
         
@@ -57,7 +57,7 @@ public class OrdersController implements IOrderOperation{
                 book.setStatusNo();
             }
         } else {
-            String idRequest = idNew.generateRequestId(stok.getRequests());
+            int idRequest = idNew.generateRequestId(stok.getRequests());
             Request request = new Request(idRequest, orderItem);
             stok.addRequest(request);
             orderItem.setStatus(OrderItemStatus.PENDING);

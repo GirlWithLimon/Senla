@@ -45,14 +45,14 @@ public class OperationController {
         System.out.println("Тестовые данные инициализированы!");
     }
         
-    public Book addBookToStock(String id, String name, String author, Double price, LocalDate datePublication, LocalDate date) {
+    public Book addBookToStock(int id, String name, String author, Double price, LocalDate datePublication, LocalDate date) {
         Book book = new Book(id, name, author, price, datePublication);
         bookInStok.addBookToStock(id, book, date);
         return book;
     }
     
     public Book addBookToStock(String name, String author, Double price, LocalDate datePublication, LocalDate date) {
-        String id = newId.generateBookId(stok.getBooks());
+        int id = newId.generateBookId(stok.getBooks());
         Book book = new Book(id, name, author, price, datePublication);
         bookInStok.addBookToStock(id, book, date);
         return book;
@@ -100,12 +100,12 @@ public class OperationController {
         return showOrdersAndRequests.sortOrderByDate();
     }
 
-    public BookOrder createOrder(String id, List<Book> books, String customerName, String customerContact) {
+    public BookOrder createOrder(int id, List<Book> books, String customerName, String customerContact) {
         return orderOperation.createOrder(id, books, customerName, customerContact);
     }
     
     public BookOrder createOrder(List<Book> books, String customerName, String customerContact) {
-        String id = newId.generateOrderId(stok.getOrders());
+        int id = newId.generateOrderId(stok.getOrders());
         return orderOperation.createOrder(id, books, customerName, customerContact);
     }
     
