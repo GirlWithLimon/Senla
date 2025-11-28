@@ -70,7 +70,7 @@ public class BookCSVService implements ICSVImportExport<Book> {
     public void saveEntities(List<Book> importedBooks) {
         List<Book> currentBooks = stok.getBooks();
         
-        Map<String, Book> importedBooksMap = importedBooks.stream()
+        Map<Integer, Book> importedBooksMap = importedBooks.stream()
             .collect(Collectors.toMap(Book::getId, book -> book));
        
 			  for (int i = 0; i < currentBooks.size(); i++) {
@@ -105,7 +105,7 @@ public class BookCSVService implements ICSVImportExport<Book> {
     }
     
     private void syncBookCopiesWithImportedBooks(List<Book> importedBooks) {
-        Map<String, Book> importedBooksMap = importedBooks.stream()
+        Map<Integer, Book> importedBooksMap = importedBooks.stream()
             .collect(Collectors.toMap(Book::getId, book -> book));
         
         List<BookCopy> copiesToRemove = new ArrayList<>();

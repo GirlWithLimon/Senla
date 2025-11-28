@@ -30,7 +30,7 @@ public class BookOrderCSVService implements ICSVImportExport<BookOrder> {
     @Override
     public String toCSV(BookOrder order) {
         return String.join(",",
-            escape(order.getId()),
+            escape(Integer.toString(order.getId())),
             escape(order.getCustomerName()),
             escape(order.getCustomerContact()),
             order.getOrderDate().toString(),
@@ -49,7 +49,7 @@ public class BookOrderCSVService implements ICSVImportExport<BookOrder> {
         OrderStatus status = OrderStatus.valueOf(parts[4]);
         double totalPrice = Double.parseDouble(parts[5]);
         
-        BookOrder order = new BookOrder(id, customerName, customerContact);
+        BookOrder order = new BookOrder(Integer.parseInt(id), customerName, customerContact);
         order.setStatus(status);
         
         return order;
@@ -64,7 +64,7 @@ public class BookOrderCSVService implements ICSVImportExport<BookOrder> {
     public void saveEntities(List<BookOrder> importedOrders) {
         List<BookOrder> currentOrders = stok.getOrders();
         
-        Map<String, BookOrder> importedOrdersMap = importedOrders.stream()
+        Map<Integer, BookOrder> importedOrdersMap = importedOrders.stream()
             .collect(Collectors.toMap(BookOrder::getId, order -> order));
         
         for (int i = 0; i < currentOrders.size(); i++) {
