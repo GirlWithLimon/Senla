@@ -10,7 +10,8 @@ public interface IShowBook {
     void sortByPublicationDate();
     void sortByPrice();
     void sortByNumberCopies();
-    void showOldBooks();
+    void showOldBooksByDate();
+    void showOldBooksByPrice();
     List<BookCopy> getOldBooksSortedByDate();
     List<BookCopy> getOldBooksSortedByPrice();
     void showAllBook();
