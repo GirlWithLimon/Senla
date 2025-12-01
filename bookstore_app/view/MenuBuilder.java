@@ -1,6 +1,7 @@
 package bookstore_app.view;
 
 import bookstore_app.controller.OperationController;
+import bookstore_app.controller.Config;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -306,19 +307,62 @@ public final class MenuBuilder {
     }
     private Menu createPropertiesMenu() {
         Menu menu = new Menu("Настройки");
+        Config config = Config.getInstance();
+            menu.addMenuItem(new MenuItem("Показать текущие настройки", () -> {
+        System.out.println("\n=== Текущие настройки ===");
+        System.out.println("Месяцев для залежавшихся книг: " + config.getMonthsForOldBook());
+        System.out.println("Автовыполнение запросов: " + 
+            (config.isAutoCompleteRequests() ? "Включено" : "Отключено"));
+    }));
+    
+    menu.addMenuItem(new MenuItem("Изменить период для залежавшихся книг", () -> {
+        System.out.println("\n=== Изменение периода для залежавшихся книг ===");
+        System.out.print("Текущее значение: " + Config.getInstance().getMonthsForOldBook() + " месяцев");
+        System.out.print("\nВведите новое количество месяцев: ");
         
-        menu.addMenuItem(new MenuItem("Количество месяцев залежавшейся книги", () -> {
-            System.out.println("\n=== Количество месяцев залежавшейся книги ===");
-            controller.showBooksByABC();
-        }));
+        try {
+            int months = scanner.nextInt();
+            scanner.nextLine();
+            
+            if (months > 0) {
+                Config.getInstance().setMonthsForOldBook(months);
+                Config.getInstance().saveConfig();
+                System.out.println("Настройка сохранена! Новое значение: " + months + " месяцев");
+            } else {
+                System.out.println("Значение должно быть больше 0!");
+            }
+        } catch (Exception e) {
+            System.out.println("Ошибка! Введите целое число.");
+            scanner.nextLine();
+        }
+    }));
+    
+    menu.addMenuItem(new MenuItem("Включить/выключить автовыполнение запросов", () -> {
+        System.out.println("\n=== Управление автовыполнением запросов ===");
+        boolean current = Config.getInstance().isAutoCompleteRequests();
+        System.out.println("Текущее состояние: " + (current ? "Включено" : "Отключено"));
+        System.out.print("Включить автовыполнение? (да/нет): ");
         
-        menu.addMenuItem(new MenuItem("Книги по цене", () -> {
-            System.out.println("\n=== Книги по цене ===");
-            controller.showBooksByPrice();
-        }));
-                
-        return menu;
-    }
+        String answer = scanner.nextLine().toLowerCase();
+        boolean newValue;
+        
+        if (answer.equals("да") || answer.equals("д") || answer.equals("yes") || answer.equals("y")) {
+            newValue = true;
+        } else if (answer.equals("нет") || answer.equals("н") || answer.equals("no") || answer.equals("n")) {
+            newValue = false;
+        } else {
+            System.out.println("Неверный ответ. Настройка не изменена.");
+            return;
+        }
+        
+        Config.getInstance().setAutoCompleteRequests(newValue);
+        Config.getInstance().saveConfig();
+        System.out.println("Настройка сохранена! Автовыполнение запросов: " + 
+            (newValue ? "Включено" : "Отключено"));
+    }));
+    
+    return menu;
+}
 
     public Menu getRootMenu() {
         return rootMenu;
