@@ -32,13 +32,15 @@ public final class MenuBuilder {
         Menu orderMenu = createOrderMenu();
         Menu reportMenu = createReportMenu();
         Menu searchMenu = createSearchMenu();
-          Menu importExportMenu = createImportExportMenu();
+        Menu importExportMenu = createImportExportMenu();
+        Menu propertiesMenu = createPropertiesMenu();
 
         rootMenu.addMenuItem(new MenuItem("Управление складом", stockMenu));
         rootMenu.addMenuItem(new MenuItem("Управление заказами", orderMenu));
         rootMenu.addMenuItem(new MenuItem("Отчеты и аналитика", reportMenu));
         rootMenu.addMenuItem(new MenuItem("Поиск и сортировка", searchMenu));
         rootMenu.addMenuItem(new MenuItem("Импорт/Экспорт данных", importExportMenu));
+        rootMenu.addMenuItem(new MenuItem("Настройки", propertiesMenu));
     }
     
     private Menu createStockMenu() {
@@ -302,6 +304,22 @@ public final class MenuBuilder {
         
         return menu;
     }
+    private Menu createPropertiesMenu() {
+        Menu menu = new Menu("Настройки");
+        
+        menu.addMenuItem(new MenuItem("Количество месяцев залежавшейся книги", () -> {
+            System.out.println("\n=== Количество месяцев залежавшейся книги ===");
+            controller.showBooksByABC();
+        }));
+        
+        menu.addMenuItem(new MenuItem("Книги по цене", () -> {
+            System.out.println("\n=== Книги по цене ===");
+            controller.showBooksByPrice();
+        }));
+                
+        return menu;
+    }
+
     public Menu getRootMenu() {
         return rootMenu;
     }
