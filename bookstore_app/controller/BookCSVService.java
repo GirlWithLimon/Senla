@@ -73,14 +73,13 @@ public class BookCSVService implements ICSVImportExport<Book> {
         
         Map<Integer, Book> importedBooksMap = importedBooks.stream()
             .collect(Collectors.toMap(Book::getId, book -> book));
-       
-			  for (int i = 0; i < currentBooks.size(); i++) {
-            Book currentBook = currentBooks.get(i);
+
+        for (Book currentBook : currentBooks) {
             Book importedBook = importedBooksMap.get(currentBook.getId());
-            
+
             if (importedBook != null) {
                 updateBookData(currentBook, importedBook);
-                importedBooksMap.remove(currentBook.getId()); 
+                importedBooksMap.remove(currentBook.getId());
             }
         }
         

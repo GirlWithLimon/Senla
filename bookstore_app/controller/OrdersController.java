@@ -13,11 +13,9 @@ import bookstore_app.model.Stok;
 
 public class OrdersController implements IOrderOperation{
     Stok stok;
-    ID idNew;
     
     public OrdersController(Stok stok) {
         this.stok = stok;
-        this.idNew = new ID();
     }
 
     private BookCopy findBook(Book book) {
@@ -44,7 +42,7 @@ public class OrdersController implements IOrderOperation{
    
     private BookOrderItem createOrderItem(Book book) {
         BookCopy bookCopy = findBook(book);
-        int id = idNew.generateOrderItemId(stok.getOrders());
+        int id = stok.getOrders().getLast().getOrderItems().getLast().getId()+1;
         
         BookOrderItem orderItem = new BookOrderItem(id, book);
         
@@ -57,7 +55,7 @@ public class OrdersController implements IOrderOperation{
                 book.setStatusNo();
             }
         } else {
-            int idRequest = idNew.generateRequestId(stok.getRequests());
+            int idRequest = stok.getRequests().getLast().getId()+1;
             Request request = new Request(idRequest, orderItem);
             stok.addRequest(request);
             orderItem.setStatus(OrderItemStatus.PENDING);

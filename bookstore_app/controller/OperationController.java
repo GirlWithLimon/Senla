@@ -16,7 +16,7 @@ public class OperationController {
     private final IShowOrdersAndRequests showOrdersAndRequests;
     private final IOrderOperation orderOperation;
     private final ImportExportService importExportService;
-    ID newId;
+
 
     public OperationController() {
         this.stok = new Stok();
@@ -25,7 +25,6 @@ public class OperationController {
         this.bookInStok = new BooksController(stok);
         this.orderOperation = new OrdersController(stok);
         this.importExportService = new ImportExportService(stok);
-        this.newId = new ID();
     }
     
     public void initializeTestData() {
@@ -52,7 +51,7 @@ public class OperationController {
     }
     
     public Book addBookToStock(String name, String author, Double price, LocalDate datePublication, LocalDate date) {
-        int id = newId.generateBookId(stok.getBooks());
+        int id = stok.getBooks().getLast().getId()+1;
         Book book = new Book(id, name, author, price, datePublication);
         bookInStok.addBookToStock(id, book, date);
         return book;
@@ -105,7 +104,7 @@ public class OperationController {
     }
     
     public BookOrder createOrder(List<Book> books, String customerName, String customerContact) {
-        int id = newId.generateOrderId(stok.getOrders());
+        int id = stok.getOrders().getLast().getId()+1;
         return orderOperation.createOrder(id, books, customerName, customerContact);
     }
     

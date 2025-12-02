@@ -3,12 +3,11 @@ package bookstore_app.view;
 import java.util.Scanner;
 
 public class MenuController {
-    private final MenuBuilder builder;
     private final Navigator navigator;
     private final Scanner scanner;
     
     public MenuController() {
-        this.builder = MenuBuilder.getInstance();
+        MenuBuilder builder = MenuBuilder.getInstance();
         this.navigator = new Navigator(builder.getRootMenu());
         this.scanner = new Scanner(System.in);
     }

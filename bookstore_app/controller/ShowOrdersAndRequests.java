@@ -33,7 +33,7 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests{
     public void showOrdersByPrice() {
         List<BookOrder> sortedOrders = stok.getOrders().stream()
             .sorted(Comparator.comparing(BookOrder::getTotalPrice))
-            .collect(Collectors.toList());
+            .toList();
             
         System.out.println("Заказы по цене:");
         sortedOrders.forEach(order -> 
@@ -45,7 +45,7 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests{
     public void showOrdersByStatus() {
         List<BookOrder> sortedOrders = stok.getOrders().stream()
             .sorted(Comparator.comparing(BookOrder::getStatus))
-            .collect(Collectors.toList());
+            .toList();
             
         System.out.println("Заказы по статусу:");
         sortedOrders.forEach(order -> 
@@ -102,8 +102,7 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests{
     
     @Override
     public int getCompletedOrdersCountByPeriod(LocalDate start, LocalDate end) {
-        return (int) getCompletedOrdersByPeriod(start, end).stream()
-            .count();
+        return getCompletedOrdersByPeriod(start, end).size();
     }
     
     @Override
