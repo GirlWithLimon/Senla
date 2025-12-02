@@ -10,11 +10,10 @@ import java.util.stream.Collectors;
 
 public class BookOrderCSVService implements ICSVImportExport<BookOrder> {
     private final Stok stok;
-    private final ID idGenerator;
+
     
     public BookOrderCSVService(Stok stok) {
         this.stok = stok;
-        this.idGenerator = new ID();
     }
     
     @Override
@@ -66,11 +65,10 @@ public class BookOrderCSVService implements ICSVImportExport<BookOrder> {
         
         Map<Integer, BookOrder> importedOrdersMap = importedOrders.stream()
             .collect(Collectors.toMap(BookOrder::getId, order -> order));
-        
-        for (int i = 0; i < currentOrders.size(); i++) {
-            BookOrder currentOrder = currentOrders.get(i);
+
+        for (BookOrder currentOrder : currentOrders) {
             BookOrder importedOrder = importedOrdersMap.get(currentOrder.getId());
-            
+
             if (importedOrder != null) {
                 updateOrderData(currentOrder, importedOrder);
                 importedOrdersMap.remove(currentOrder.getId());

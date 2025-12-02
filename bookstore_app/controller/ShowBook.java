@@ -71,7 +71,7 @@ public class ShowBook implements IShowBook{
         }
         List<Book> sortedBooks = stok.getBooks().stream()
             .sorted(Comparator.comparing(Book::getPublicationDate))
-            .collect(Collectors.toList());
+            .toList();
             
         System.out.println("Книги по дате публикации:");
         sortedBooks.forEach(book -> 
@@ -86,7 +86,7 @@ public class ShowBook implements IShowBook{
         }
         List<Book> sortedBooks = stok.getBooks().stream()
             .sorted(Comparator.comparing(Book::getPrice))
-            .collect(Collectors.toList());
+            .toList();
             
         System.out.println("Книги по цене:");
         sortedBooks.forEach(book -> 
@@ -111,7 +111,7 @@ public class ShowBook implements IShowBook{
                 bookCount.getOrDefault(b2, 0L),
                 bookCount.getOrDefault(b1, 0L)
             ))
-            .collect(Collectors.toList());
+            .toList();
         
         System.out.println("Книги по количеству экземпляров:");
         sortedBooks.forEach(book -> {
