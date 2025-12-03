@@ -51,7 +51,7 @@ public class BooksController implements IBookStok{
         
         List<Request> requestsToRemove = stok.getRequests().stream()
             .filter(request -> request.getBook().equals(book))
-            .collect(Collectors.toList());
+            .toList();
             
         Set<BookOrder> ordersToUpdate = requestsToRemove.stream()
             .map(this::findOrderByRequest)

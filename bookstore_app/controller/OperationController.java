@@ -51,7 +51,7 @@ public class OperationController {
     }
     
     public Book addBookToStock(String name, String author, Double price, LocalDate datePublication, LocalDate date) {
-        int id = stok.getBooks().getLast().getId()+1;
+        int id = stok.getBooks().isEmpty() ? 1 : stok.getBooks().getLast().getId() + 1;
         Book book = new Book(id, name, author, price, datePublication);
         bookInStok.addBookToStock(id, book, date);
         return book;
@@ -65,7 +65,7 @@ public class OperationController {
         return  showBook.sortABCBook();
     }
     
-    public void showsortABCBook() {
+    public void showSortABCBook() {
         showBook.showAllBook();
     }
 
@@ -104,7 +104,7 @@ public class OperationController {
     }
     
     public BookOrder createOrder(List<Book> books, String customerName, String customerContact) {
-        int id = stok.getOrders().getLast().getId()+1;
+        int id = stok.getOrders().isEmpty()? 1 : stok.getOrders().getLast().getId()+1;
         return orderOperation.createOrder(id, books, customerName, customerContact);
     }
     

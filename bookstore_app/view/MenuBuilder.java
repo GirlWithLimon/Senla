@@ -100,7 +100,7 @@ public final class MenuBuilder {
             System.out.print("Контактные данные: ");
             String customerContact = scanner.nextLine();
             
-            controller.showsortABCBook();
+            controller.showSortABCBook();
             System.out.print("Выберите номера книг через запятую: ");
             String booksInput = scanner.nextLine();
             

@@ -42,10 +42,25 @@ public class OrdersController implements IOrderOperation{
    
     private BookOrderItem createOrderItem(Book book) {
         BookCopy bookCopy = findBook(book);
-        int id = stok.getOrders().getLast().getOrderItems().getLast().getId()+1;
-        
+        int id;
+        if(stok.getOrders().isEmpty()){
+            id = 1;
+        } else {
+            boolean anyOrderHasBooks = stok.getOrders().stream()
+                    .anyMatch(order -> !order.getOrderItems().isEmpty());
+
+            if (anyOrderHasBooks) {
+               id = stok.getOrders().stream()
+                        .flatMap(order -> order.getOrderItems().stream())
+                        .mapToInt(BookOrderItem::getId)
+                        .max()
+                        .orElse(0) + 1;
+            } else {
+                id = 1;
+            }
+        }
         BookOrderItem orderItem = new BookOrderItem(id, book);
-        
+
         if (bookCopy != null) {
             orderItem.setBookCopy(bookCopy);
             orderItem.setStatus(OrderItemStatus.COMPLETED);
@@ -55,7 +70,7 @@ public class OrdersController implements IOrderOperation{
                 book.setStatusNo();
             }
         } else {
-            int idRequest = stok.getRequests().getLast().getId()+1;
+            int idRequest = stok.getRequests().isEmpty()? 1: stok.getRequests().getLast().getId()+1;
             Request request = new Request(idRequest, orderItem);
             stok.addRequest(request);
             orderItem.setStatus(OrderItemStatus.PENDING);
