@@ -53,17 +53,17 @@ public class BooksController implements IBookStok{
 
         if (config.isAutoCompleteRequests()) {
             List<Request> requestsToRemove = stok.getRequests().stream()
-                .filter(request -> request.getBook().equals(book))
-                .collect(Collectors.toList());
-                
+                .filter(request -> request.getBook().equals(bookCopy.getBook()))
+                .toList();
+
             Set<BookOrder> ordersToUpdate = requestsToRemove.stream()
                 .map(this::findOrderByRequest)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
             
             requestsToRemove.forEach(request -> {
-                request.ContinueRequest(newBook);
-                removeBookFromStock(newBook);
+                request.ContinueRequest(bookCopy);
+                removeBookCopyfromstock(bookCopy);
             });
             
             requestsToRemove.forEach(stok::removeRequest);
@@ -76,7 +76,7 @@ public class BooksController implements IBookStok{
             
             if (!requestsToRemove.isEmpty()) {
                 System.out.println("Выполнено запросов: " + requestsToRemove.size() + 
-                              " для книги: " + book.getName());
+                              " для книги: " + bookCopy.getBook().getName());
             }
         } else {
             System.out.println("Автоматическое выполнение запросов отключено в настройках");
@@ -96,7 +96,7 @@ public class BooksController implements IBookStok{
     }
     
     @Override
-    public void removeBookFromStock(BookCopy book) {
+    public void removeBookCopyfromstock(BookCopy book) {
         stok.removeBooksCopy(book);
         boolean hasOtherCopies = stok.getBooksCopy().stream()
             .anyMatch(copy -> copy.getBook().equals(book.getBook()));

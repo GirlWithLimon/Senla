@@ -67,7 +67,7 @@ public class OperationController {
     }
     
     public void removeBookFromStock(BookCopy bookCopy) {
-        bookInStok.removeBookFromStock(bookCopy);
+        bookInStok.removeBookCopyfromstock(bookCopy);
     }
     
     public List<Book> getBooks(){
