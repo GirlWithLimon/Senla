@@ -6,6 +6,7 @@ import bookstore_app.model.Book;
 import bookstore_app.model.BookCopy;
 
 public interface IShowBook {
+    void showBook();
     void sortByABC();
     void sortByPublicationDate();
     void sortByPrice();

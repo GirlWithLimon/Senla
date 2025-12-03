@@ -34,7 +34,7 @@ public class OperationController {
         Book book4 =  addBookToStock("1984", "Дж.Оруэлл", 300.0, LocalDate.of(2019, 1, 15), LocalDate.now().minusMonths(5));
         
         Book book5 = addBookToStock("Старая книга", "Автор", 150.0, LocalDate.of(2020, 1, 1), LocalDate.now().minusMonths(24));
-        
+        BookCopy bookCopy = addBookCopyToStock(1,LocalDate.now());
         List<Book> order1Books = List.of(book1, book2);
         createOrder(order1Books, "Иван Иванов", "ivan@mail.com");
         
@@ -51,10 +51,19 @@ public class OperationController {
     }
     
     public Book addBookToStock(String name, String author, Double price, LocalDate datePublication, LocalDate date) {
-        int id = stok.getBooks().getLast().getId()+1;
+        int id = stok.getBooks().isEmpty() ? 1 : stok.getBooks().getLast().getId() + 1;
         Book book = new Book(id, name, author, price, datePublication);
         bookInStok.addBookToStock(id, book, date);
         return book;
+    }
+    public BookCopy addBookCopyToStock(int idBook, LocalDate date) {
+        int id = stok.getBooksCopy().isEmpty() ? 1 : stok.getBooksCopy().getLast().getId() + 1;
+        Book book = stok.getBooks().stream().filter(books -> books.getId()==idBook)
+                .findFirst().orElse(null);
+
+        BookCopy bookCopy = new BookCopy(id,book,date);
+        bookInStok.addBookCopyToStock(id, bookCopy, date);
+        return bookCopy;
     }
     
     public void removeBookFromStock(BookCopy bookCopy) {
@@ -65,10 +74,12 @@ public class OperationController {
         return  showBook.sortABCBook();
     }
     
-    public void showsortABCBook() {
+    public void showSortABCBook() {
         showBook.showAllBook();
     }
-
+    public void showSortBook() {
+        showBook.showBook();
+    }
     public String showBookInformation(Book book) {
         return bookInStok.showBookInformation(book);
     }
@@ -104,7 +115,7 @@ public class OperationController {
     }
     
     public BookOrder createOrder(List<Book> books, String customerName, String customerContact) {
-        int id = stok.getOrders().getLast().getId()+1;
+        int id = stok.getOrders().isEmpty()? 1 : stok.getOrders().getLast().getId()+1;
         return orderOperation.createOrder(id, books, customerName, customerContact);
     }
     

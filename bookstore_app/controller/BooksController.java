@@ -23,34 +23,34 @@ public class BooksController implements IBookStok{
         this.config = Config.getInstance();
     }
 
-    public void addBookToCatalog(Book book) {
-        boolean bookExists = stok.getBooks().stream()
-            .anyMatch(b -> b.getId()==book.getId());
-            
-        if (!bookExists) {
-            stok.addBook(book);
-            System.out.println("Книга добавлена в каталог: " + book.getName() + " | ID: " + book.getId() + " | Всего в каталоге: " + stok.getBooks().size());
-        } else {
-            System.out.println("Книга уже есть в каталоге: " + book.getName() + " | ID: " + book.getId());
-        }
-    }
+
     
     @Override
     public String showBookInformation(Book book) {
         return book.getInfo();
     }
 
-     @Override
+    @Override
     public void addBookToStock(int id, Book book, LocalDate date) {
-        addBookToCatalog(book);
-        BookCopy newBook = new BookCopy(id, book, date);
-        stok.addBooksCopy(newBook);
-        book.setStatusStok();     
-        
-        System.out.println("Добавлена книга на склад: " + book.getName() + 
-                      " | Копий: " + countBookCopies(book) + 
-                      " | Книг в каталоге: " + stok.getBooks().size());
-        
+        boolean bookExists = stok.getBooks().stream()
+                .anyMatch(b -> b.getId()==book.getId());
+
+        if (!bookExists) {
+            stok.addBook(book);
+            System.out.println("Книга добавлена в каталог: " + book.getName() + " | ID: " + book.getId() + " | Всего в каталоге: " + stok.getBooks().size());
+        } else {
+            System.out.println("Книга уже есть в каталоге: " + book.getName() + " | ID: " + book.getId());
+        }
+
+    }
+    public void addBookCopyToStock(int id, BookCopy bookCopy, LocalDate date){
+        stok.addBooksCopy(bookCopy);
+        bookCopy.getBook().setStatusStok();
+
+        System.out.println("Добавлена книга на склад: " + bookCopy.getBook().getName() +
+                " | Копий: " + countBookCopies(bookCopy.getBook()) +
+                " | Книг в каталоге: " + stok.getBooks().size());
+
         if (config.isAutoCompleteRequests()) {
             List<Request> requestsToRemove = stok.getRequests().stream()
                 .filter(request -> request.getBook().equals(book))
@@ -82,7 +82,6 @@ public class BooksController implements IBookStok{
             System.out.println("Автоматическое выполнение запросов отключено в настройках");
         }
     }
-    
     private BookOrder findOrderByRequest(Request request) {
         return stok.getOrders().stream()
             .filter(order -> order.getOrderItems().contains(request.getOrderItem()))

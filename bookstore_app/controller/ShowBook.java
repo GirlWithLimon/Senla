@@ -63,7 +63,21 @@ public class ShowBook implements IShowBook{
                                  copy.getBook().getPrice() + " руб."));
         }
     }
-    
+
+    @Override
+    public  void showBook(){
+        if (stok.getBooks().isEmpty()) {
+            System.out.println("Каталог книг пуст");
+            return;
+        }
+        List<Book> sortedBooks = stok.getBooks().stream()
+                .sorted(Comparator.comparing(Book::getId))
+                .toList();
+
+        System.out.println("Книги по id:");
+        sortedBooks.forEach(book ->
+                System.out.println(book.getId()+ " - " + book.getName() + " "+ book.getAuthor()));
+    }
     @Override
     public void sortByABC() {
         if (stok.getBooks().isEmpty()) {
@@ -150,7 +164,7 @@ public class ShowBook implements IShowBook{
         } else { 
             for (int i = 0; i < sortedBooks.size(); i++) {
                 Book book = sortedBooks.get(i);
-                System.out.println((i + 1) + ". " + book.getName()+" - "+ book.getAuthor() + " - " + book.getPrice());
+                System.out.println(book.getId()+ ". " + book.getName()+" - "+ book.getAuthor() + " - " + book.getPrice());
             }
         }
     }
