@@ -68,7 +68,33 @@ public final class MenuBuilder {
             controller.addBookToStock(name, author, price, datePublication, LocalDate.now());
             System.out.println("Книга добавлена на склад!");
         }));
-        
+        menu.addMenuItem(new MenuItem("Добавить экземпляр книги на склад", () -> {
+            System.out.println("\n=== Добавление экземпляра книги на склад ===");
+            controller.showSortBook();
+            System.out.print("Выберите id книги: ");
+            int booksInput=0;
+            try{
+                booksInput = scanner.nextInt();
+            }
+            catch (Exception e) {
+                System.out.println("Необходимо ввести целое число!");
+            }
+            scanner.nextLine();
+//            boolean dateParsing=false;
+            LocalDate datePublication = LocalDate.now();
+//            while (!dateParsing) {
+//                System.out.print("Дата публикации (гггг-мм-дд): ");
+//                String dateString = scanner.nextLine();
+//                try {
+//                    datePublication = LocalDate.parse(dateString);
+//                    dateParsing = true;
+//                } catch (Exception e) {
+//                    System.out.println("Ошибка формата даты! Используйте гггг-мм-дд");
+//                }
+//            }
+
+            controller.addBookCopyToStock(booksInput, datePublication);
+        }));
         menu.addMenuItem(new MenuItem("Показать информацию о книге", () -> {
             System.out.println("\n=== Информация о книге ===");
                        

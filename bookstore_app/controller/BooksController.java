@@ -21,17 +21,7 @@ public class BooksController implements IBookStok{
         this.stok = stok;
     }
 
-    public void addBookToCatalog(Book book) {
-        boolean bookExists = stok.getBooks().stream()
-            .anyMatch(b -> b.getId()==book.getId());
-            
-        if (!bookExists) {
-            stok.addBook(book);
-            System.out.println("Книга добавлена в каталог: " + book.getName() + " | ID: " + book.getId() + " | Всего в каталоге: " + stok.getBooks().size());
-        } else {
-            System.out.println("Книга уже есть в каталоге: " + book.getName() + " | ID: " + book.getId());
-        }
-    }
+
     
     @Override
     public String showBookInformation(Book book) {
@@ -40,43 +30,52 @@ public class BooksController implements IBookStok{
 
     @Override
     public void addBookToStock(int id, Book book, LocalDate date) {
-        addBookToCatalog(book);
-        BookCopy newBook = new BookCopy(id, book, date);
-        stok.addBooksCopy(newBook);
-        book.setStatusStok();     
-        
-        System.out.println("Добавлена книга на склад: " + book.getName() + 
-                      " | Копий: " + countBookCopies(book) + 
-                      " | Книг в каталоге: " + stok.getBooks().size());
-        
+        boolean bookExists = stok.getBooks().stream()
+                .anyMatch(b -> b.getId()==book.getId());
+
+        if (!bookExists) {
+            stok.addBook(book);
+            System.out.println("Книга добавлена в каталог: " + book.getName() + " | ID: " + book.getId() + " | Всего в каталоге: " + stok.getBooks().size());
+        } else {
+            System.out.println("Книга уже есть в каталоге: " + book.getName() + " | ID: " + book.getId());
+        }
+
+    }
+    public void addBookCopyToStock(int id, BookCopy bookCopy, LocalDate date){
+        stok.addBooksCopy(bookCopy);
+        bookCopy.getBook().setStatusStok();
+
+        System.out.println("Добавлена книга на склад: " + bookCopy.getBook().getName() +
+                " | Копий: " + countBookCopies(bookCopy.getBook()) +
+                " | Книг в каталоге: " + stok.getBooks().size());
+
         List<Request> requestsToRemove = stok.getRequests().stream()
-            .filter(request -> request.getBook().equals(book))
-            .toList();
-            
+                .filter(request -> request.getBook().equals(bookCopy.getBook()))
+                .toList();
+
         Set<BookOrder> ordersToUpdate = requestsToRemove.stream()
-            .map(this::findOrderByRequest)
-            .filter(Objects::nonNull)
-            .collect(Collectors.toSet());
-        
+                .map(this::findOrderByRequest)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+
         requestsToRemove.forEach(request -> {
-            request.ContinueRequest(newBook);
-            removeBookFromStock(newBook);
+            request.ContinueRequest(bookCopy);
+            removeBookFromStock(bookCopy);
         });
-        
+
         requestsToRemove.forEach(stok::removeRequest);
-        
+
         ordersToUpdate.forEach(order -> {
             updateOrderStatus(order);
-            System.out.println("Обновлен статус заказа #" + order.getId() + 
-                          " на: " + order.getStatus());
+            System.out.println("Обновлен статус заказа #" + order.getId() +
+                    " на: " + order.getStatus());
         });
-        
+
         if (!requestsToRemove.isEmpty()) {
-            System.out.println("Выполнено запросов: " + requestsToRemove.size() + 
-                          " для книги: " + book.getName());
+            System.out.println("Выполнено запросов: " + requestsToRemove.size() +
+                    " для книги: " + bookCopy.getBook().getName());
         }
     }
-    
     private BookOrder findOrderByRequest(Request request) {
         return stok.getOrders().stream()
             .filter(order -> order.getOrderItems().contains(request.getOrderItem()))
