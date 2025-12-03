@@ -12,15 +12,16 @@ import bookstore_app.model.Stok;
 
 public class ShowBook implements IShowBook{
     final Stok stok;
-    
+    final Config config;
     public ShowBook(Stok stok) {
         this.stok = stok;
+        this.config = Config.getInstance();
        
     }
     
     @Override
     public List<BookCopy> getOldBooksSortedByDate() {
-        LocalDate sixMonthsAgo = LocalDate.now().minusMonths(6);
+        LocalDate sixMonthsAgo = LocalDate.now().minusMonths(config.getMonthsForOldBook());
         return stok.getBooksCopy().stream()
             .filter(copy -> copy.getArrivalDate().isBefore(sixMonthsAgo))
             .sorted(Comparator.comparing(BookCopy::getArrivalDate))
@@ -29,17 +30,30 @@ public class ShowBook implements IShowBook{
     
     @Override
     public List<BookCopy> getOldBooksSortedByPrice() {
-        LocalDate sixMonthsAgo = LocalDate.now().minusMonths(6);
+        LocalDate oldDate = LocalDate.now().minusMonths(config.getMonthsForOldBook());
         return stok.getBooksCopy().stream()
-            .filter(copy -> copy.getArrivalDate().isBefore(sixMonthsAgo))
+            .filter(copy -> copy.getArrivalDate().isBefore(oldDate))
             .sorted(Comparator.comparing(copy -> copy.getBook().getPrice()))
             .collect(Collectors.toList());
     }
     
     @Override
-    public void showOldBooks() {
+    public void showOldBooksByDate() {
         List<BookCopy> oldBooks = getOldBooksSortedByDate();
-        System.out.println("Залежавшиеся книги (более 6 месяцев):");
+        System.out.println("Залежавшиеся книги (более " + config.getMonthsForOldBook()+" месяцев):");
+        if (oldBooks.isEmpty()) {
+            System.out.println(" - Нет залежавшихся книг");
+        } else {
+            oldBooks.forEach(copy -> 
+                System.out.println(" - " + copy.getBook() + " | Поступление: " + 
+                                 copy.getArrivalDate() + " | Цена: " + 
+                                 copy.getBook().getPrice() + " руб."));
+        }
+    }
+    @Override
+    public void showOldBooksByPrice() {
+        List<BookCopy> oldBooks = getOldBooksSortedByDate();
+        System.out.println("Залежавшиеся книги (более " + config.getMonthsForOldBook()+" месяцев):");
         if (oldBooks.isEmpty()) {
             System.out.println(" - Нет залежавшихся книг");
         } else {

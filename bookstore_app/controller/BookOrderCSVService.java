@@ -56,12 +56,12 @@ public class BookOrderCSVService implements ICSVImportExport<BookOrder> {
     
     @Override
     public List<BookOrder> getAllEntities() {
-        return stok.getOrders();
+        return (List<BookOrder>) stok.getOrders();
     }
     
     @Override
     public void saveEntities(List<BookOrder> importedOrders) {
-        List<BookOrder> currentOrders = stok.getOrders();
+        List<BookOrder> currentOrders = (List<BookOrder>) stok.getOrders();
         
         Map<Integer, BookOrder> importedOrdersMap = importedOrders.stream()
             .collect(Collectors.toMap(BookOrder::getId, order -> order));

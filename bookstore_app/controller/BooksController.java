@@ -16,9 +16,11 @@ import bookstore_app.model.Stok;
 
 public class BooksController implements IBookStok{
     Stok stok;
+     private final Config config;
    
     public BooksController(Stok stok) {
         this.stok = stok;
+        this.config = Config.getInstance();
     }
 
 
@@ -49,31 +51,35 @@ public class BooksController implements IBookStok{
                 " | Копий: " + countBookCopies(bookCopy.getBook()) +
                 " | Книг в каталоге: " + stok.getBooks().size());
 
-        List<Request> requestsToRemove = stok.getRequests().stream()
-                .filter(request -> request.getBook().equals(bookCopy.getBook()))
-                .toList();
-
-        Set<BookOrder> ordersToUpdate = requestsToRemove.stream()
+        if (config.isAutoCompleteRequests()) {
+            List<Request> requestsToRemove = stok.getRequests().stream()
+                .filter(request -> request.getBook().equals(book))
+                .collect(Collectors.toList());
+                
+            Set<BookOrder> ordersToUpdate = requestsToRemove.stream()
                 .map(this::findOrderByRequest)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
-
-        requestsToRemove.forEach(request -> {
-            request.ContinueRequest(bookCopy);
-            removeBookFromStock(bookCopy);
-        });
-
-        requestsToRemove.forEach(stok::removeRequest);
-
-        ordersToUpdate.forEach(order -> {
-            updateOrderStatus(order);
-            System.out.println("Обновлен статус заказа #" + order.getId() +
-                    " на: " + order.getStatus());
-        });
-
-        if (!requestsToRemove.isEmpty()) {
-            System.out.println("Выполнено запросов: " + requestsToRemove.size() +
-                    " для книги: " + bookCopy.getBook().getName());
+            
+            requestsToRemove.forEach(request -> {
+                request.ContinueRequest(newBook);
+                removeBookFromStock(newBook);
+            });
+            
+            requestsToRemove.forEach(stok::removeRequest);
+            
+            ordersToUpdate.forEach(order -> {
+                updateOrderStatus(order);
+                System.out.println("Обновлен статус заказа #" + order.getId() + 
+                              " на: " + order.getStatus());
+            });
+            
+            if (!requestsToRemove.isEmpty()) {
+                System.out.println("Выполнено запросов: " + requestsToRemove.size() + 
+                              " для книги: " + book.getName());
+            }
+        } else {
+            System.out.println("Автоматическое выполнение запросов отключено в настройках");
         }
     }
     private BookOrder findOrderByRequest(Request request) {

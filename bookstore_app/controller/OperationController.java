@@ -144,21 +144,11 @@ public class OperationController {
     }
     
     public void showOldBooksSortedByDate() {
-        List<BookCopy> oldBooks = showBook.getOldBooksSortedByDate();
-        System.out.println("Залежавшиеся книги по дате поступления:");
-        oldBooks.forEach(copy -> 
-            System.out.println(" - " + copy.getBook() + " | Поступление: " + 
-                             copy.getArrivalDate() + " | Цена: " + 
-                             copy.getBook().getPrice() + " руб."));
+        showBook.showOldBooksByDate();
     }
     
     public void showOldBooksSortedByPrice() {
-        List<BookCopy> oldBooks = showBook.getOldBooksSortedByPrice();
-        System.out.println("Залежавшиеся книги по цене:");
-        oldBooks.forEach(copy -> 
-            System.out.println(" - " + copy.getBook() + " | Цена: " + 
-                             copy.getBook().getPrice() + " руб. | Поступление: " + 
-                             copy.getArrivalDate()));
+        showBook.showOldBooksByPrice();
     }
 
     public void showRequestsByCount() {
