@@ -1,5 +1,11 @@
 package bookstore_app.model;
-public class BookOrderItem {
+
+import java.io.Serial;
+import java.io.Serializable;
+
+public class BookOrderItem implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private final int id;
     private final Book book;
     private BookCopy bookCopy;

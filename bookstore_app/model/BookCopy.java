@@ -1,7 +1,11 @@
 package bookstore_app.model;
+import java.io.Serial;
 import java.time.LocalDate;
+import java.io.Serializable;
 
-public class BookCopy {
+public class BookCopy implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private final int id;
     private final Book book;
     private final LocalDate arrivalDate;
