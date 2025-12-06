@@ -1,5 +1,8 @@
 package bookstore_app.model;
-public enum BookStatus {
+
+import java.io.Serializable;
+
+public enum BookStatus implements Serializable {
     IN_STOCK("В наличии"),
     OUT_OF_STOCK("Отсутствует");
     

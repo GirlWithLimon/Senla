@@ -1,7 +1,11 @@
 package bookstore_app.model;
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.*;
 
-public class Stok {
+public class Stok implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private final List<BookCopy> booksCopy = new ArrayList<>();
     private final List<Request> requests = new ArrayList<>();
     private final List<BookOrder> orders = new ArrayList<>();

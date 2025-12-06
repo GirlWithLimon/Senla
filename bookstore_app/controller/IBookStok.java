@@ -7,6 +7,6 @@ import bookstore_app.model.BookCopy;
 public interface IBookStok {
     void addBookToStock(int id, Book book, LocalDate date);
     void addBookCopyToStock(int id, BookCopy bookCopy, LocalDate date);
-    void removeBookFromStock(BookCopy book);
+    void removeBookCopyfromstock(BookCopy book);
     String showBookInformation(Book book);
 }

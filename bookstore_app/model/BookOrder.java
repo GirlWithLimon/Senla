@@ -1,11 +1,15 @@
 package bookstore_app.model;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class BookOrder {
+public class BookOrder implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private final int id;
     private final List<BookOrderItem> orderItems;
     private OrderStatus status;
