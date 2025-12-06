@@ -16,32 +16,50 @@ public class OperationController {
     private final IShowOrdersAndRequests showOrdersAndRequests;
     private final IOrderOperation orderOperation;
     private final ImportExportService importExportService;
-
+    private final DataSave dataSave;
 
     public OperationController() {
-        this.stok = new Stok();
+        this.dataSave = DataSave.getInstance();
+        this.stok = dataSave.loadState();
         this.showBook = new ShowBook(stok);
         this.showOrdersAndRequests = new ShowOrdersAndRequests(stok);
         this.bookInStok = new BooksController(stok);
         this.orderOperation = new OrdersController(stok);
         this.importExportService = new ImportExportService(stok);
+        setupShutdownHook();
     }
-    
+    private void setupShutdownHook() {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            System.out.println("\nСохранение состояния программы...");
+            dataSave.saveState(stok);
+            System.out.println("Состояние успешно сохранено.");
+        }));
+    }
     public void initializeTestData() {
-        Book book1 = addBookToStock("Война и мир", "Л.Н.Толстой", 250.0, LocalDate.of(2014, 10, 24), LocalDate.now());
-        Book book2 = addBookToStock("Мастер и Маргарита", "М.А.Булгаков", 260.0, LocalDate.of(2014, 10, 24), LocalDate.now().minusMonths(1));
-        Book book3 = addBookToStock("Преступление и наказание", "Ф.М.Достоевский", 200.0, LocalDate.of(2015, 5, 10), LocalDate.now().minusYears(1));
-        Book book4 =  addBookToStock("1984", "Дж.Оруэлл", 300.0, LocalDate.of(2019, 1, 15), LocalDate.now().minusMonths(5));
-        
-        Book book5 = addBookToStock("Старая книга", "Автор", 150.0, LocalDate.of(2020, 1, 1), LocalDate.now().minusMonths(24));
-        BookCopy bookCopy = addBookCopyToStock(1,LocalDate.now());
-        List<Book> order1Books = List.of(book1, book2);
-        createOrder(order1Books, "Иван Иванов", "ivan@mail.com");
-        
-        List<Book> order2Books = List.of(book3, book4);
-        createOrder(order2Books, "Петр Петров", "petr@mail.com");
-        
-        System.out.println("Тестовые данные инициализированы!");
+        if (!stok.getBooks().isEmpty() || !stok.getOrders().isEmpty()) {
+            System.out.println("Загружены сохраненные данные:");
+            System.out.println("- Книг в каталоге: " + stok.getBooks().size());
+            System.out.println("- Экземпляров на складе: " + stok.getBooksCopy().size());
+            System.out.println("- Активных заказов: " + stok.getOrders().size());
+            System.out.println("- Активных запросов: " + stok.getRequests().size());
+            return;
+        }
+        else {
+            Book book1 = addBookToStock("Война и мир", "Л.Н.Толстой", 250.0, LocalDate.of(2014, 10, 24), LocalDate.now());
+            Book book2 = addBookToStock("Мастер и Маргарита", "М.А.Булгаков", 260.0, LocalDate.of(2014, 10, 24), LocalDate.now().minusMonths(1));
+            Book book3 = addBookToStock("Преступление и наказание", "Ф.М.Достоевский", 200.0, LocalDate.of(2015, 5, 10), LocalDate.now().minusYears(1));
+            Book book4 = addBookToStock("1984", "Дж.Оруэлл", 300.0, LocalDate.of(2019, 1, 15), LocalDate.now().minusMonths(5));
+
+            Book book5 = addBookToStock("Старая книга", "Автор", 150.0, LocalDate.of(2020, 1, 1), LocalDate.now().minusMonths(24));
+            BookCopy bookCopy = addBookCopyToStock(1, LocalDate.now());
+            List<Book> order1Books = List.of(book1, book2);
+            createOrder(order1Books, "Иван Иванов", "ivan@mail.com");
+
+            List<Book> order2Books = List.of(book3, book4);
+            createOrder(order2Books, "Петр Петров", "petr@mail.com");
+
+            System.out.println("Тестовые данные инициализированы!");
+        }
     }
         
     public Book addBookToStock(int id, String name, String author, Double price, LocalDate datePublication, LocalDate date) {
