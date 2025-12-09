@@ -1,6 +1,8 @@
 package bookstore_app.model;
 
-public enum OrderStatus {
+import java.io.Serializable;
+
+public enum OrderStatus implements Serializable {
     NEW("Новый"),
     IN_PROCESS("В обработке"),
     PARTIALLY_COMPLETED("Частично выполнен"),
