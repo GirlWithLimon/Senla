@@ -336,9 +336,13 @@ public final class MenuBuilder {
         Config config = Config.getInstance();
             menu.addMenuItem(new MenuItem("Показать текущие настройки", () -> {
         System.out.println("\n=== Текущие настройки ===");
-        System.out.println("Месяцев для залежавшихся книг: " + config.getMonthsForOldBook());
-        System.out.println("Автовыполнение запросов: " + 
-            (config.isAutoCompleteRequests() ? "Включено" : "Отключено"));
+
+        System.out.println(" - Месяцев для залежавшихся книг: " + config.getMonthsForOldBook());
+        System.out.println(" - Автовыполнение запросов: " +
+                (config.isAutoCompleteRequests() ? "Включено" : "Отключено"));
+        System.out.println(" - Разделитель CSV: " +
+                (config.getCsvDelimiter() != null ? config.getCsvDelimiter() : "запятая (по умолчанию)"));
+
     }));
     
     menu.addMenuItem(new MenuItem("Изменить период для залежавшихся книг", () -> {
