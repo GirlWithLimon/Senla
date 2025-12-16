@@ -6,20 +6,21 @@ import bookstore_app.project.model.Book;
 import bookstore_app.project.model.BookCopy;
 import bookstore_app.project.model.Stok;
 
+import bookstore_app.config.annotation.Component;
+import bookstore_app.config.annotation.Inject;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Component
 public class ShowBook implements IShowBook {
-    final Stok stok;
-    final BookstoreConfig config;
-
-    public ShowBook(Stok stok) {
-        this.stok = stok;
-        this.config = DI.getConfig(BookstoreConfig.class);
-    }
+    @Inject
+    private Stok stok;
+    @Inject
+    private BookstoreConfig config;
+    public ShowBook(){}
 
     @Override
     public List<BookCopy> getOldBooksSortedByDate() {

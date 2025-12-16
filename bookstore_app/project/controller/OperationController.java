@@ -1,5 +1,7 @@
 package bookstore_app.project.controller;
 
+import bookstore_app.config.annotation.Component;
+import bookstore_app.config.annotation.Inject;
 import bookstore_app.project.model.*;
 
 import java.io.IOException;
@@ -9,23 +11,24 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@Component
 public class OperationController {
-    private final Stok stok;
-    private final IBookStok bookInStok;
-    private final IShowBook showBook;
-    private final IShowOrdersAndRequests showOrdersAndRequests;
-    private final IOrderOperation orderOperation;
-    private final ImportExportService importExportService;
-    private final DataSave dataSave;
+    @Inject
+    private Stok stok;
+    @Inject
+    private IBookStok bookInStok;
+    @Inject
+    private IShowBook showBook;
+    @Inject
+    private IShowOrdersAndRequests showOrdersAndRequests;
+    @Inject
+    private IOrderOperation orderOperation;
+    @Inject
+    private ImportExportService importExportService;
+    @Inject
+    private DataSave dataSave;
 
     public OperationController() {
-        this.dataSave = DataSave.getInstance();
-        this.stok = dataSave.loadState();
-        this.showBook = new ShowBook(stok);
-        this.showOrdersAndRequests = new ShowOrdersAndRequests(stok);
-        this.bookInStok = new BooksController(stok);
-        this.orderOperation = new OrdersController(stok);
-        this.importExportService = new ImportExportService(stok);
         setupShutdownHook();
     }
     private void setupShutdownHook() {
@@ -61,13 +64,13 @@ public class OperationController {
             System.out.println("Тестовые данные инициализированы!");
         }
     }
-        
+
     public Book addBookToStock(int id, String name, String author, Double price, LocalDate datePublication, LocalDate date) {
         Book book = new Book(id, name, author, price, datePublication);
         bookInStok.addBookToStock(id, book, date);
         return book;
     }
-    
+
     public Book addBookToStock(String name, String author, Double price, LocalDate datePublication, LocalDate date) {
         int id = stok.getBooks().isEmpty() ? 1 : stok.getBooks().getLast().getId() + 1;
         Book book = new Book(id, name, author, price, datePublication);
@@ -83,15 +86,15 @@ public class OperationController {
         bookInStok.addBookCopyToStock(id, bookCopy, date);
         return bookCopy;
     }
-    
+
     public void removeBookFromStock(BookCopy bookCopy) {
         bookInStok.removeBookCopyfromstock(bookCopy);
     }
-    
+
     public List<Book> getBooks(){
         return  showBook.sortABCBook();
     }
-    
+
     public void showSortABCBook() {
         showBook.showAllBook();
     }
@@ -101,7 +104,7 @@ public class OperationController {
     public String showBookInformation(Book book) {
         return bookInStok.showBookInformation(book);
     }
-    
+
     public void checkOrderDate(String booksInput, String customerName, String customerContact){
         List<Book> selectedBooks = Arrays.stream(booksInput.split(","))
                 .map(String::trim)
@@ -117,8 +120,8 @@ public class OperationController {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         if (!selectedBooks.isEmpty()) {
-                BookOrder order = createOrder(selectedBooks, customerName, customerContact);
-                System.out.println("Заказ создан! ID: " + order.getId());
+            BookOrder order = createOrder(selectedBooks, customerName, customerContact);
+            System.out.println("Заказ создан! ID: " + order.getId());
         } else {
             System.out.println("Не выбрано ни одной книги!");
         }
@@ -131,40 +134,40 @@ public class OperationController {
     public BookOrder createOrder(int id, List<Book> books, String customerName, String customerContact) {
         return orderOperation.createOrder(id, books, customerName, customerContact);
     }
-    
+
     public BookOrder createOrder(List<Book> books, String customerName, String customerContact) {
         int id = stok.getOrders().isEmpty()? 1 : stok.getOrders().getLast().getId()+1;
         return orderOperation.createOrder(id, books, customerName, customerContact);
     }
-    
+
     public void cancelOrder(BookOrder order) {
         orderOperation.cancelOrder(order);
     }
-    
+
     public void cancelOrderItem(BookOrder order, Book book) {
         orderOperation.cancelOrderItem(order, book);
     }
-    
+
     public void showBooksByABC() {
         showBook.sortByABC();
     }
-    
+
     public void showBooksByPublicationDate() {
         showBook.sortByPublicationDate();
     }
-    
+
     public void showBooksByPrice() {
         showBook.sortByPrice();
     }
-    
+
     public void showBooksByNumberCopies() {
         showBook.sortByNumberCopies();
     }
-    
+
     public void showOldBooksSortedByDate() {
         showBook.showOldBooksByDate();
     }
-    
+
     public void showOldBooksSortedByPrice() {
         showBook.showOldBooksByPrice();
     }
@@ -172,62 +175,62 @@ public class OperationController {
     public void showRequestsByCount() {
         showOrdersAndRequests.showRequestsByCount();
     }
-    
+
     public void showRequestsByAlphabet() {
         showOrdersAndRequests.showRequestsByAlphabet();
     }
-    
+
     public void showOrderDetails(BookOrder order) {
         showOrdersAndRequests.showOrderDetails(order);
     }
-    
+
     public void showOrdersByDate() {
         showOrdersAndRequests.showOrdersByDate();
     }
-    
+
     public void showOrdersByPrice() {
         showOrdersAndRequests.showOrdersByPrice();
     }
-    
+
     public void showOrdersByStatus() {
         showOrdersAndRequests.showOrdersByStatus();
     }
-    
+
     public void showCompletedOrdersByPeriod(LocalDate start, LocalDate end) {
         List<BookOrder> completedOrders = showOrdersAndRequests.getCompletedOrdersByPeriod(start, end);
         System.out.println("Выполненные заказы за период " + start + " - " + end + ":");
-        completedOrders.forEach(order -> 
-            System.out.println(" - " + order.getId() + " | " + 
-                             order.getOrderDate() + " | " + order.getTotalPrice() + " руб."));
+        completedOrders.forEach(order ->
+                System.out.println(" - " + order.getId() + " | " +
+                        order.getOrderDate() + " | " + order.getTotalPrice() + " руб."));
     }
-    
+
     public void showEarnedMoneyByPeriod(LocalDate start, LocalDate end) {
         double earned = showOrdersAndRequests.getEarnedMoneyByPeriod(start, end);
-        System.out.println("Заработанные средства за период " + start + " - " + end + 
-                          ": " + earned + " руб.");
+        System.out.println("Заработанные средства за период " + start + " - " + end +
+                ": " + earned + " руб.");
     }
-    
+
     public void showCompletedOrdersCountByPeriod(LocalDate start, LocalDate end) {
         int count = showOrdersAndRequests.getCompletedOrdersCountByPeriod(start, end);
-        System.out.println("Количество выполненных заказов за период " + start + " - " + 
-                          end + ": " + count);
-    }  
+        System.out.println("Количество выполненных заказов за период " + start + " - " +
+                end + ": " + count);
+    }
 
     public void exportToCSV(String entityType, String filePath) throws IOException {
         importExportService.exportEntities(entityType, filePath);
     }
-    
+
     public void importFromCSV(String entityType, String filePath) throws IOException {
         System.out.println("Начало импорта " + entityType + " из " + filePath);
-        System.out.println("До импорта - Книги: " + stok.getBooks().size() + 
-                        ", Заказы: " + stok.getOrders().size());
-        
+        System.out.println("До импорта - Книги: " + stok.getBooks().size() +
+                ", Заказы: " + stok.getOrders().size());
+
         importExportService.importEntities(entityType, filePath);
-        
-        System.out.println("После импорта - Книги: " + stok.getBooks().size() + 
-                        ", Заказы: " + stok.getOrders().size());
+
+        System.out.println("После импорта - Книги: " + stok.getBooks().size() +
+                ", Заказы: " + stok.getOrders().size());
     }
-    
+
     public String getAvailableEntityTypes() {
         return importExportService.getAvailableEntityTypes();
     }

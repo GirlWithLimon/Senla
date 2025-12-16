@@ -1,5 +1,7 @@
 package bookstore_app.project.controller;
 
+import bookstore_app.config.annotation.Component;
+import bookstore_app.config.annotation.Inject;
 import bookstore_app.project.model.*;
 
 import java.time.LocalDate;
@@ -7,14 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
+@Component
 public class BookOrderCSVService implements ICSVImportExport<BookOrder> {
-    private final Stok stok;
+    @Inject
+    private Stok stok;
 
     
-    public BookOrderCSVService(Stok stok) {
-        this.stok = stok;
-    }
+    public BookOrderCSVService() { }
     
     @Override
     public String getFileName() {

@@ -2,6 +2,8 @@ package bookstore_app.project.controller;
 
 import java.util.List;
 
+import bookstore_app.config.annotation.Component;
+import bookstore_app.config.annotation.Inject;
 import bookstore_app.project.model.Book;
 import bookstore_app.project.model.BookCopy;
 import bookstore_app.project.model.BookOrder;
@@ -11,12 +13,12 @@ import bookstore_app.project.model.OrderStatus;
 import bookstore_app.project.model.Request;
 import bookstore_app.project.model.Stok;
 
+@Component
 public class OrdersController implements IOrderOperation{
+    @Inject
     Stok stok;
     
-    public OrdersController(Stok stok) {
-        this.stok = stok;
-    }
+    public OrdersController() {  }
 
     private BookCopy findBook(Book book) {
         return stok.getBooksCopy().stream()

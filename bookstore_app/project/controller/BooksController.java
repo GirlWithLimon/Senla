@@ -9,6 +9,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import bookstore_app.config.annotation.Component;
+import bookstore_app.config.annotation.Inject;
 import bookstore_app.project.model.Book;
 import bookstore_app.project.model.BookCopy;
 import bookstore_app.project.model.BookOrder;
@@ -17,14 +19,14 @@ import bookstore_app.project.model.OrderStatus;
 import bookstore_app.project.model.Request;
 import bookstore_app.project.model.Stok;
 
+@Component
 public class BooksController implements IBookStok {
+    @Inject
     Stok stok;
-    private final BookstoreConfig config;
+    @Inject
+    private BookstoreConfig config;
 
-    public BooksController(Stok stok) {
-        this.stok = stok;
-        this.config = DI.getConfig(BookstoreConfig.class);
-    }
+    public BooksController() {  }
 
     @Override
     public String showBookInformation(Book book) {

@@ -41,7 +41,7 @@ public class Config {
         Properties props = new Properties();
 
         try (FileOutputStream fos = new FileOutputStream("bookstore_app/config/bookstore.properties")) {
-             props.setProperty("months.for.old.book",
+            props.setProperty("months.for.old.book",
                     String.valueOf(bookstoreConfig.getMonthsForOldBook()));
             props.setProperty("auto.complete.requests",
                     String.valueOf(bookstoreConfig.isAutoCompleteRequests()));
@@ -63,11 +63,11 @@ public class Config {
     }
 
     public void reloadConfig() {
-         DI.reloadConfig(BookstoreConfig.class);
+        DI.reloadConfig(BookstoreConfig.class);
 
         this.bookstoreConfig = DI.getConfig(BookstoreConfig.class);
 
-         if (instance != null) {
+        if (instance != null) {
             instance = new Config();
         }
     }
@@ -92,7 +92,7 @@ public class Config {
 
     public void loadFromFile(String configFile) {
         try {
-           System.setProperty("config.file", configFile);
+            System.setProperty("config.file", configFile);
 
             DI.reloadConfig(BookstoreConfig.class);
             this.bookstoreConfig = DI.getConfig(BookstoreConfig.class);

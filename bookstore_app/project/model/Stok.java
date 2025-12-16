@@ -51,7 +51,5 @@ public class Stok implements Serializable {
     public void removeBook(Book book){
         books.remove(book);
     }
-    public List<Book> getBooks() { 
-        return new ArrayList<>(books); 
-    }
+    public List<Book> getBooks() { return new ArrayList<>(books);  }
 }

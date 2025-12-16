@@ -7,18 +7,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ImportExportService {
-    private final Stok stok;
     private final Map<String, ICSVImportExport<?>> services;
     
-    public ImportExportService(Stok stok) {
-        this.stok = stok;
-        this.services = new HashMap<>();
+    public ImportExportService() {
+       this.services = new HashMap<>();
         initializeServices();
     }
     
     private void initializeServices() {
-        services.put("books", new BookCSVService(stok));
-        services.put("orders", new BookOrderCSVService(stok));
+        services.put("books", new BookCSVService());
+        services.put("orders", new BookOrderCSVService());
     }
     
     public void exportEntities(String entityType, String filePath) throws IOException {

@@ -3,5 +3,5 @@ package bookstore_app.project.view;
 public interface IUIFactory {
     MenuBuilder createMenuBuilder();
     Navigator createNavigator(Menu rootMenu);
-    MenuController createMenuController();
+    MenuController createMenuController(MenuBuilder menuBuilder);
 }

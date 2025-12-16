@@ -8,7 +8,7 @@ public class DataSave {
         private static final String DATA_FILE = "bookstore_data.out";
         private static DataSave instance;
 
-        private DataSave() {}
+        public DataSave() {}
 
         public static DataSave getInstance() {
             if (instance == null) {

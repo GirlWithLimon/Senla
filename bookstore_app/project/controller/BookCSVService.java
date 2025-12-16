@@ -1,5 +1,6 @@
 package bookstore_app.project.controller;
 
+import bookstore_app.config.annotation.Inject;
 import bookstore_app.project.model.Book;
 import bookstore_app.project.model.Stok;
 import bookstore_app.project.model.BookCopy;
@@ -12,11 +13,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class BookCSVService implements ICSVImportExport<Book> {
-    private final Stok stok;
+    @Inject
+    private Stok stok;
     
-    public BookCSVService(Stok stok) {
-        this.stok = stok;
-    }
+    public BookCSVService() { }
     
     @Override
     public String getFileName() {
