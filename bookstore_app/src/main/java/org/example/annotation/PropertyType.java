@@ -1,4 +1,4 @@
-package org.example.bookstore_app.config;
+package org.example.annotation;
 
 public enum PropertyType {
     AUTO,

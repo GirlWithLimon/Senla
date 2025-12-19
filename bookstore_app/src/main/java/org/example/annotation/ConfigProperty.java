@@ -1,7 +1,5 @@
 package org.example.annotation;
 
-import org.example.bookstore_app.config.PropertyType;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

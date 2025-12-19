@@ -1,6 +1,7 @@
 package org.example.bookstore_app.config;
 
 import org.example.annotation.ConfigProperty;
+import org.example.annotation.PropertyType;
 
 public class BookstoreConfig {
 
