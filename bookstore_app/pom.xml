@@ -5,10 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.example</groupId>
-    <artifactId>bookstoreapp</artifactId>
+    <artifactId>bookstore_app</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
-
+    <packaging>pom</packaging>
+    <modules>
+        <module>annotation-module</module>
+        <module>bookstore</module>
+    </modules>
     <name>bookstore</name>
     <url>http://maven.apache.org</url>
 
@@ -17,6 +20,7 @@
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
         <java.version>25</java.version>
+
     </properties>
 
     <dependencies>
@@ -40,14 +44,6 @@
                 </configuration>
             </plugin>
 
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>3.1.0</version>
-                <configuration>
-                    <mainClass>bookstore_app.project.test.ConsolePlayTest</mainClass>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 </project>
