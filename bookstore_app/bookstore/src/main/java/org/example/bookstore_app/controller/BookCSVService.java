@@ -1,5 +1,6 @@
 package org.example.bookstore_app.controller;
 
+import org.example.annotation.Component;
 import org.example.annotation.Inject;
 import org.example.bookstore_app.model.Book;
 import org.example.bookstore_app.model.BookCopy;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
+@Component
 public class BookCSVService implements ICSVImportExport<Book> {
     @Inject
     private Stok stok;

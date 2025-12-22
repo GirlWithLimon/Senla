@@ -34,13 +34,19 @@ public class OperationController {
     public OperationController() {
         setupShutdownHook();
     }
+
     private void setupShutdownHook() {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("\nСохранение состояния программы...");
-            dataSave.saveState(stok);
-            System.out.println("Состояние успешно сохранено.");
+            if (dataSave != null && stok != null) {
+                dataSave.saveState(stok);
+                System.out.println("Состояние успешно сохранено.");
+            } else {
+                System.err.println("Ошибка: DataSave или Stok не инициализированы!");
+            }
         }));
     }
+
     public void initializeTestData() {
         if (!stok.getBooks().isEmpty() || !stok.getOrders().isEmpty()) {
             System.out.println("Загружены сохраненные данные:");
@@ -80,12 +86,18 @@ public class OperationController {
         bookInStok.addBookToStock(id, book, date);
         return book;
     }
+
     public BookCopy addBookCopyToStock(int idBook, LocalDate date) {
         int id = stok.getBooksCopy().isEmpty() ? 1 : stok.getBooksCopy().getLast().getId() + 1;
         Book book = stok.getBooks().stream().filter(books -> books.getId()==idBook)
                 .findFirst().orElse(null);
 
-        BookCopy bookCopy = new BookCopy(id,book,date);
+        if (book == null) {
+            System.out.println("Ошибка: книга с ID " + idBook + " не найдена!");
+            return null;
+        }
+
+        BookCopy bookCopy = new BookCopy(id, book, date);
         bookInStok.addBookCopyToStock(id, bookCopy, date);
         return bookCopy;
     }
@@ -101,9 +113,11 @@ public class OperationController {
     public void showSortABCBook() {
         showBook.showAllBook();
     }
+
     public void showSortBook() {
         showBook.showBook();
     }
+
     public String showBookInformation(Book book) {
         return bookInStok.showBookInformation(book);
     }
@@ -122,6 +136,7 @@ public class OperationController {
                 })
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
+
         if (!selectedBooks.isEmpty()) {
             BookOrder order = createOrder(selectedBooks, customerName, customerContact);
             System.out.println("Заказ создан! ID: " + order.getId());

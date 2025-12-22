@@ -1,9 +1,12 @@
 package org.example.bookstore_app.controller;
 
+import org.example.annotation.Component;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+@Component
 public class ImportExportService {
     private final Map<String, ICSVImportExport<?>> services;
     

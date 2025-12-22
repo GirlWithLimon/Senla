@@ -1,40 +1,83 @@
 package org.example.bookstore_app.view;
 
+import org.example.annotation.Component;
+import org.example.annotation.Inject;
+import org.example.bookstore_app.config.ApplicationContext;
 import org.example.bookstore_app.config.BookstoreConfig;
 import org.example.bookstore_app.controller.OperationController;
 
 import java.time.LocalDate;
 import java.util.Scanner;
 
+@Component
 public final class MenuBuilder {
-    private Menu rootMenu;
+    private volatile Menu rootMenu;
     private final BookstoreConfig config;
     private final OperationController controller;
     private final Scanner scanner;
+    private final Object lock = new Object();
 
+    @Inject
     public MenuBuilder(BookstoreConfig config, OperationController controller) {
         this.config = config;
         this.controller = controller;
         this.scanner = new Scanner(System.in);
-        buildMenu();
     }
 
-    public void buildMenu() {
-        rootMenu = new Menu("Главное меню");
+    public Navigator createNavigator() {
+        buildMenu();
+        if (rootMenu == null) {
+            System.err.println("ОШИБКА: rootMenu не создан!");
+            rootMenu = new Menu("Главное меню");
+            rootMenu.addMenuItem(new MenuItem("Тестовая функция", () ->
+                    System.out.println("Меню работает!")));
+        }
 
-        Menu stockMenu = createStockMenu();
-        Menu orderMenu = createOrderMenu();
-        Menu reportMenu = createReportMenu();
-        Menu searchMenu = createSearchMenu();
-        Menu importExportMenu = createImportExportMenu();
-        Menu propertiesMenu = createPropertiesMenu();
+        Navigator navigator = new Navigator(rootMenu);
 
-        rootMenu.addMenuItem(new MenuItem("Управление складом", stockMenu));
-        rootMenu.addMenuItem(new MenuItem("Управление заказами", orderMenu));
-        rootMenu.addMenuItem(new MenuItem("Отчеты и аналитика", reportMenu));
-        rootMenu.addMenuItem(new MenuItem("Поиск и сортировка", searchMenu));
-        rootMenu.addMenuItem(new MenuItem("Импорт/Экспорт данных", importExportMenu));
-        rootMenu.addMenuItem(new MenuItem("Настройки", propertiesMenu));
+        try {
+            ApplicationContext context = ApplicationContext.getInstance();
+            context.registerBean(Navigator.class, navigator);
+        } catch (Exception e) {
+            System.err.println("Не удалось зарегистрировать Navigator в DI: " + e.getMessage());
+        }
+
+        return navigator;
+    }
+
+    private void buildMenu() {
+        synchronized (lock) {
+            if (rootMenu != null) {
+                return;
+            }
+
+            System.out.println("Создаем меню...");
+
+            try {
+                rootMenu = new Menu("Главное меню");
+
+                Menu stockMenu = createStockMenu();
+                Menu orderMenu = createOrderMenu();
+                Menu reportMenu = createReportMenu();
+                Menu searchMenu = createSearchMenu();
+                Menu importExportMenu = createImportExportMenu();
+                Menu propertiesMenu = createPropertiesMenu();
+
+                rootMenu.addMenuItem(new MenuItem("Управление складом", stockMenu));
+                rootMenu.addMenuItem(new MenuItem("Управление заказами", orderMenu));
+                rootMenu.addMenuItem(new MenuItem("Отчеты и аналитика", reportMenu));
+                rootMenu.addMenuItem(new MenuItem("Поиск и сортировка", searchMenu));
+                rootMenu.addMenuItem(new MenuItem("Импорт/Экспорт данных", importExportMenu));
+                rootMenu.addMenuItem(new MenuItem("Настройки", propertiesMenu));
+
+                System.out.println("Меню успешно создано с " + rootMenu.getMenuItems().size() + " пунктами");
+            } catch (Exception e) {
+                System.err.println("Ошибка при создании меню: " + e.getMessage());
+                e.printStackTrace();
+                rootMenu = new Menu("Главное меню");
+                rootMenu.addMenuItem(new MenuItem("Тест", () -> System.out.println("Тест")));
+            }
+        }
     }
 
     private Menu createStockMenu() {
@@ -72,13 +115,15 @@ public final class MenuBuilder {
             int booksInput=0;
             try{
                 booksInput = scanner.nextInt();
+                scanner.nextLine();
             }
             catch (Exception e) {
                 System.out.println("Необходимо ввести целое число!");
+                scanner.nextLine();
+                return;
             }
-            scanner.nextLine();
-            LocalDate datePublication = LocalDate.now();
-            controller.addBookCopyToStock(booksInput, datePublication);
+
+            controller.addBookCopyToStock(booksInput, LocalDate.now());
         }));
 
         menu.addMenuItem(new MenuItem("Показать информацию о книге", () -> {
@@ -88,8 +133,15 @@ public final class MenuBuilder {
             controller.showBooksByABC();
 
             System.out.print("Выберите номер книги: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            int choice = 0;
+            try {
+                choice = scanner.nextInt();
+                scanner.nextLine();
+            } catch (Exception e) {
+                System.out.println("Необходимо ввести целое число!");
+                scanner.nextLine();
+                return;
+            }
 
             if (choice > 0 && choice <= controller.getBooks().size()) {
                 String info = controller.showBookInformation(controller.getBooks().get(choice-1));
@@ -123,9 +175,21 @@ public final class MenuBuilder {
             System.out.println("\n=== Отмена заказа ===");
             controller.showOrdersByDate();
 
+            if (controller.getOrder().isEmpty()) {
+                System.out.println("Нет активных заказов!");
+                return;
+            }
+
             System.out.print("Выберите номер заказа для отмены: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            int choice = 0;
+            try {
+                choice = scanner.nextInt();
+                scanner.nextLine();
+            } catch (Exception e) {
+                System.out.println("Необходимо ввести целое число!");
+                scanner.nextLine();
+                return;
+            }
 
             if (choice > 0 && choice <= controller.getOrder().size()) {
                 controller.cancelOrder(controller.getOrder().get(choice - 1));
@@ -154,8 +218,15 @@ public final class MenuBuilder {
             }
 
             System.out.print("Выберите номер заказа: ");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            int choice = 0;
+            try {
+                choice = scanner.nextInt();
+                scanner.nextLine();
+            } catch (Exception e) {
+                System.out.println("Необходимо ввести целое число!");
+                scanner.nextLine();
+                return;
+            }
 
             if (choice > 0 && choice <= controller.getOrder().size()) {
                 controller.showOrderDetails(controller.getOrder().get(choice - 1));
@@ -266,6 +337,7 @@ public final class MenuBuilder {
                 System.out.println("Книги успешно экспортированы в: " + filePath);
             } catch (Exception e) {
                 System.out.println("Ошибка при экспорте: " + e.getMessage());
+                e.printStackTrace();
             }
         }));
 
@@ -279,6 +351,7 @@ public final class MenuBuilder {
                 System.out.println("Книги успешно импортированы из: " + filePath);
             } catch (Exception e) {
                 System.out.println("Ошибка при импорте: " + e.getMessage());
+                e.printStackTrace();
             }
         }));
 
@@ -292,6 +365,7 @@ public final class MenuBuilder {
                 System.out.println("Заказы успешно экспортированы в: " + filePath);
             } catch (Exception e) {
                 System.out.println("Ошибка при экспорте: " + e.getMessage());
+                e.printStackTrace();
             }
         }));
 
@@ -305,6 +379,7 @@ public final class MenuBuilder {
                 System.out.println("Заказы успешно импортированы из: " + filePath);
             } catch (Exception e) {
                 System.out.println("Ошибка при импорте: " + e.getMessage());
+                e.printStackTrace();
             }
         }));
 
@@ -375,6 +450,7 @@ public final class MenuBuilder {
     }
 
     public Menu getRootMenu() {
+        buildMenu();
         return rootMenu;
     }
 }

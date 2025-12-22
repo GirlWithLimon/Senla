@@ -15,25 +15,28 @@ public class ApplicationInitializer {
 
         BookstoreConfig config = loadConfiguration();
         context.registerBean(BookstoreConfig.class, config);
+        System.out.println("Конфигурация зарегистрирована");
 
         DataSave dataSave = DataSave.getInstance();
         context.registerBean(DataSave.class, dataSave);
+        System.out.println("DataSave зарегистрирован");
 
         Stok stok = dataSave.loadState();
         context.registerBean(Stok.class, stok);
+        System.out.println("Stok загружен, размер книг: " + stok.getBooks().size());
 
         context.initialize();
 
-        OperationController controller = context.getBean(OperationController.class);
+       OperationController controller = context.getBean(OperationController.class);
         if (controller != null) {
+            System.out.println("OperationController получен, инициализируем тестовые данные");
             controller.initializeTestData();
         } else {
             System.err.println("Ошибка: не удалось получить OperationController");
+            context.printRegisteredBeans();
         }
 
         System.out.println("Инициализация завершена");
-        context.printRegisteredBeans();
-
         return context;
     }
 

@@ -3,24 +3,24 @@ package org.example.bookstore_app.config;
 import org.example.annotation.Component;
 import org.example.annotation.Inject;
 import org.example.annotation.Singleton;
-import org.example.bookstore_app.controller.*;
 
+import java.io.File;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
+import java.net.URL;
+import java.util.*;
 
-@Component @Singleton
+@Component
+@Singleton
 public class ApplicationContext {
 
     private static ApplicationContext instance;
-    private final Map<Class<?>, Object> singletons = new ConcurrentHashMap<>();
-    private final Map<String, Object> namedComponents = new ConcurrentHashMap<>();
-    private final Set<Object> allBeans = new HashSet<>();
-    private boolean initialized = false;
+    private final Map<Class<?>, Object> beans = new HashMap<>();
+    private final Set<String> scannedPackages = new HashSet<>();
 
-    private ApplicationContext() {}
+    private ApplicationContext() {
+        scannedPackages.add("org.example.bookstore_app");
+    }
 
     public static synchronized ApplicationContext getInstance() {
         if (instance == null) {
@@ -30,136 +30,262 @@ public class ApplicationContext {
     }
 
     public void initialize() {
-        if (initialized) {
+        System.out.println("Начинаем сканирование компонентов...");
+        scanAndRegisterComponents();
+        createAllBeanInstances();
+        injectDependencies();
+        System.out.println("Инициализация DI контейнера завершена");
+        printRegisteredBeans();
+    }
+
+    private void scanAndRegisterComponents() {
+        for (String packageName : scannedPackages) {
+            try {
+                List<Class<?>> classes = getClasses(packageName);
+
+                for (Class<?> clazz : classes) {
+                    if (clazz.isAnnotationPresent(Component.class) ||
+                            clazz.isAnnotationPresent(Singleton.class)) {
+
+                        if (!beans.containsKey(clazz)) {
+                            System.out.println("Найден компонент: " + clazz.getSimpleName());
+                            beans.put(clazz, null);
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                System.err.println("Ошибка при сканировании пакета " + packageName + ": " + e.getMessage());
+            }
+        }
+    }
+
+    private void createAllBeanInstances() {
+        List<Class<?>> classesToCreate = new ArrayList<>();
+        for (Class<?> clazz : beans.keySet()) {
+            if (beans.get(clazz) == null) {
+                classesToCreate.add(clazz);
+            }
+        }
+
+        for (Class<?> clazz : classesToCreate) {
+            try {
+                createBeanInstance(clazz);
+            } catch (Exception e) {
+                System.err.println("Ошибка при создании экземпляра " + clazz.getSimpleName() + ": " + e.getMessage());
+            }
+        }
+    }
+
+    private void createBeanInstance(Class<?> clazz) throws Exception {
+        if (clazz.isInterface()) {
             return;
         }
 
-        registerCoreBeans();
+        System.out.println("Создаем экземпляр: " + clazz.getSimpleName());
 
-        registerComponents();
-        injectAllDependencies();
+        Constructor<?> injectConstructor = null;
+        Constructor<?> defaultConstructor = null;
 
-        initialized = true;
-    }
-
-    private void registerCoreBeans() {
-        try {
-            ImportExportService importExportService = new ImportExportService();
-            registerBean(ImportExportService.class, importExportService);
-
-        } catch (Exception e) {
-            System.err.println("Ошибка при регистрации основных бинов: " + e.getMessage());
-        }
-    }
-
-    private void registerComponents() {
-       try {
-            ShowBook showBook = new ShowBook();
-            ShowOrdersAndRequests showOrdersAndRequests = new ShowOrdersAndRequests();
-            BooksController booksController = new BooksController();
-            OrdersController ordersController = new OrdersController();
-            OperationController operationController = new OperationController();
-
-            registerBean(ShowBook.class, showBook);
-            registerBean(ShowOrdersAndRequests.class, showOrdersAndRequests);
-            registerBean(BooksController.class, booksController);
-            registerBean(OrdersController.class, ordersController);
-            registerBean(OperationController.class, operationController);
-
-            registerBean(IShowBook.class, showBook);
-            registerBean(IShowOrdersAndRequests.class, showOrdersAndRequests);
-            registerBean(IBookStok.class, booksController);
-            registerBean(IOrderOperation.class, ordersController);
-
-        } catch (Exception e) {
-            System.err.println("Ошибка при регистрации компонентов: " + e.getMessage());
-        }
-    }
-
-    private void injectAllDependencies() {
-        for (Object bean : allBeans) {
-            injectDependencies(bean);
-        }
-    }
-
-    public <T> void registerBean(Class<T> type, T instance) {
-        singletons.put(type, instance);
-        allBeans.add(instance);
-
-       for (Class<?> interfaceClass : type.getInterfaces()) {
-            singletons.put(interfaceClass, instance);
-        }
-    }
-
-    public <T> void registerBean(String name, T instance) {
-        namedComponents.put(name, instance);
-        allBeans.add(instance);
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T> T getBean(Class<T> type) {
-        Object bean = singletons.get(type);
-
-        if (bean != null) {
-            return (T) bean;
-        }
-
-        for (Map.Entry<Class<?>, Object> entry : singletons.entrySet()) {
-            if (type.isAssignableFrom(entry.getKey())) {
-                return (T) entry.getValue();
+        for (Constructor<?> constructor : clazz.getDeclaredConstructors()) {
+            if (constructor.isAnnotationPresent(Inject.class)) {
+                injectConstructor = constructor;
+                break;
+            }
+            if (constructor.getParameterCount() == 0) {
+                defaultConstructor = constructor;
             }
         }
 
+        Object instance;
+        if (injectConstructor != null) {
+            Class<?>[] paramTypes = injectConstructor.getParameterTypes();
+            Object[] params = new Object[paramTypes.length];
 
-        if (type.isAnnotationPresent(Component.class) ||
-                type.isAnnotationPresent(Singleton.class)) {
-            try {
-                T newBean = createBean(type);
-                registerBean(type, newBean);
-                injectDependencies(newBean);
-                return newBean;
-            } catch (Exception e) {
-                throw new RuntimeException("Не удалось создать bean " + type.getName(), e);
+            for (int i = 0; i < paramTypes.length; i++) {
+                params[i] = getBean(paramTypes[i]);
+                if (params[i] == null) {
+                    System.err.println("Внимание: зависимость не найдена для конструктора " +
+                            clazz.getSimpleName() + " параметр: " + paramTypes[i].getSimpleName());
+                }
+            }
+
+            injectConstructor.setAccessible(true);
+            instance = injectConstructor.newInstance(params);
+        } else if (defaultConstructor != null) {
+            defaultConstructor.setAccessible(true);
+            instance = defaultConstructor.newInstance();
+        } else {
+            Constructor<?>[] constructors = clazz.getDeclaredConstructors();
+            if (constructors.length > 0) {
+                constructors[0].setAccessible(true);
+                Class<?>[] paramTypes = constructors[0].getParameterTypes();
+                Object[] params = new Object[paramTypes.length];
+                for (int i = 0; i < paramTypes.length; i++) {
+                    params[i] = getDefaultValue(paramTypes[i]);
+                }
+                instance = constructors[0].newInstance(params);
+            } else {
+                throw new RuntimeException("Не найден подходящий конструктор для класса " + clazz.getName());
             }
         }
 
+        beans.put(clazz, instance);
+
+        for (Class<?> iface : clazz.getInterfaces()) {
+            beans.put(iface, instance);
+        }
+    }
+
+    private Object getDefaultValue(Class<?> type) {
+        if (type == boolean.class || type == Boolean.class) return false;
+        if (type == byte.class || type == Byte.class) return (byte) 0;
+        if (type == char.class || type == Character.class) return '\0';
+        if (type == short.class || type == Short.class) return (short) 0;
+        if (type == int.class || type == Integer.class) return 0;
+        if (type == long.class || type == Long.class) return 0L;
+        if (type == float.class || type == Float.class) return 0.0f;
+        if (type == double.class || type == Double.class) return 0.0;
         return null;
     }
 
-    private <T> T createBean(Class<T> type) throws Exception {
-        return type.getDeclaredConstructor().newInstance();
+    private void injectDependencies() {
+        List<Object> beanInstances = new ArrayList<>();
+        for (Object bean : beans.values()) {
+            if (bean != null) {
+                beanInstances.add(bean);
+            }
+        }
+
+        for (Object bean : beanInstances) {
+            injectFieldDependencies(bean);
+        }
     }
 
-    private void injectDependencies(Object bean) {
+    private void injectFieldDependencies(Object bean) {
         Class<?> clazz = bean.getClass();
 
         for (Field field : clazz.getDeclaredFields()) {
             if (field.isAnnotationPresent(Inject.class)) {
-                field.setAccessible(true);
-                Class<?> fieldType = field.getType();
+                try {
+                    field.setAccessible(true);
+                    Class<?> fieldType = field.getType();
 
-                Object dependency = getBean(fieldType);
-                if (dependency != null) {
-                    try {
-                        field.set(bean, dependency);
-                    } catch (IllegalAccessException e) {
-                        System.err.println("Ошибка внедрения зависимости в поле " +
-                                field.getName() + " класса " + clazz.getName() + ": " + e.getMessage());
+                    if (fieldType.isPrimitive()) {
+                        continue;
                     }
-                } else {
-                    System.err.println("Предупреждение: не удалось найти зависимость для поля "
-                            + field.getName() + " типа " + fieldType.getName()
-                            + " в классе " + clazz.getName());
+
+                    Object dependency = getBean(fieldType);
+
+                    if (dependency != null) {
+                        field.set(bean, dependency);
+                    } else {
+                        System.err.println("Внимание: зависимость не найдена для поля " +
+                                field.getName() + " класса " + clazz.getSimpleName() +
+                                " типа " + fieldType.getSimpleName());
+                    }
+                } catch (Exception e) {
+                    System.err.println("Ошибка при внедрении зависимости в поле " +
+                            field.getName() + " класса " + clazz.getSimpleName() + ": " + e.getMessage());
                 }
             }
         }
     }
 
+    @SuppressWarnings("unchecked")
+    public <T> T getBean(Class<T> type) {
+        Object bean = beans.get(type);
+        if (bean != null) {
+            return (T) bean;
+        }
+
+        for (Map.Entry<Class<?>, Object> entry : beans.entrySet()) {
+            if (type.isAssignableFrom(entry.getKey()) && entry.getValue() != null) {
+                return (T) entry.getValue();
+            }
+        }
+
+         try {
+            boolean isComponent = false;
+            for (Class<?> clazz : beans.keySet()) {
+                if (clazz.isAssignableFrom(type)) {
+                    isComponent = true;
+                    break;
+                }
+            }
+
+            if (isComponent && !type.isInterface()) {
+                System.out.println("Динамическое создание бина: " + type.getSimpleName());
+                createBeanInstance(type);
+                return (T) beans.get(type);
+            }
+        } catch (Exception e) {
+            System.err.println("Не удалось создать bean для типа: " + type.getName() + " - " + e.getMessage());
+        }
+
+        return null;
+    }
+
+    public void registerBean(Class<?> type, Object instance) {
+        beans.put(type, instance);
+
+        for (Class<?> iface : type.getInterfaces()) {
+            beans.put(iface, instance);
+        }
+    }
+
+    private List<Class<?>> getClasses(String packageName) throws Exception {
+        List<Class<?>> classes = new ArrayList<>();
+        String path = packageName.replace('.', '/');
+        URL resource = Thread.currentThread().getContextClassLoader().getResource(path);
+
+        if (resource != null) {
+            File directory = new File(resource.getFile());
+            if (directory.exists()) {
+                classes.addAll(findClasses(directory, packageName));
+            }
+        }
+
+        return classes;
+    }
+
+    private List<Class<?>> findClasses(File directory, String packageName) throws Exception {
+        List<Class<?>> classes = new ArrayList<>();
+
+        if (!directory.exists()) {
+            return classes;
+        }
+
+        File[] files = directory.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isDirectory()) {
+                    classes.addAll(findClasses(file, packageName + "." + file.getName()));
+                } else if (file.getName().endsWith(".class")) {
+                    String className = packageName + '.' + file.getName().substring(0, file.getName().length() - 6);
+                    try {
+                        Class<?> clazz = Class.forName(className);
+                        classes.add(clazz);
+                    } catch (ClassNotFoundException e) {
+                        System.err.println("Не удалось загрузить класс: " + className);
+                    } catch (NoClassDefFoundError e) {
+                        System.err.println("Ошибка загрузки класса " + className + ": " + e.getMessage());
+                    }
+                }
+            }
+        }
+
+        return classes;
+    }
+
     public void printRegisteredBeans() {
         System.out.println("\n=== Зарегистрированные компоненты ===");
-        for (Map.Entry<Class<?>, Object> entry : singletons.entrySet()) {
-            System.out.println(entry.getKey().getSimpleName() + " -> " +
-                    entry.getValue().getClass().getSimpleName());
+        int count = 0;
+        for (Class<?> clazz : beans.keySet()) {
+            Object bean = beans.get(clazz);
+            System.out.println("  " + clazz.getSimpleName() + " -> " +
+                    (bean != null ? bean.getClass().getSimpleName() + " (INSTANCE)" : "NULL"));
+            if (bean != null) count++;
         }
+        System.out.println("Всего экземпляров: " + count + " из " + beans.size());
     }
 }
