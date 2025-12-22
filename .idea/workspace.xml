@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="c1c63246-89cf-46e4-b94b-3f1918de080f" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/Senla.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bookstore_app/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bookstore_app/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bookstore_app/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bookstore_app/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bookstore_app/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bookstore_app/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/annotation/Component.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/config/DI.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/config/PropertyType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/resources/bookstore.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bookstore_app/src/test/java/org/example/StartTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Senla.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/.idea/encodings.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/bookstore_data.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/annotation/Component.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/annotation/ConfigProperty.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/annotation/Inject.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/annotation/Singleton.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/config/ApplicationContext.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/config/BookstoreConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/config/ConfigurationLoader.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/config/DI.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/config/PropertyType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/controller/BookCSVService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/controller/BookOrderCSVService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/controller/BooksController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/controller/CSVUtils.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/controller/Config.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/controller/DataSave.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/controller/IBookStok.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/controller/ICSVImportExport.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/controller/IOrderOperation.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/controller/IShowBook.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/controller/IShowOrdersAndRequests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/controller/ImportExportService.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/controller/OperationController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/controller/OrdersController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/controller/ShowBook.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/controller/ShowOrdersAndRequests.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/model/Book.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/model/BookCopy.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/model/BookOrder.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/model/BookOrderItem.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/model/BookStatus.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/model/OrderItemStatus.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/model/OrderStatus.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/model/Request.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/model/Stok.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/view/ApplicationInitializer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/view/ConsoleUIFactory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/view/IAction.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/view/IUIFactory.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/view/Menu.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/view/MenuBuilder.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/view/MenuController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/view/MenuItem.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/java/bookstore_app/view/Navigator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/main/resources/bookstore.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore/src/test/java/test/ConsolePlayTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/config/ApplicationContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/config/ApplicationContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/config/BookstoreConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/config/BookstoreConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/config/ConfigurationLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/config/ConfigurationLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/config/DI.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/config/PropertyType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/config/annotation/Component.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/config/annotation/ConfigProperty.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/annotation/ConfigProperty.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/config/annotation/Inject.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/annotation/Inject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/config/annotation/Singleton.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/annotation/Singleton.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/config/bookstore.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/controller/BookCSVService.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/controller/BookCSVService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/controller/BookOrderCSVService.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/controller/BookOrderCSVService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/controller/BooksController.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/controller/BooksController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/controller/CSVUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/controller/CSVUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/controller/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/controller/Config.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/controller/DataSave.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/controller/DataSave.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/controller/IBookStok.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/controller/IBookStok.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/controller/ICSVImportExport.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/controller/ICSVImportExport.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/controller/IOrderOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/controller/IOrderOperation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/controller/IShowBook.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/controller/IShowBook.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/controller/IShowOrdersAndRequests.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/controller/IShowOrdersAndRequests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/controller/ImportExportService.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/controller/ImportExportService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/controller/OperationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/controller/OperationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/controller/OrdersController.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/controller/OrdersController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/controller/ShowBook.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/controller/ShowBook.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/controller/ShowOrdersAndRequests.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/controller/ShowOrdersAndRequests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/controller/bookstore.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/model/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/model/Book.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/model/BookCopy.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/model/BookCopy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/model/BookOrder.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/model/BookOrder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/model/BookOrderItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/model/BookOrderItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/model/BookStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/model/BookStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/model/OrderItemStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/model/OrderItemStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/model/OrderStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/model/OrderStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/model/Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/model/Request.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/model/Stok.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/model/Stok.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/test/ConsolePlayTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/view/ApplicationInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/view/ApplicationInitializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/view/ConsoleUIFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/view/ConsoleUIFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/view/IAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/view/IAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/view/IUIFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/view/IUIFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/view/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/view/Menu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/view/MenuBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/view/MenuBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/view/MenuController.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/view/MenuController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/view/MenuItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/view/MenuItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/project/view/Navigator.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/src/main/java/org/example/bookstore_app/view/Navigator.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 8
+}]]></component>
+  <component name="ProjectId" id="373qrfph9piwy3IWiYILtbVy676" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "test-8",
+    "kotlin-language-version-configured": "true"
+  }
+}]]></component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c1c63246-89cf-46e4-b94b-3f1918de080f" name="Changes" comment="" />
+      <created>1766142303849</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1766142303849</updated>
+    </task>
+    <servers />
+  </component>
+</project>
