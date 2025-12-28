@@ -32,8 +32,11 @@ public class ApplicationContext {
     public void initialize() {
         System.out.println("Начинаем сканирование компонентов...");
         scanAndRegisterComponents();
+
+        createSimpleBeans();
         createAllBeanInstances();
         injectDependencies();
+
         System.out.println("Инициализация DI контейнера завершена");
         printRegisteredBeans();
     }
@@ -59,21 +62,91 @@ public class ApplicationContext {
         }
     }
 
+    private void createSimpleBeans() {
+        List<Class<?>> simpleClasses = new ArrayList<>();
+
+        for (Class<?> clazz : beans.keySet()) {
+            if (beans.get(clazz) == null && hasDefaultConstructor(clazz)) {
+                simpleClasses.add(clazz);
+            }
+        }
+
+        for (Class<?> clazz : simpleClasses) {
+            try {
+                createBeanWithDefaultConstructor(clazz);
+            } catch (Exception e) {
+                System.err.println("Ошибка при создании простого бина " + clazz.getSimpleName() + ": " + e.getMessage());
+            }
+        }
+    }
+
+    private boolean hasDefaultConstructor(Class<?> clazz) {
+        if (clazz.isInterface()) return false;
+
+        try {
+            Constructor<?> defaultConstructor = clazz.getDeclaredConstructor();
+            return defaultConstructor != null;
+        } catch (NoSuchMethodException e) {
+            return false;
+        }
+    }
+
+    private void createBeanWithDefaultConstructor(Class<?> clazz) throws Exception {
+        Constructor<?> defaultConstructor = clazz.getDeclaredConstructor();
+        defaultConstructor.setAccessible(true);
+        Object instance = defaultConstructor.newInstance();
+        beans.put(clazz, instance);
+
+        for (Class<?> iface : clazz.getInterfaces()) {
+            beans.put(iface, instance);
+        }
+    }
+
     private void createAllBeanInstances() {
         List<Class<?>> classesToCreate = new ArrayList<>();
         for (Class<?> clazz : beans.keySet()) {
-            if (beans.get(clazz) == null) {
+            if (beans.get(clazz) == null && !clazz.isInterface()) {
                 classesToCreate.add(clazz);
             }
         }
 
+        classesToCreate.sort(Comparator.comparingInt(this::countDependencies));
+
+        System.out.println("Создаем бины с зависимостями в порядке: " +
+                classesToCreate.stream().map(Class::getSimpleName).toList());
+
         for (Class<?> clazz : classesToCreate) {
             try {
-                createBeanInstance(clazz);
+                if (beans.get(clazz) == null) {
+                    createBeanInstance(clazz);
+                }
             } catch (Exception e) {
                 System.err.println("Ошибка при создании экземпляра " + clazz.getSimpleName() + ": " + e.getMessage());
+                e.printStackTrace();
             }
         }
+    }
+
+    private int countDependencies(Class<?> clazz) {
+        int count = 0;
+
+        for (Constructor<?> constructor : clazz.getDeclaredConstructors()) {
+            if (constructor.isAnnotationPresent(Inject.class)) {
+                return constructor.getParameterCount();
+            }
+        }
+
+       try {
+            Constructor<?> defaultConstructor = clazz.getDeclaredConstructor();
+             return 0;
+        } catch (NoSuchMethodException e) {
+            Constructor<?>[] constructors = clazz.getDeclaredConstructors();
+            if (constructors.length > 0) {
+                return constructors[0].getParameterCount();
+            }
+        }
+
+        return 0;
     }
 
     private void createBeanInstance(Class<?> clazz) throws Exception {
@@ -104,6 +177,10 @@ public class ApplicationContext {
             for (int i = 0; i < paramTypes.length; i++) {
                 params[i] = getBean(paramTypes[i]);
                 if (params[i] == null) {
+                    params[i] = findBeanByInterface(paramTypes[i]);
+                }
+
+                if (params[i] == null) {
                     System.err.println("Внимание: зависимость не найдена для конструктора " +
                             clazz.getSimpleName() + " параметр: " + paramTypes[i].getSimpleName());
                 }
@@ -121,7 +198,13 @@ public class ApplicationContext {
                 Class<?>[] paramTypes = constructors[0].getParameterTypes();
                 Object[] params = new Object[paramTypes.length];
                 for (int i = 0; i < paramTypes.length; i++) {
-                    params[i] = getDefaultValue(paramTypes[i]);
+                    params[i] = getBean(paramTypes[i]);
+                    if (params[i] == null) {
+                        params[i] = findBeanByInterface(paramTypes[i]);
+                    }
+                    if (params[i] == null) {
+                        params[i] = getDefaultValue(paramTypes[i]);
+                    }
                 }
                 instance = constructors[0].newInstance(params);
             } else {
@@ -134,6 +217,15 @@ public class ApplicationContext {
         for (Class<?> iface : clazz.getInterfaces()) {
             beans.put(iface, instance);
         }
+    }
+
+    private Object findBeanByInterface(Class<?> interfaceType) {
+        for (Map.Entry<Class<?>, Object> entry : beans.entrySet()) {
+            if (interfaceType.isAssignableFrom(entry.getKey()) && entry.getValue() != null) {
+                return entry.getValue();
+            }
+        }
+        return null;
     }
 
     private Object getDefaultValue(Class<?> type) {
@@ -176,6 +268,10 @@ public class ApplicationContext {
 
                     Object dependency = getBean(fieldType);
 
+                    if (dependency == null) {
+                        dependency = findBeanByInterface(fieldType);
+                    }
+
                     if (dependency != null) {
                         field.set(bean, dependency);
                     } else {
@@ -202,24 +298,6 @@ public class ApplicationContext {
             if (type.isAssignableFrom(entry.getKey()) && entry.getValue() != null) {
                 return (T) entry.getValue();
             }
-        }
-
-         try {
-            boolean isComponent = false;
-            for (Class<?> clazz : beans.keySet()) {
-                if (clazz.isAssignableFrom(type)) {
-                    isComponent = true;
-                    break;
-                }
-            }
-
-            if (isComponent && !type.isInterface()) {
-                System.out.println("Динамическое создание бина: " + type.getSimpleName());
-                createBeanInstance(type);
-                return (T) beans.get(type);
-            }
-        } catch (Exception e) {
-            System.err.println("Не удалось создать bean для типа: " + type.getName() + " - " + e.getMessage());
         }
 
         return null;

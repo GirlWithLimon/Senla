@@ -93,8 +93,10 @@ public class ShowBook implements IShowBook {
         List<Book> sortedBooks = sortABCBook();
 
         System.out.println("Книги по алфавиту:");
-        sortedBooks.forEach(book ->
-                System.out.println(" - " + book.getName()));
+        for(int i=0; i<sortedBooks.size();i++){
+            System.out.println(i + " - " + sortedBooks.get(i).getName());
+        }
+
     }
 
     @Override

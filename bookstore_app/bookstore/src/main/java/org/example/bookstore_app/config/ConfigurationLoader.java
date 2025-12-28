@@ -3,8 +3,7 @@ package org.example.bookstore_app.config;
 import org.example.annotation.ConfigProperty;
 import org.example.annotation.PropertyType;
 
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -29,12 +28,18 @@ public class ConfigurationLoader {
 
         Properties allProperties = new Properties();
         for (String configFile : configFiles) {
-            try (FileInputStream fis = new FileInputStream(configFile)) {
-                Properties fileProps = new Properties();
-                fileProps.load(fis);
-                allProperties.putAll(fileProps);
+            try (InputStream input = getResourceAsStream(configFile)) {
+                if (input != null) {
+                    Properties fileProps = new Properties();
+                    fileProps.load(input);
+                    allProperties.putAll(fileProps);
+                    System.out.println("Загружен файл конфигурации: " + configFile);
+                } else {
+                    System.out.println("Предупреждение: конфигурационный файл " +
+                            configFile + " не найден в classpath. Используются значения по умолчанию.");
+                }
             } catch (IOException e) {
-                System.out.println("Предупреждение: конфигурационный файл " + configFile + " не найден");
+                System.out.println("Ошибка чтения файла " + configFile + ": " + e.getMessage());
             }
         }
 
@@ -50,10 +55,38 @@ public class ConfigurationLoader {
             String propertyValue = allProperties.getProperty(propertyKey);
             if (propertyValue != null) {
                 setFieldValue(configInstance, field, propertyValue, annotation.type());
+                System.out.println("Установлено значение " + propertyKey + " = " + propertyValue);
+            } else {
+                System.out.println("Свойство " + propertyKey + " не найдено в конфигурации");
             }
         }
 
         return configInstance;
+    }
+
+    private static InputStream getResourceAsStream(String resourcePath) {
+        if (resourcePath.startsWith("/")) {
+            resourcePath = resourcePath.substring(1);
+        }
+
+        InputStream input = ConfigurationLoader.class.getClassLoader()
+                .getResourceAsStream(resourcePath);
+
+        if (input == null) {
+            input = Thread.currentThread().getContextClassLoader()
+                    .getResourceAsStream(resourcePath);
+        }
+
+        if (input == null) {
+            try {
+                File file = new File(resourcePath);
+                if (file.exists()) {
+                    return new FileInputStream(file);
+                }
+            } catch (FileNotFoundException e) { }
+        }
+
+        return input;
     }
 
     private static <T> void setFieldValue(T instance, Field field, String value, PropertyType type)
