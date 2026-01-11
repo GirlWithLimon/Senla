@@ -1,0 +1,1 @@
+SELECT p.maker,l.speed FROM product p,laptop l WHERE p.model=l.model AND l.hd>=100;

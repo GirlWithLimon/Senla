@@ -1,0 +1,7 @@
+CREATE TABLE printer (
+	code INT NOT NULL PRIMARY KEY,
+	model VARCHAR(50) NOT NULL REFERENCES product(model),
+	color CHAR(1) NOT NULL,
+	type VARCHAR(10) NOT NULL,
+	price MONEY
+);

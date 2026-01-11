@@ -1,0 +1,1 @@
+SELECT model,speed,hd FROM pc WHERE price < CAST (500 AS MONEY);

@@ -1,0 +1,1 @@
+SELECT model,ram,screen FROM laptop WHERE price > CAST (1000 AS MONEY);

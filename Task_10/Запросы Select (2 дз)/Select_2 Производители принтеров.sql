@@ -1,0 +1,1 @@
+SELECT maker FROM product GROUP BY maker
