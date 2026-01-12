@@ -15,4 +15,5 @@ INSERT INTO product VALUES ('B','Ram','Laptop');
 INSERT INTO product VALUES ('B','Bat','PC');
 INSERT INTO product VALUES ('A','Boom','PC');
 INSERT INTO product VALUES ('A','Baam','PC');
+INSERT INTO product VALUES ('Sweet', 'Cake','Laptop');
 
