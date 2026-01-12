@@ -4,6 +4,8 @@ DELETE FROM printer;
 DELETE FROM product;
 INSERT INTO product VALUES ('Ivashkin','Spring13','PC');
 INSERT INTO product VALUES ('Ivashkin','Snow','Laptop');
+INSERT INTO product VALUES ('Ivashkin','Snow2','Laptop');
+INSERT INTO product VALUES ('Ivashkin','Snow3','Laptop');
 INSERT INTO product VALUES ('Ivashkin','Ask','Printer');
 INSERT INTO product VALUES ('McDonald','PC-64','PC');
 INSERT INTO product VALUES ('Ivashkin','Sun','Printer');
@@ -15,5 +17,6 @@ INSERT INTO product VALUES ('B','Ram','Laptop');
 INSERT INTO product VALUES ('B','Bat','PC');
 INSERT INTO product VALUES ('A','Boom','PC');
 INSERT INTO product VALUES ('A','Baam','PC');
+INSERT INTO product VALUES ('A','Biim','PC');
 INSERT INTO product VALUES ('Sweet', 'Cake','Laptop');
 
