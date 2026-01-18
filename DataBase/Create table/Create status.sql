@@ -1,0 +1,3 @@
+CREATE TABLE status (
+	type VARCHAR(20) NOT NULL PRIMARY KEY
+);

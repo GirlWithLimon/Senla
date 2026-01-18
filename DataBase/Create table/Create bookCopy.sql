@@ -1,0 +1,6 @@
+CREATE TABLE bookCopy (
+	id INT NOT NULL PRIMARY KEY,
+	idBook INT NOT NULL REFERENCES  book(id),
+	idStock INT NOT NULL REFERENCES  stock(id),
+	arrivalDate DATE NOT NULL
+);
