@@ -1,5 +1,6 @@
 package org.example.bookstore_app.view;
 
+import org.example.annotation.Inject;
 import org.example.bookstore_app.config.ApplicationContext;
 import org.example.bookstore_app.config.BookstoreConfig;
 import org.example.bookstore_app.config.ConfigurationLoader;
@@ -8,6 +9,11 @@ import org.example.bookstore_app.controller.OperationController;
 import org.example.bookstore_app.model.Stok;
 
 public class ApplicationInitializer {
+    private  BookstoreConfig config;
+    @Inject
+    public ApplicationInitializer(BookstoreConfig config) {
+        this.config = config;
+    }
 
     public static ApplicationContext initialize() {
         System.out.println("Инициализация приложения...");
@@ -32,7 +38,7 @@ public class ApplicationInitializer {
        OperationController controller = context.getBean(OperationController.class);
         if (controller != null) {
             System.out.println("OperationController получен, инициализируем тестовые данные");
-            controller.initializeTestData();
+            controller.loadDate();
         } else {
             System.err.println("Ошибка: не удалось получить OperationController");
             context.printRegisteredBeans();
@@ -43,6 +49,8 @@ public class ApplicationInitializer {
     }
 
     private static BookstoreConfig loadConfiguration() {
+
+        if(config.isUseBD())
         try {
             return ConfigurationLoader.loadConfiguration(BookstoreConfig.class);
         } catch (Exception e) {

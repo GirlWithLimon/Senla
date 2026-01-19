@@ -116,7 +116,7 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void deleteById(Integer id) {
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(SQL_DELETE)) {
 

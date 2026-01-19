@@ -4,8 +4,11 @@ import org.example.bookstore_app.model.Book;
 import org.example.bookstore_app.model.BookStatus;
 
 import java.sql.*;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 public class BookDAO implements GenericDAO<Book, Integer> {
@@ -13,23 +16,21 @@ public class BookDAO implements GenericDAO<Book, Integer> {
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_NAME = "name";
     private static final String COLUMN_AUTHOR = "author";
+    private static final String COLUMN_STATUS = "status";
     private static final String COLUMN_PRICE = "price";
     private static final String COLUMN_PUBLICATION_DATE = "publicationDate";
     private static final String COLUMN_INFORMATION = "information";
-    private static final String COLUMN_STATUS = "status";
 
     private static final String SQL_SELECT_BY_ID =
             "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = ?";
     private static final String SQL_SELECT_ALL =
             "SELECT * FROM " + TABLE_NAME + " ORDER BY " + COLUMN_NAME;
     private static final String SQL_INSERT =
-            "INSERT INTO " + TABLE_NAME + " (" + COLUMN_NAME + ", " + COLUMN_AUTHOR + ", " +
-                    COLUMN_PRICE + ", " + COLUMN_PUBLICATION_DATE + ", " + COLUMN_INFORMATION + ", " +
-                    COLUMN_STATUS + ") VALUES (?, ?, ?, ?, ?, ?)";
+            "INSERT INTO " + TABLE_NAME + " (" + COLUMN_NAME + ", " + COLUMN_AUTHOR + ", " + COLUMN_STATUS + ", " +
+                    COLUMN_PRICE + ", " + COLUMN_PUBLICATION_DATE + ", " + COLUMN_INFORMATION +  ") VALUES (?, ?, ?, ?, ?, ?)";
     private static final String SQL_UPDATE =
-            "UPDATE " + TABLE_NAME + " SET " + COLUMN_NAME + " = ?, " + COLUMN_AUTHOR + " = ?, " +
-                    COLUMN_PRICE + " = ?, " + COLUMN_PUBLICATION_DATE + " = ?, " + COLUMN_INFORMATION + " = ?, " +
-                    COLUMN_STATUS + " = ? WHERE " + COLUMN_ID + " = ?";
+            "UPDATE " + TABLE_NAME + " SET " + COLUMN_NAME + " = ?, " + COLUMN_AUTHOR + " = ?, " + COLUMN_STATUS  + " = ?, " +
+                    COLUMN_PRICE + " = ?, " + COLUMN_PUBLICATION_DATE + " = ?, " + COLUMN_INFORMATION + " = ? WHERE " + COLUMN_ID + " = ?";
     private static final String SQL_DELETE =
             "DELETE FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = ?";
 
@@ -113,7 +114,7 @@ public class BookDAO implements GenericDAO<Book, Integer> {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void deleteById(Integer id) {
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(SQL_DELETE)) {
 
@@ -125,67 +126,64 @@ public class BookDAO implements GenericDAO<Book, Integer> {
         }
     }
 
-     public Book saveWithTransaction(Book book) {
-        return executeInTransaction(conn -> {
-            if (book.getId() == 0) {
-                return insertBook(conn, book);
-            } else {
-                updateBook(conn, book);
-                return book;
-            }
-        });
-    }
-
-    private Book insertBook(Connection conn, Book book) throws SQLException {
-        try (PreparedStatement stmt = conn.prepareStatement(SQL_INSERT,
-                Statement.RETURN_GENERATED_KEYS)) {
-
-            setBookParameters(stmt, book);
-            stmt.executeUpdate();
-
-            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    book.setId(generatedKeys.getInt(1));
-                }
-            }
-            return book;
-        }
-    }
-
-    private void updateBook(Connection conn, Book book) throws SQLException {
-        try (PreparedStatement stmt = conn.prepareStatement(SQL_UPDATE)) {
-            setBookParameters(stmt, book);
-            stmt.setInt(7, book.getId());
-            stmt.executeUpdate();
-        }
-    }
-
     private Book mapResultSetToBook(ResultSet rs) throws SQLException {
-        Book book = new Book(
-                rs.getInt(COLUMN_ID),
-                rs.getString(COLUMN_NAME),
-                rs.getString(COLUMN_AUTHOR),
-                rs.getDouble(COLUMN_PRICE),
-                rs.getString(COLUMN_INFORMATION),
-                rs.getDate(COLUMN_PUBLICATION_DATE).toLocalDate()
-        );
+        try {
+            Book book = new Book(
+                    rs.getInt(COLUMN_ID),
+                    rs.getString(COLUMN_NAME),
+                    rs.getString(COLUMN_AUTHOR),
+                    parsePrice(rs.getString(COLUMN_PRICE)), // Используем метод parsePrice
+                    rs.getString(COLUMN_INFORMATION),
+                    rs.getDate(COLUMN_PUBLICATION_DATE).toLocalDate()
+            );
 
-        String statusStr = rs.getString(COLUMN_STATUS);
-        if (BookStatus.IN_STOCK.name().equals(statusStr)) {
-            book.setStatusStok();
-        } else {
-            book.setStatusNo();
+            String statusStr = rs.getString(COLUMN_STATUS);
+            if (BookStatus.IN_STOCK.name().equals(statusStr)) {
+                book.setStatusStok();
+            } else {
+                book.setStatusNo();
+            }
+
+            return book;
+        } catch (ParseException e) {
+            throw new SQLException("Error parsing price from database", e);
+        }
+    }
+
+    private double parsePrice(String priceString) throws ParseException {
+        if (priceString == null || priceString.trim().isEmpty()) {
+            return 0.0;
         }
 
-        return book;
+        // Убираем символы валюты и пробелы
+        String cleaned = priceString.replaceAll("[^\\d,.-]", "").trim();
+
+        // Если строка уже содержит точку как разделитель
+        if (cleaned.contains(".") && !cleaned.contains(",")) {
+            return Double.parseDouble(cleaned);
+        }
+
+        // Если содержит запятую, заменяем ее на точку
+        if (cleaned.contains(",")) {
+            cleaned = cleaned.replace(",", ".");
+        }
+
+        try {
+            return Double.parseDouble(cleaned);
+        } catch (NumberFormatException e) {
+            // Пробуем с локалью
+            NumberFormat format = NumberFormat.getInstance(Locale.FRANCE); // Используем локаль с запятой
+            Number number = format.parse(priceString);
+            return number.doubleValue();
+        }
     }
 
     private void setBookParameters(PreparedStatement stmt, Book book) throws SQLException {
         stmt.setString(1, book.getName());
         stmt.setString(2, book.getAuthor());
-        stmt.setDouble(3, book.getPrice());
-        stmt.setDate(4, Date.valueOf(book.getPublicationDate()));
-        stmt.setString(5, book.getInfo());
-        stmt.setString(6, book.getStatus().name());
+        stmt.setString(3, book.getStatus().name());
+        stmt.setDouble(4, book.getPrice());
+        stmt.setDate(5, Date.valueOf(book.getPublicationDate()));
+        stmt.setString(6, book.getInfo());
     }
 }

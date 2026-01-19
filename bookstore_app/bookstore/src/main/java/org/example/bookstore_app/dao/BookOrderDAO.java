@@ -120,7 +120,7 @@ public class BookOrderDAO implements GenericDAO<BookOrder, Integer> {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void deleteById(Integer id) {
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(SQL_DELETE)) {
 

@@ -100,7 +100,7 @@ public class RequestDAO implements GenericDAO<Request, Integer> {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void deleteById(Integer id) {
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(SQL_DELETE)) {
 

@@ -2,6 +2,8 @@ package org.example.bookstore_app.controller;
 
 import org.example.annotation.Component;
 import org.example.annotation.Inject;
+import org.example.bookstore_app.dao.DBConfig;
+import org.example.bookstore_app.dao.LoadFromDB;
 import org.example.bookstore_app.model.Book;
 import org.example.bookstore_app.model.BookCopy;
 import org.example.bookstore_app.model.BookOrder;
@@ -19,7 +21,7 @@ public class OperationController {
     @Inject
     private Stok stok;
     @Inject
-    private IBookStok bookInStok;
+    private static IBookStok bookInStok;
     @Inject
     private IShowBook showBook;
     @Inject
@@ -31,10 +33,15 @@ public class OperationController {
     @Inject
     private DataSave dataSave;
 
-    public OperationController() {
-        setupShutdownHook();
+    public OperationController() { }
+    public void loadDate(){
+        LoadFromDB load = new LoadFromDB();
+        if (load.initialize()) {
+            System.out.println("Выполнено подключение к базе данных");
+        }
+        else setupShutdownHook();
+        initializeTestData();
     }
-
     private void setupShutdownHook() {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("\nСохранение состояния программы...");
@@ -74,7 +81,7 @@ public class OperationController {
         }
     }
 
-    public Book addBookToStock(int id, String name, String author, Double price, LocalDate datePublication, LocalDate date) {
+    public static Book addBookToStock(int id, String name, String author, Double price, LocalDate datePublication, LocalDate date) {
         Book book = new Book(id, name, author, price, datePublication);
         bookInStok.addBookToStock(id, book, date);
         return book;

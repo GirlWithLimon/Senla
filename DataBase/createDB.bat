@@ -74,19 +74,17 @@ if %errorlevel% neq 0 (
     pause
     exit /b 1
 )
-
+echo Создание таблицы stok...
+psql -h %PGHOST% -p %PGPORT% -U %PGUSER% -d %DBNAME% -f "Create table\Create stok.sql"
+if %errorlevel% neq 0 (
+    echo ОШИБКА при создании таблицы stok
+    pause
+    exit /b 1
+)
 echo Создание таблицы bookCopy...
 psql -h %PGHOST% -p %PGPORT% -U %PGUSER% -d %DBNAME% -f "Create table\Create bookCopy.sql"
 if %errorlevel% neq 0 (
     echo ОШИБКА при создании таблицы bookCopy
-    pause
-    exit /b 1
-)
-
-echo Создание таблицы orderItem...
-psql -h %PGHOST% -p %PGPORT% -U %PGUSER% -d %DBNAME% -f "Create table\Create orderItem.sql"
-if %errorlevel% neq 0 (
-    echo ОШИБКА при создании таблицы orderItem
     pause
     exit /b 1
 )
@@ -99,6 +97,14 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
+echo Создание таблицы orderItem...
+psql -h %PGHOST% -p %PGPORT% -U %PGUSER% -d %DBNAME% -f "Create table\Create orderItem.sql"
+if %errorlevel% neq 0 (
+    echo ОШИБКА при создании таблицы orderItem
+    pause
+    exit /b 1
+)
+
 echo Создание таблицы request...
 psql -h %PGHOST% -p %PGPORT% -U %PGUSER% -d %DBNAME% -f "Create table\Create request.sql"
 if %errorlevel% neq 0 (
@@ -107,13 +113,7 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-echo Создание таблицы stok...
-psql -h %PGHOST% -p %PGPORT% -U %PGUSER% -d %DBNAME% -f "Create table\Create stok.sql"
-if %errorlevel% neq 0 (
-    echo ОШИБКА при создании таблицы stok
-    pause
-    exit /b 1
-)
+
 
 echo.
 echo Шаг 4: Заполнение начальными данными...
@@ -126,7 +126,12 @@ if %errorlevel% neq 0 (
     pause
     exit /b 1
 )
-
+psql -h %PGHOST% -p %PGPORT% -U %PGUSER% -d %DBNAME% -f "Insert\Insert book.sql"
+if %errorlevel% neq 0 (
+    echo ОШИБКА при заполнении таблицы book
+    pause
+    exit /b 1
+)
 echo.
 
 echo.

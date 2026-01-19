@@ -11,7 +11,7 @@ public interface GenericDAO<T, ID> {
     List<T> findAll();
     T save(T entity);
     void update(T entity);
-    void delete(ID id);
+    void deleteById(ID id);
 
     default Connection getConnection() throws Exception {
         return DBConnect.getInstance().getConnection();
@@ -22,9 +22,7 @@ public interface GenericDAO<T, ID> {
         try {
             conn = getConnection();
             conn.setAutoCommit(false);
-
             R result = operation.execute(conn);
-
             conn.commit();
             return result;
 
