@@ -8,7 +8,7 @@ import java.time.LocalDate;
 public class Book implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-    private final int id;
+    private int id;
     private final String name;
     private final String author;
     private BookStatus status;
@@ -86,5 +86,9 @@ public class Book implements Serializable {
     @Override
     public String toString() {
         return this.name;
+    }
+
+    public void setId(int newId) {
+        this.id =newId;
     }
 }

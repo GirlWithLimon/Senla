@@ -21,6 +21,8 @@ public class ApplicationInitializer {
         context.registerBean(DataSave.class, dataSave);
         System.out.println("DataSave зарегистрирован");
 
+
+        //возвращение сохраненного состояния
         Stok stok = dataSave.loadState();
         context.registerBean(Stok.class, stok);
         System.out.println("Stok загружен, размер книг: " + stok.getBooks().size());

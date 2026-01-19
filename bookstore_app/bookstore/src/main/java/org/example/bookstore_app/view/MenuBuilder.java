@@ -445,6 +445,28 @@ public final class MenuBuilder {
             System.out.println("Настройка сохранена! Автовыполнение запросов: " +
                     (newValue ? "Включено" : "Отключено"));
         }));
+        menu.addMenuItem(new MenuItem("Включить/выключить использование базы данных", () -> {
+            System.out.println("\n=== Управление использованием БД ===");
+            boolean current = config.isUseBD();
+            System.out.println("Текущее состояние: " + (current ? "Включено" : "Отключено"));
+            System.out.print("Включить автовыполнение? (да/нет): ");
+
+            String answer = scanner.nextLine().toLowerCase();
+            boolean newValue;
+
+            if (answer.equals("да") || answer.equals("д") || answer.equals("yes") || answer.equals("y")) {
+                newValue = true;
+            } else if (answer.equals("нет") || answer.equals("н") || answer.equals("no") || answer.equals("n")) {
+                newValue = false;
+            } else {
+                System.out.println("Неверный ответ. Настройка не изменена.");
+                return;
+            }
+
+            config.setUseBD(newValue);
+            System.out.println("Настройка сохранена! Использование БД: " +
+                    (newValue ? "Включено" : "Отключено"));
+        }));
 
         return menu;
     }

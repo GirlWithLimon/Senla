@@ -32,7 +32,7 @@ echo База данных: %DBNAME%
 echo.
 
 REM Запрос пароля, если он не установлен
-if "%PGPASSWORD%"=="1234" (
+if "%PGPASSWORD%"=="Введите пароль" (
     set /p PGPASSWORD="Введите пароль для пользователя %PGUSER%: "
 )
 
@@ -53,7 +53,7 @@ psql -h %PGHOST% -p %PGPORT% -U %PGUSER% -c "CREATE DATABASE %DBNAME% ENCODING '
 if %errorlevel% neq 0 (
     echo ОШИБКА при создании базы данных
     pause
-    exit /b 1
+    exit /b
 )
 
 echo.
@@ -68,7 +68,6 @@ if %errorlevel% neq 0 (
 )
 
 echo Создание таблицы book...
-REM Файл называется "Create book.sql" с пробелом, поэтому в кавычках
 psql -h %PGHOST% -p %PGPORT% -U %PGUSER% -d %DBNAME% -f "Create table\Create book.sql"
 if %errorlevel% neq 0 (
     echo ОШИБКА при создании таблицы book

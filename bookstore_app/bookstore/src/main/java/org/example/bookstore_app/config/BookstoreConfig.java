@@ -14,6 +14,9 @@ public class BookstoreConfig {
     @ConfigProperty(propertyName = "csv.delimiter")
     private String csvDelimiter = ",";
 
+    @ConfigProperty(propertyName = "use.bd", type = PropertyType.BOOLEAN)
+    private boolean useBD = true;
+
      public int getMonthsForOldBook() {
         return monthsForOldBook;
     }
@@ -25,7 +28,9 @@ public class BookstoreConfig {
     public String getCsvDelimiter() {
         return csvDelimiter;
     }
-
+    public boolean isUseBD() {
+        return useBD;
+    }
 
     public void setMonthsForOldBook(int monthsForOldBook) {
         this.monthsForOldBook = monthsForOldBook;
@@ -38,7 +43,9 @@ public class BookstoreConfig {
     public void setCsvDelimiter(String csvDelimiter) {
         this.csvDelimiter = csvDelimiter;
     }
-
+    public void setUseBD(boolean useBD) {
+        this.useBD = useBD;
+    }
 
     @Override
     public String toString() {
