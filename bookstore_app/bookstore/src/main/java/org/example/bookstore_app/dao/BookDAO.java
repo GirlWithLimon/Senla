@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class BookDAO implements GenericDAO<Book, Integer> {
-    // Все литералы в константах
     private static final String TABLE_NAME = "book";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_NAME = "name";
@@ -48,7 +47,7 @@ public class BookDAO implements GenericDAO<Book, Integer> {
             return Optional.empty();
 
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Error finding book with id: " + id, e);
         }
     }
 
@@ -65,14 +64,69 @@ public class BookDAO implements GenericDAO<Book, Integer> {
             }
             return books;
 
-        }  catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            throw new RuntimeException("Error finding all books", e);
         }
     }
 
     @Override
     public Book save(Book book) {
-        Book book1 = this.<Book>executeInTransaction(conn -> {
+        if (book.getId() == 0) {
+            return insertBook(book);
+        } else {
+            update(book);
+            return book;
+        }
+    }
+
+    private Book insertBook(Book book) {
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(SQL_INSERT,
+                     Statement.RETURN_GENERATED_KEYS)) {
+
+            setBookParameters(stmt, book);
+            stmt.executeUpdate();
+
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    book.setId(generatedKeys.getInt(1));
+                }
+            }
+            return book;
+        } catch (Exception e) {
+            throw new RuntimeException("Error inserting book: " + book.getName(), e);
+        }
+    }
+
+    @Override
+    public void update(Book book) {
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(SQL_UPDATE)) {
+
+            setBookParameters(stmt, book);
+            stmt.setInt(7, book.getId());
+            stmt.executeUpdate();
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error updating book: " + book.getId(), e);
+        }
+    }
+
+    @Override
+    public void delete(Integer id) {
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(SQL_DELETE)) {
+
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error deleting book: " + id, e);
+        }
+    }
+
+     public Book saveWithTransaction(Book book) {
+        return executeInTransaction(conn -> {
             if (book.getId() == 0) {
                 return insertBook(conn, book);
             } else {
@@ -80,64 +134,32 @@ public class BookDAO implements GenericDAO<Book, Integer> {
                 return book;
             }
         });
-        return book1;
     }
 
-    private Book insertBook(Connection conn, Book book) throws SQLException{
+    private Book insertBook(Connection conn, Book book) throws SQLException {
         try (PreparedStatement stmt = conn.prepareStatement(SQL_INSERT,
                 Statement.RETURN_GENERATED_KEYS)) {
 
             setBookParameters(stmt, book);
-            int affectedRows = stmt.executeUpdate();
-
-            if (affectedRows == 0) {
-
-            }
+            stmt.executeUpdate();
 
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     book.setId(generatedKeys.getInt(1));
-                } else {
-
                 }
             }
             return book;
         }
     }
 
-    @Override
-    public void update(Book book) {
-        executeInTransaction((TransactionOperation) conn -> updateBook(conn, book));
-    }
-
     private void updateBook(Connection conn, Book book) throws SQLException {
         try (PreparedStatement stmt = conn.prepareStatement(SQL_UPDATE)) {
-
             setBookParameters(stmt, book);
             stmt.setInt(7, book.getId());
-            int affectedRows = stmt.executeUpdate();
-
-            if (affectedRows == 0) {
-
-            }
+            stmt.executeUpdate();
         }
     }
 
-    @Override
-    public void delete(Integer id)  {
-        executeInTransaction(conn -> {
-            try (PreparedStatement stmt = conn.prepareStatement(SQL_DELETE)) {
-                stmt.setInt(1, id);
-                int affectedRows = stmt.executeUpdate();
-
-                if (affectedRows == 0) {
-
-                }
-            }
-        });
-    }
-
-    // Приватные вспомогательные методы
     private Book mapResultSetToBook(ResultSet rs) throws SQLException {
         Book book = new Book(
                 rs.getInt(COLUMN_ID),
@@ -165,17 +187,5 @@ public class BookDAO implements GenericDAO<Book, Integer> {
         stmt.setDate(4, Date.valueOf(book.getPublicationDate()));
         stmt.setString(5, book.getInfo());
         stmt.setString(6, book.getStatus().name());
-    }
-
-    // Обертка для выполнения в транзакции
-    private <R> R executeInTransaction(TransactionFunction<R> operation) {
-        return (R) executeInTransaction((TransactionOperation) conn -> {
-            return operation.execute(conn);
-        });
-    }
-
-    @FunctionalInterface
-    private interface TransactionFunction<R> {
-        void execute(Connection connection) throws SQLException;
     }
 }
