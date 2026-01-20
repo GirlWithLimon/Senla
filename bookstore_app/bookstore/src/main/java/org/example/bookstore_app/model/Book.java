@@ -6,8 +6,6 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 public class Book implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
     private int id;
     private final String name;
     private final String author;

@@ -5,8 +5,6 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 public class BookCopy implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
     private final int id;
     private final Book book;
     private final LocalDate arrivalDate;

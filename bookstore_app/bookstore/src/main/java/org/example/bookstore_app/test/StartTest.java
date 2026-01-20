@@ -1,7 +1,6 @@
 package org.example.bookstore_app.test;
 
 import org.example.bookstore_app.config.ApplicationContext;
-import org.example.bookstore_app.dao.DBConnect;
 import org.example.bookstore_app.view.ApplicationInitializer;
 import org.example.bookstore_app.view.MenuBuilder;
 import org.example.bookstore_app.view.MenuController;
@@ -13,15 +12,7 @@ import java.sql.SQLException;
 public class StartTest {
 
     public static void main(String[] args) {
-        try (Connection connection = DBConnect.getInstance().getConnection()) {
-            if (connection != null) {
-                System.out.println("Выполнено подключение к базе данных");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+
         Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
             System.err.println("Необработанное исключение в потоке " + thread.getName() + ":");
             throwable.printStackTrace();

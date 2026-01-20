@@ -1,8 +1,10 @@
 package org.example.bookstore_app.dao;
 
+import org.example.annotation.Component;
 import org.example.annotation.ConfigProperty;
 import org.example.annotation.PropertyType;
 
+@Component
 public class DBConfig {
     @ConfigProperty( configFileName = "jdbc.properties", propertyName = "url", type = PropertyType.STRING)
     private  String URL = "jdbc:postgresql://localhost:5433/bookstore";

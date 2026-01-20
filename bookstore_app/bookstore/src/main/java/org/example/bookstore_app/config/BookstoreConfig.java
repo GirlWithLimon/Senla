@@ -1,8 +1,10 @@
 package org.example.bookstore_app.config;
 
+import org.example.annotation.Component;
 import org.example.annotation.ConfigProperty;
 import org.example.annotation.PropertyType;
 
+@Component
 public class BookstoreConfig {
 
     @ConfigProperty(propertyName = "months.for.old.book", type = PropertyType.INTEGER)
@@ -14,10 +16,7 @@ public class BookstoreConfig {
     @ConfigProperty(propertyName = "csv.delimiter")
     private String csvDelimiter = ",";
 
-    @ConfigProperty(propertyName = "use.bd", type = PropertyType.BOOLEAN)
-    private boolean useBD = true;
-
-     public int getMonthsForOldBook() {
+    public int getMonthsForOldBook() {
         return monthsForOldBook;
     }
 
@@ -28,9 +27,7 @@ public class BookstoreConfig {
     public String getCsvDelimiter() {
         return csvDelimiter;
     }
-    public boolean isUseBD() {
-        return useBD;
-    }
+
 
     public void setMonthsForOldBook(int monthsForOldBook) {
         this.monthsForOldBook = monthsForOldBook;
@@ -43,9 +40,7 @@ public class BookstoreConfig {
     public void setCsvDelimiter(String csvDelimiter) {
         this.csvDelimiter = csvDelimiter;
     }
-    public void setUseBD(boolean useBD) {
-        this.useBD = useBD;
-    }
+
 
     @Override
     public String toString() {

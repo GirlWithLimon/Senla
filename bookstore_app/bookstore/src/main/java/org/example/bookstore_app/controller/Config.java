@@ -89,9 +89,6 @@ public class Config {
             bookstoreConfig.setCsvDelimiter(delimiter);
         }
     }
-    public void setUseBD(boolean useBD) {
-        bookstoreConfig.setUseBD(useBD);
-    }
 
 
     public void loadFromFile(String configFile) {

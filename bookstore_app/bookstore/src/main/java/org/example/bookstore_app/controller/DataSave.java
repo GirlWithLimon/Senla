@@ -1,10 +1,9 @@
 package org.example.bookstore_app.controller;
 
 import org.example.bookstore_app.config.ApplicationContext;
-import org.example.bookstore_app.dao.BookDAO;
-import org.example.bookstore_app.dao.DBConnect;
-import org.example.bookstore_app.dao.LoadFromDB;
+import org.example.bookstore_app.dao.*;
 import org.example.bookstore_app.model.Book;
+import org.example.bookstore_app.model.BookCopy;
 import org.example.bookstore_app.model.Stok;
 
 import java.sql.Connection;
@@ -52,34 +51,32 @@ public class DataSave {
             }
         }
 
-        public Stok loadDate(Connection conn) {
-            try {
-                BookDAO bookDAO = new BookDAO();
-                List<Book> books = bookDAO.findAll();
-                System.out.println("Найдено книг в БД: " + books.size());
-                ApplicationContext context = ApplicationContext.getInstance();
-                Stok stok = context.getBean(Stok.class);
-                if (stok != null) {
-                    // Получаем OperationController для корректного добавления книг
-                    OperationController operationController = context.getBean(OperationController.class);
-                    if (operationController != null) {
-                        for(Book book : books){
-                            System.out.println("Загружаем книгу: " + book.getName() + " (ID: " + book.getId() + ")");
-                            // Используем метод OperationController вместо статического вызова
-                            operationController.addBookToStock(book.getName(), book.getAuthor(),
-                                    book.getPrice(), book.getPublicationDate(),
-                                    LocalDate.now());
-                        }
-                    }
-                }
-                return stok;
-            } catch (Exception e) {
-                System.out.println("Ошибка при загрузке данных из БД: " + e.getMessage());
-                e.printStackTrace();
-                return null;
-            }
+    public Stok loadDate(Connection conn) {
+        try {
+            BookDAO bookDAO = new BookDAO();
+            List<Book> books = bookDAO.findAll();
+            System.out.println("Найдено книг в БД: " + books.size());
 
+            Stok stok = new Stok();
+
+            for(Book book : books){
+                System.out.println("Загружаем книгу: " + book.getName() + " (ID: " + book.getId() + ")");
+                stok.addBook(book);
+
+                BookCopyDAO bookCopyDAO = new BookCopyDAO();
+                List<BookCopy> copies = bookCopyDAO.findByBookId(book.getId());
+                for(BookCopy copy : copies) {
+                    stok.addBooksCopy(copy);
+                    book.setStatusStok();
+                }
+            }
+            return stok;
+        } catch (Exception e) {
+            System.out.println("Ошибка при загрузке данных из БД: " + e.getMessage());
+            e.printStackTrace();
+            return new Stok();
         }
+    }
 
         private boolean tablesExist(Connection conn) throws SQLException {
             String checkSql = "SELECT EXISTS (SELECT 1 FROM information_schema.tables " +
@@ -89,7 +86,7 @@ public class DataSave {
                  ResultSet rs = stmt.executeQuery(checkSql)) {
 
                 if (rs.next()) {
-                    return rs.getBoolean(1); // true если таблица существует
+                    return rs.getBoolean(1);
                 }
                 return false;
             }

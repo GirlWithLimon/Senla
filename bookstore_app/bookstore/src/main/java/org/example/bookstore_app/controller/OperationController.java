@@ -3,6 +3,7 @@ package org.example.bookstore_app.controller;
 import org.example.annotation.Component;
 import org.example.annotation.Inject;
 import org.example.bookstore_app.dao.DBConfig;
+import org.example.bookstore_app.dao.DBConnect;
 import org.example.bookstore_app.dao.LoadFromDB;
 import org.example.bookstore_app.model.Book;
 import org.example.bookstore_app.model.BookCopy;
@@ -33,23 +34,22 @@ public class OperationController {
     private ImportExportService importExportService;
     @Inject
     private DataSave dataSave;
-    @Inject
-    private Connection conn;
 
     public OperationController() { }
     public void loadDate(){
-        DataSave load = new DataSave();
+        DataSave load = DataSave.getInstance();
         if (load.initialize()) {
             System.out.println("Выполнено подключение к базе данных");
         }
         else setupShutdownHook();
-        initializeTestData();
     }
     private void setupShutdownHook() {
+
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("\nСохранение состояния программы...");
             if (dataSave != null && stok != null) {
                 try {
+                    Connection conn = DBConnect.getInstance().getConnection();
                     dataSave.saveState(stok,conn);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
