@@ -5,21 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c1c63246-89cf-46e4-b94b-3f1918de080f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/BookDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/DBConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/DBConnect.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/GenericDAO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/resources/jdbc.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataBase/createDB.bat" beforeDir="false" afterPath="$PROJECT_DIR$/DataBase/createDB.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/config/BookstoreConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/config/BookstoreConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/Config.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/model/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/model/Book.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/test/StartTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/test/StartTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/DataSave.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/DataSave.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/OperationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/OperationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/LoadFromDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/LoadFromDB.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/view/ApplicationInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/view/ApplicationInitializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/view/MenuBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/view/MenuBuilder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/resources/bookstore.properties" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/resources/bookstore.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bookstore_app/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

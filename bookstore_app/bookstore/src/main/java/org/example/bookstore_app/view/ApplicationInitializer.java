@@ -6,7 +6,10 @@ import org.example.bookstore_app.config.BookstoreConfig;
 import org.example.bookstore_app.config.ConfigurationLoader;
 import org.example.bookstore_app.controller.DataSave;
 import org.example.bookstore_app.controller.OperationController;
+import org.example.bookstore_app.dao.DBConnect;
 import org.example.bookstore_app.model.Stok;
+
+import java.sql.Connection;
 
 public class ApplicationInitializer {
     private  BookstoreConfig config;
@@ -15,21 +18,19 @@ public class ApplicationInitializer {
         this.config = config;
     }
 
-    public static ApplicationContext initialize() {
+    public static ApplicationContext initialize() throws Exception {
         System.out.println("Инициализация приложения...");
         ApplicationContext context = ApplicationContext.getInstance();
 
         BookstoreConfig config = loadConfiguration();
-        context.registerBean(BookstoreConfig.class, config);
-        System.out.println("Конфигурация зарегистрирована");
 
         DataSave dataSave = DataSave.getInstance();
         context.registerBean(DataSave.class, dataSave);
         System.out.println("DataSave зарегистрирован");
 
-
+        Connection conn = DBConnect.getInstance().getConnection();
         //возвращение сохраненного состояния
-        Stok stok = dataSave.loadState();
+        Stok stok = dataSave.loadDate(conn);
         context.registerBean(Stok.class, stok);
         System.out.println("Stok загружен, размер книг: " + stok.getBooks().size());
 
@@ -49,9 +50,7 @@ public class ApplicationInitializer {
     }
 
     private static BookstoreConfig loadConfiguration() {
-
-        if(config.isUseBD())
-        try {
+         try {
             return ConfigurationLoader.loadConfiguration(BookstoreConfig.class);
         } catch (Exception e) {
             System.err.println("Ошибка загрузки конфигурации: " + e.getMessage());

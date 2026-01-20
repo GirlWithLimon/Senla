@@ -10,6 +10,7 @@ import org.example.bookstore_app.model.BookOrder;
 import org.example.bookstore_app.model.Stok;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -32,10 +33,12 @@ public class OperationController {
     private ImportExportService importExportService;
     @Inject
     private DataSave dataSave;
+    @Inject
+    private Connection conn;
 
     public OperationController() { }
     public void loadDate(){
-        LoadFromDB load = new LoadFromDB();
+        DataSave load = new DataSave();
         if (load.initialize()) {
             System.out.println("Выполнено подключение к базе данных");
         }
@@ -46,7 +49,11 @@ public class OperationController {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("\nСохранение состояния программы...");
             if (dataSave != null && stok != null) {
-                dataSave.saveState(stok);
+                try {
+                    dataSave.saveState(stok,conn);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
                 System.out.println("Состояние успешно сохранено.");
             } else {
                 System.err.println("Ошибка: DataSave или Stok не инициализированы!");
