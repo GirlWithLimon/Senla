@@ -3,6 +3,7 @@ package org.example.bookstore_app.controller;
 import org.example.bookstore_app.config.BookstoreConfig;
 import org.example.annotation.Component;
 import org.example.annotation.Inject;
+import org.example.bookstore_app.dao.StokService;
 import org.example.bookstore_app.model.*;
 
 import java.time.LocalDate;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 @Component
 public class BooksController implements IBookStok {
     @Inject
-    Stok stok;
+    StokService stokService;
     @Inject
     private BookstoreConfig config;
 
@@ -27,14 +28,14 @@ public class BooksController implements IBookStok {
 
     @Override
     public void addBookToStock(int id, Book book, LocalDate date) {
-        boolean bookExists = stok.getBooks().stream()
+        boolean bookExists = stokService.getBooks().stream()
                 .anyMatch(b -> b.getId() == book.getId());
 
         if (!bookExists) {
-            stok.addBook(book);
+            stokService.addBook(book);
             System.out.println("Книга добавлена в каталог: " + book.getName() +
                     " | ID: " + book.getId() +
-                    " | Всего в каталоге: " + stok.getBooks().size());
+                    " | Всего в каталоге: " + stokService.getBooks().size());
         } else {
             System.out.println("Книга уже есть в каталоге: " + book.getName() +
                     " | ID: " + book.getId());
@@ -42,15 +43,15 @@ public class BooksController implements IBookStok {
     }
 
     public void addBookCopyToStock(int id, BookCopy bookCopy, LocalDate date) {
-        stok.addBooksCopy(bookCopy);
+        stokService.addBooksCopy(bookCopy);
         bookCopy.getBook().setStatusStok();
 
         System.out.println("Добавлена книга на склад: " + bookCopy.getBook().getName() +
                 " | Копий: " + countBookCopies(bookCopy.getBook()) +
-                " | Книг в каталоге: " + stok.getBooks().size());
+                " | Книг в каталоге: " + stokService.getBooks().size());
 
          if (config.isAutoCompleteRequests()) {
-            List<Request> requestsToRemove = stok.getRequests().stream()
+            List<Request> requestsToRemove = stokService.getRequests().stream()
                     .filter(request -> request.getBook().equals(bookCopy.getBook()))
                     .toList();
 
@@ -60,11 +61,11 @@ public class BooksController implements IBookStok {
                     .collect(Collectors.toSet());
 
             requestsToRemove.forEach(request -> {
-                request.ContinueRequest(bookCopy);
+                ContinueRequest(request.getOrderItem(), bookCopy);
                 removeBookCopyfromstock(bookCopy);
             });
 
-            requestsToRemove.forEach(stok::removeRequest);
+            requestsToRemove.forEach(stokService::removeRequest);
 
             ordersToUpdate.forEach(order -> {
                 updateOrderStatus(order);
@@ -80,24 +81,28 @@ public class BooksController implements IBookStok {
             System.out.println("Автоматическое выполнение запросов отключено в настройках");
         }
     }
+    public void ContinueRequest(BookOrderItem orderItem, BookCopy bookCopy) {
+        orderItem.setBookCopy(bookCopy);
+        orderItem.setStatus(OrderItemStatus.COMPLETED);
+    }
 
     private BookOrder findOrderByRequest(Request request) {
-        return stok.getOrders().stream()
+        return stokService.getOrders().stream()
                 .filter(order -> order.getOrderItems().contains(request.getOrderItem()))
                 .findFirst()
                 .orElse(null);
     }
 
     private int countBookCopies(Book book) {
-        return (int) stok.getBooksCopy().stream()
+        return (int) stokService.getBooksCopy().stream()
                 .filter(copy -> copy.getBook().equals(book))
                 .count();
     }
 
     @Override
     public void removeBookCopyfromstock(BookCopy book) {
-        stok.removeBooksCopy(book);
-        boolean hasOtherCopies = stok.getBooksCopy().stream()
+        stokService.removeBooksCopy(book);
+        boolean hasOtherCopies = stokService.getBooksCopy().stream()
                 .anyMatch(copy -> copy.getBook().equals(book.getBook()));
         if (!hasOtherCopies) {
             book.getBook().setStatusNo();

@@ -1,16 +1,14 @@
 package org.example.bookstore_app.controller;
 
-import org.example.bookstore_app.config.ApplicationContext;
 import org.example.bookstore_app.dao.*;
 import org.example.bookstore_app.model.Book;
 import org.example.bookstore_app.model.BookCopy;
-import org.example.bookstore_app.model.Stok;
+import org.example.bookstore_app.dao.StokService;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -45,36 +43,36 @@ public class DataSave {
             return instance;
         }
 
-        public void saveState(Stok stok, Connection conn) throws Exception {
+        public void saveState(StokService stokService, Connection conn) throws Exception {
             if(tablesExist(conn)){
 
             }
         }
 
-    public Stok loadDate(Connection conn) {
+    public StokService loadDate(Connection conn) {
         try {
             BookDAO bookDAO = new BookDAO();
             List<Book> books = bookDAO.findAll();
             System.out.println("Найдено книг в БД: " + books.size());
 
-            Stok stok = new Stok();
+            StokService stokService = new StokService();
 
             for(Book book : books){
                 System.out.println("Загружаем книгу: " + book.getName() + " (ID: " + book.getId() + ")");
-                stok.addBook(book);
+                stokService.addBook(book);
 
                 BookCopyDAO bookCopyDAO = new BookCopyDAO();
                 List<BookCopy> copies = bookCopyDAO.findByBookId(book.getId());
                 for(BookCopy copy : copies) {
-                    stok.addBooksCopy(copy);
+                    stokService.addBooksCopy(copy);
                     book.setStatusStok();
                 }
             }
-            return stok;
+            return stokService;
         } catch (Exception e) {
             System.out.println("Ошибка при загрузке данных из БД: " + e.getMessage());
             e.printStackTrace();
-            return new Stok();
+            return new StokService();
         }
     }
 

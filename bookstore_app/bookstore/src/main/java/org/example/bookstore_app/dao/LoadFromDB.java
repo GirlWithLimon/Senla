@@ -1,16 +1,9 @@
 package org.example.bookstore_app.dao;
 
-import org.example.bookstore_app.config.ApplicationContext;
-import org.example.bookstore_app.controller.*;
-import org.example.bookstore_app.model.Book;
-import org.example.bookstore_app.model.Stok;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
-import java.util.List;
 
 public class LoadFromDB {
 

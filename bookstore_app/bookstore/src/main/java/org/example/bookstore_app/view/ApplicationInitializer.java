@@ -6,7 +6,7 @@ import org.example.bookstore_app.config.ConfigurationLoader;
 import org.example.bookstore_app.controller.DataSave;
 import org.example.bookstore_app.controller.OperationController;
 import org.example.bookstore_app.dao.DBConnect;
-import org.example.bookstore_app.model.Stok;
+import org.example.bookstore_app.dao.StokService;
 
 import java.sql.Connection;
 
@@ -30,9 +30,9 @@ public class ApplicationInitializer {
         System.out.println("DataSave зарегистрирован");
 
         Connection conn = DBConnect.getInstance().getConnection();
-        Stok stok = dataSave.loadDate(conn);
-        context.registerBean(Stok.class, stok);
-        System.out.println("Stok загружен, размер книг: " + stok.getBooks().size());
+        StokService stokService = dataSave.loadDate(conn);
+        context.registerBean(StokService.class, stokService);
+        System.out.println("Stok загружен, размер книг: " + stokService.getBooks().size());
 
         context.initialize();
 
@@ -40,7 +40,7 @@ public class ApplicationInitializer {
         if (controller != null) {
             System.out.println("OperationController получен");
             // Не инициализируем тестовые данные, если уже есть данные из БД
-            if (stok.getBooks().isEmpty()) {
+            if (stokService.getBooks().isEmpty()) {
                 System.out.println("Инициализируем тестовые данные");
                 controller.initializeTestData();
             } else {

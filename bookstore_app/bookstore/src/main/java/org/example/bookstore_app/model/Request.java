@@ -18,13 +18,8 @@ public class Request implements Serializable {
     public Book getBook() {
         return orderItem.getBook();
     }
-    
     public BookOrderItem getOrderItem() {
         return orderItem;
     }
-    
-    public void ContinueRequest(BookCopy bookCopy) {
-        orderItem.setBookCopy(bookCopy);
-        orderItem.setStatus(OrderItemStatus.COMPLETED);
-    }
+
 }

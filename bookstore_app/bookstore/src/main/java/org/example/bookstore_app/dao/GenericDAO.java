@@ -17,42 +17,4 @@ public interface GenericDAO<T, ID> {
         return DBConnect.getInstance().getConnection();
     }
 
-    default <R> R executeInTransaction(TransactionOperation<R> operation) {
-        Connection conn = null;
-        try {
-            conn = getConnection();
-            conn.setAutoCommit(false);
-            R result = operation.execute(conn);
-            conn.commit();
-            return result;
-
-        } catch (SQLException e) {
-            if (conn != null) {
-                try {
-                    conn.rollback();
-                } catch (SQLException rollbackEx) {
-                    System.err.println("Rollback failed: " + rollbackEx.getMessage());
-                }
-            }
-            throw new RuntimeException("Transaction failed", e);
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-
-        } finally {
-            if (conn != null) {
-                try {
-                    conn.setAutoCommit(true);
-                    conn.close();
-                } catch (SQLException e) {
-                    System.err.println("Error closing connection: " + e.getMessage());
-                }
-            }
-        }
-    }
-
-    @FunctionalInterface
-    interface TransactionOperation<R> {
-        R execute(Connection connection) throws SQLException;
-    }
 }

@@ -1,7 +1,6 @@
 package org.example.bookstore_app.model;
 
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 

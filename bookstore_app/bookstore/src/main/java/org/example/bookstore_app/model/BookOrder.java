@@ -1,6 +1,5 @@
 package org.example.bookstore_app.model;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -29,35 +28,8 @@ public class BookOrder implements Serializable {
         
     public void addBookToOrder(BookOrderItem orderItem) {
         orderItems.add(orderItem);
-        calculateTotalPrice();
     }
-    
-    public void removeBookFromOrder(Book book) {
-        orderItems.removeIf(item -> item.getBook().equals(book));
-        calculateTotalPrice();
-    }
-    
-    private void calculateTotalPrice() {
-        totalPrice = orderItems.stream()
-                .mapToDouble(BookOrderItem::getPrice)
-                .sum();
-    }
-    
-    public List<BookOrderItem> getItemsByStatus(OrderItemStatus status) {
-        return orderItems.stream()
-                .filter(item -> status.equals(item.getStatus()))
-                .collect(Collectors.toList());
-    }
-    
-    public boolean isFullyCompleted() {
-        return orderItems.stream()
-                .allMatch(item -> OrderItemStatus.COMPLETED.equals(item.getStatus()));
-    }
-    
-    public boolean hasPendingItems() {
-        return orderItems.stream()
-                .anyMatch(item -> OrderItemStatus.PENDING.equals(item.getStatus()));
-    }
+
     
     public int getId() { 
         return this.id; 
@@ -98,4 +70,5 @@ public class BookOrder implements Serializable {
     public void setCustomerContact(String customerContact) { 
         this.customerContact = customerContact; 
     }
+    public void setTotalPrice(double totalPrice) { this.totalPrice = totalPrice;  }
 }

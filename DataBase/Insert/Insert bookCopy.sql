@@ -1,0 +1,2 @@
+DELETE FROM bookCopy;
+INSERT INTO bookCopy VALUES (1,1,'2024-03-15');

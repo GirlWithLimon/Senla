@@ -2,13 +2,11 @@ package org.example.bookstore_app.controller;
 
 import org.example.annotation.Component;
 import org.example.annotation.Inject;
-import org.example.bookstore_app.dao.DBConfig;
 import org.example.bookstore_app.dao.DBConnect;
-import org.example.bookstore_app.dao.LoadFromDB;
 import org.example.bookstore_app.model.Book;
 import org.example.bookstore_app.model.BookCopy;
 import org.example.bookstore_app.model.BookOrder;
-import org.example.bookstore_app.model.Stok;
+import org.example.bookstore_app.dao.StokService;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -21,7 +19,7 @@ import java.util.stream.Collectors;
 @Component
 public class OperationController {
     @Inject
-    private Stok stok;
+    private StokService stokService;
     @Inject
     private static IBookStok bookInStok;
     @Inject
@@ -47,10 +45,10 @@ public class OperationController {
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("\nСохранение состояния программы...");
-            if (dataSave != null && stok != null) {
+            if (dataSave != null && stokService != null) {
                 try {
                     Connection conn = DBConnect.getInstance().getConnection();
-                    dataSave.saveState(stok,conn);
+                    dataSave.saveState(stokService,conn);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -62,12 +60,12 @@ public class OperationController {
     }
 
     public void initializeTestData() {
-        if (!stok.getBooks().isEmpty() || !stok.getOrders().isEmpty()) {
+        if (!stokService.getBooks().isEmpty() || !stokService.getOrders().isEmpty()) {
             System.out.println("Загружены сохраненные данные:");
-            System.out.println("- Книг в каталоге: " + stok.getBooks().size());
-            System.out.println("- Экземпляров на складе: " + stok.getBooksCopy().size());
-            System.out.println("- Активных заказов: " + stok.getOrders().size());
-            System.out.println("- Активных запросов: " + stok.getRequests().size());
+            System.out.println("- Книг в каталоге: " + stokService.getBooks().size());
+            System.out.println("- Экземпляров на складе: " + stokService.getBooksCopy().size());
+            System.out.println("- Активных заказов: " + stokService.getOrders().size());
+            System.out.println("- Активных запросов: " + stokService.getRequests().size());
             return;
         }
         else {
@@ -95,15 +93,15 @@ public class OperationController {
     }
 
     public Book addBookToStock(String name, String author, Double price, LocalDate datePublication, LocalDate date) {
-        int id = stok.getBooks().isEmpty() ? 1 : stok.getBooks().getLast().getId() + 1;
+        int id = stokService.getBooks().isEmpty() ? 1 : stokService.getBooks().getLast().getId() + 1;
         Book book = new Book(id, name, author, price, datePublication);
         bookInStok.addBookToStock(id, book, date);
         return book;
     }
 
     public BookCopy addBookCopyToStock(int idBook, LocalDate date) {
-        int id = stok.getBooksCopy().isEmpty() ? 1 : stok.getBooksCopy().getLast().getId() + 1;
-        Book book = stok.getBooks().stream().filter(books -> books.getId()==idBook)
+        int id = stokService.getBooksCopy().isEmpty() ? 1 : stokService.getBooksCopy().getLast().getId() + 1;
+        Book book = stokService.getBooks().stream().filter(books -> books.getId()==idBook)
                 .findFirst().orElse(null);
 
         if (book == null) {
@@ -168,7 +166,7 @@ public class OperationController {
     }
 
     public BookOrder createOrder(List<Book> books, String customerName, String customerContact) {
-        int id = stok.getOrders().isEmpty()? 1 : stok.getOrders().getLast().getId()+1;
+        int id = stokService.getOrders().isEmpty()? 1 : stokService.getOrders().getLast().getId()+1;
         return orderOperation.createOrder(id, books, customerName, customerContact);
     }
 
@@ -254,13 +252,13 @@ public class OperationController {
 
     public void importFromCSV(String entityType, String filePath) throws IOException {
         System.out.println("Начало импорта " + entityType + " из " + filePath);
-        System.out.println("До импорта - Книги: " + stok.getBooks().size() +
-                ", Заказы: " + stok.getOrders().size());
+        System.out.println("До импорта - Книги: " + stokService.getBooks().size() +
+                ", Заказы: " + stokService.getOrders().size());
 
         importExportService.importEntities(entityType, filePath);
 
-        System.out.println("После импорта - Книги: " + stok.getBooks().size() +
-                ", Заказы: " + stok.getOrders().size());
+        System.out.println("После импорта - Книги: " + stokService.getBooks().size() +
+                ", Заказы: " + stokService.getOrders().size());
     }
 
     public String getAvailableEntityTypes() {

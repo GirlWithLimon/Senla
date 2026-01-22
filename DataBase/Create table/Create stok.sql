@@ -1,3 +1,0 @@
-CREATE TABLE stock (
-	id INT NOT NULL PRIMARY KEY
-);

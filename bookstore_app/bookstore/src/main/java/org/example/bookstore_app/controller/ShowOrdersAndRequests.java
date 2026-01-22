@@ -3,6 +3,7 @@ package org.example.bookstore_app.controller;
 
 import org.example.annotation.Component;
 import org.example.annotation.Inject;
+import org.example.bookstore_app.dao.StokService;
 import org.example.bookstore_app.model.*;
 
 import java.time.LocalDate;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 @Component
 public class ShowOrdersAndRequests implements IShowOrdersAndRequests {
     @Inject
-    Stok stok;
+    StokService stokService;
 
     public ShowOrdersAndRequests() { }
 
@@ -30,7 +31,7 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests {
 
     @Override
     public void showOrdersByPrice() {
-        List<BookOrder> sortedOrders = stok.getOrders().stream()
+        List<BookOrder> sortedOrders = stokService.getOrders().stream()
                 .sorted(Comparator.comparing(BookOrder::getTotalPrice))
                 .toList();
 
@@ -42,7 +43,7 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests {
 
     @Override
     public void showOrdersByStatus() {
-        List<BookOrder> sortedOrders = stok.getOrders().stream()
+        List<BookOrder> sortedOrders = stokService.getOrders().stream()
                 .sorted(Comparator.comparing(BookOrder::getStatus))
                 .toList();
 
@@ -54,7 +55,7 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests {
 
     @Override
     public void showRequestsByCount() {
-        Map<Book, Long> requestCount = stok.getRequests().stream()
+        Map<Book, Long> requestCount = stokService.getRequests().stream()
                 .collect(Collectors.groupingBy(
                         Request::getBook,
                         Collectors.counting()
@@ -69,7 +70,7 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests {
 
     @Override
     public void showRequestsByAlphabet() {
-        Map<Book, Long> requestedBooks = stok.getRequests().stream()
+        Map<Book, Long> requestedBooks = stokService.getRequests().stream()
                 .collect(Collectors.groupingBy(
                         Request::getBook,
                         Collectors.counting()
@@ -84,7 +85,7 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests {
 
     @Override
     public List<BookOrder> getCompletedOrdersByPeriod(LocalDate start, LocalDate end) {
-        return stok.getOrders().stream()
+        return stokService.getOrders().stream()
                 .filter(order -> OrderStatus.COMPLETED.equals(order.getStatus()))
                 .filter(order -> !order.getOrderDate().isBefore(start) &&
                         !order.getOrderDate().isAfter(end))
@@ -122,7 +123,7 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests {
 
     @Override
     public List<BookOrder> sortOrderByDate(){
-        return stok.getOrders().stream()
+        return stokService.getOrders().stream()
                 .sorted(Comparator.comparing(BookOrder::getOrderDate))
                 .collect(Collectors.toList());
     }

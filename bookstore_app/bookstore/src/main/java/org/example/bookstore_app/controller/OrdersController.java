@@ -2,6 +2,7 @@ package org.example.bookstore_app.controller;
 
 import org.example.annotation.Component;
 import org.example.annotation.Inject;
+import org.example.bookstore_app.dao.StokService;
 import org.example.bookstore_app.model.*;
 
 import java.util.List;
@@ -9,12 +10,12 @@ import java.util.List;
 @Component
 public class OrdersController implements IOrderOperation{
     @Inject
-    Stok stok;
+    StokService stokService;
     
     public OrdersController() {  }
 
     private BookCopy findBook(Book book) {
-        return stok.getBooksCopy().stream()
+        return stokService.getBooksCopy().stream()
             .filter(copy -> copy.getBook().equals(book))
             .findFirst()
             .orElse(null);
@@ -22,30 +23,31 @@ public class OrdersController implements IOrderOperation{
 
     @Override
     public BookOrder createOrder(int id, List<Book> bookList, String customerName, String customerContact) {
-        BookOrder bookOrder = new BookOrder(id, customerName, customerContact);
+        BookOrder order = new BookOrder(id, customerName, customerContact);
         bookList.stream()
             .map(this::createOrderItem)
-            .forEach(bookOrder::addBookToOrder);
+            .forEach(order::addBookToOrder);
             
-        stok.addOrder(bookOrder);
-        updateOrderStatus(bookOrder);
-       
-        System.out.println("Создан заказ #" + bookOrder.getId() + 
-                         " на " + bookList.size() + " книг(и)");
-        return bookOrder;
+        stokService.addOrder(order);
+        updateOrderStatus(order);
+
+        calculateTotalPrice(order);
+        System.out.println("Создан заказ #" + order.getId() +
+                         " на " + bookList.size() + " книг(и) с итоговой ценой: " + order.getTotalPrice());
+        return order;
     }
    
     private BookOrderItem createOrderItem(Book book) {
         BookCopy bookCopy = findBook(book);
         int id;
-        if(stok.getOrders().isEmpty()){
+        if(stokService.getOrders().isEmpty()){
             id = 1;
         } else {
-            boolean anyOrderHasBooks = stok.getOrders().stream()
+            boolean anyOrderHasBooks = stokService.getOrders().stream()
                     .anyMatch(order -> !order.getOrderItems().isEmpty());
 
             if (anyOrderHasBooks) {
-               id = stok.getOrders().stream()
+               id = stokService.getOrders().stream()
                         .flatMap(order -> order.getOrderItems().stream())
                         .mapToInt(BookOrderItem::getId)
                         .max()
@@ -60,14 +62,14 @@ public class OrdersController implements IOrderOperation{
             orderItem.setBookCopy(bookCopy);
             orderItem.setStatus(OrderItemStatus.COMPLETED);
             System.out.println("Продан экземпляр книги: " + bookCopy);
-            stok.removeBooksCopy(bookCopy);
+            stokService.removeBooksCopy(bookCopy);
             if (findBook(book) == null) {
                 book.setStatusNo();
             }
         } else {
-            int idRequest = stok.getRequests().isEmpty()? 1: stok.getRequests().getLast().getId()+1;
+            int idRequest = stokService.getRequests().isEmpty()? 1: stokService.getRequests().getLast().getId()+1;
             Request request = new Request(idRequest, orderItem);
-            stok.addRequest(request);
+            stokService.addRequest(request);
             orderItem.setStatus(OrderItemStatus.PENDING);
             System.out.println("Книга отсутствует. Создан запрос: " + book.getName());
         }
@@ -76,15 +78,15 @@ public class OrdersController implements IOrderOperation{
     
     @Override
     public void cancelOrder(BookOrder order) {
-        stok.removeOrder(order);
+        stokService.removeOrder(order);
         order.setStatus(OrderStatus.CANCELLED);
         
         order.getOrderItems().forEach(orderItem -> {
             if (orderItem.getBookCopy() != null) {
-                stok.addBooksCopy(orderItem.getBookCopy());
+                stokService.addBooksCopy(orderItem.getBookCopy());
                 orderItem.getBook().setStatusStok();
             }
-            stok.getRequests().removeIf(request -> 
+            stokService.getRequests().removeIf(request ->
                 request.getOrderItem().equals(orderItem));
         });
     }
@@ -96,14 +98,15 @@ public class OrdersController implements IOrderOperation{
             .findFirst()
             .ifPresent(itemToRemove -> {
                 if (itemToRemove.getBookCopy() != null) {
-                    stok.addBooksCopy(itemToRemove.getBookCopy());
+                    stokService.addBooksCopy(itemToRemove.getBookCopy());
                     itemToRemove.getBook().setStatusStok();
                 }
-                stok.getRequests().removeIf(request -> 
+                stokService.getRequests().removeIf(request ->
                     request.getOrderItem().equals(itemToRemove));
                 order.getOrderItems().remove(itemToRemove);
                 updateOrderStatus(order);
             });
+        calculateTotalPrice(order);
     }
     
     private void updateOrderStatus(BookOrder order) {
@@ -127,4 +130,11 @@ public class OrdersController implements IOrderOperation{
             order.setStatus(OrderStatus.NEW);
         }
     }
+    private void calculateTotalPrice(BookOrder order) {
+        double price = order.getOrderItems().stream()
+                            .mapToDouble(BookOrderItem::getPrice)
+                            .sum();
+        order.setTotalPrice(price);
+    }
+
 }

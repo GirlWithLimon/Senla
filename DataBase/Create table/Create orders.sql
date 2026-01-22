@@ -1,6 +1,5 @@
 CREATE TABLE orders (
 	id INT NOT NULL PRIMARY KEY,
-	idStock INT NOT NULL REFERENCES  stock(id),
 	status VARCHAR(15) NOT NULL REFERENCES  status(type),
 	orderDate DATE NOT NULL,
 	customerName VARCHAR(50) NOT NULL,

@@ -60,7 +60,7 @@ echo.
 echo Шаг 3: Создание таблиц...
 echo --------------------------
 
-echo Создание таблицы status (должна быть первой!)...
+echo Создание таблицы status ...
 psql -h %PGHOST% -p %PGPORT% -U %PGUSER% -d %DBNAME% -f "Create table\Create status.sql"
 if %errorlevel% neq 0 (
     echo ОШИБКА при создании таблицы status
@@ -71,13 +71,6 @@ echo Создание таблицы book...
 psql -h %PGHOST% -p %PGPORT% -U %PGUSER% -d %DBNAME% -f "Create table\Create book.sql"
 if %errorlevel% neq 0 (
     echo ОШИБКА при создании таблицы book
-    pause
-    exit /b 1
-)
-echo Создание таблицы stok...
-psql -h %PGHOST% -p %PGPORT% -U %PGUSER% -d %DBNAME% -f "Create table\Create stok.sql"
-if %errorlevel% neq 0 (
-    echo ОШИБКА при создании таблицы stok
     pause
     exit /b 1
 )
@@ -126,12 +119,22 @@ if %errorlevel% neq 0 (
     pause
     exit /b 1
 )
+echo Заполнение таблицы book...
 psql -h %PGHOST% -p %PGPORT% -U %PGUSER% -d %DBNAME% -f "Insert\Insert book.sql"
 if %errorlevel% neq 0 (
     echo ОШИБКА при заполнении таблицы book
     pause
     exit /b 1
 )
+
+echo Заполнение таблицы bookCopy...
+psql -h %PGHOST% -p %PGPORT% -U %PGUSER% -d %DBNAME% -f "Insert\Insert bookCopy.sql"
+if %errorlevel% neq 0 (
+    echo ОШИБКА при заполнении таблицы status
+    pause
+    exit /b 1
+)
+
 echo.
 
 echo.

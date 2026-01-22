@@ -1,11 +1,15 @@
-package org.example.bookstore_app.model;
+package org.example.bookstore_app.dao;
 
-import java.io.Serial;
+import org.example.bookstore_app.model.Book;
+import org.example.bookstore_app.model.BookCopy;
+import org.example.bookstore_app.model.BookOrder;
+import org.example.bookstore_app.model.Request;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Stok implements Serializable {
+public class StokService implements Serializable {
     private final List<BookCopy> booksCopy = new ArrayList<>();
     private final List<Request> requests = new ArrayList<>();
     private final List<BookOrder> orders = new ArrayList<>();

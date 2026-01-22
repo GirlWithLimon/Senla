@@ -4,7 +4,35 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c1c63246-89cf-46e4-b94b-3f1918de080f" name="Changes" comment="" />
+    <list default="true" id="c1c63246-89cf-46e4-b94b-3f1918de080f" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/DataBase/Insert/Insert bookCopy.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Допполнительная папочка/Create all table.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Допполнительная папочка/Insert all.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataBase/Create table/Create bookCopy.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DataBase/Create table/Create bookCopy.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataBase/Create table/Create orders.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DataBase/Create table/Create orders.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataBase/Create table/Create stok.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataBase/Insert/Insert book.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DataBase/Insert/Insert book.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataBase/Insert/Insert status.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DataBase/Insert/Insert status.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataBase/createDB.bat" beforeDir="false" afterPath="$PROJECT_DIR$/DataBase/createDB.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/BookCSVService.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/BookCSVService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/BookOrderCSVService.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/BookOrderCSVService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/BooksController.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/BooksController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/DataSave.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/DataSave.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/OperationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/OperationController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/OrdersController.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/OrdersController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/ShowBook.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/ShowBook.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/ShowOrdersAndRequests.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/ShowOrdersAndRequests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/GenericDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/GenericDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/LoadFromDB.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/LoadFromDB.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/model/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/model/Book.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/model/BookCopy.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/model/BookCopy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/model/BookOrder.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/model/BookOrder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/model/BookOrderItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/model/BookOrderItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/model/Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/model/Request.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/model/Stok.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/model/StokService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/view/ApplicationInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/view/ApplicationInitializer.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -18,6 +46,9 @@
   &quot;associatedIndex&quot;: 8
 }</component>
   <component name="ProjectId" id="373qrfph9piwy3IWiYILtbVy676" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -33,6 +64,11 @@
     &quot;last_opened_file_path&quot;: &quot;D:/GitHubRepositories/Senla&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\GitHubRepositories\Senla\Допполнительная папочка" />
+    </key>
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="c1c63246-89cf-46e4-b94b-3f1918de080f" name="Changes" comment="" />
