@@ -32,6 +32,8 @@ public class OperationController {
     private ImportExportService importExportService;
     @Inject
     private DataSave dataSave;
+    @Inject
+    DBConnect dbConnect;
 
     public OperationController() { }
     public void loadDate(){
@@ -47,7 +49,7 @@ public class OperationController {
             System.out.println("\nСохранение состояния программы...");
             if (dataSave != null && stokService != null) {
                 try {
-                    Connection conn = DBConnect.getInstance().getConnection();
+                    Connection conn = dbConnect.getConnection();
                     dataSave.saveState(stokService,conn);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
@@ -109,7 +111,7 @@ public class OperationController {
             return null;
         }
 
-        BookCopy bookCopy = new BookCopy(id, book, date);
+        BookCopy bookCopy = new BookCopy(id, book.getId(), date);
         bookInStok.addBookCopyToStock(id, bookCopy, date);
         return bookCopy;
     }

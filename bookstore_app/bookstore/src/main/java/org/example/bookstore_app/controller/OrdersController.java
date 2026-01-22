@@ -16,7 +16,7 @@ public class OrdersController implements IOrderOperation{
 
     private BookCopy findBook(Book book) {
         return stokService.getBooksCopy().stream()
-            .filter(copy -> copy.getBook().equals(book))
+            .filter(copy -> copy.getIdBook()==book.getId())
             .findFirst()
             .orElse(null);
     }
@@ -26,9 +26,10 @@ public class OrdersController implements IOrderOperation{
         BookOrder order = new BookOrder(id, customerName, customerContact);
         bookList.stream()
             .map(this::createOrderItem)
-            .forEach(order::addBookToOrder);
+            .forEach(stokService::addBookToOrder);
             
         stokService.addOrder(order);
+        order.setOrderItems(stokService.getBookOrderItem(order.getId()));
         updateOrderStatus(order);
 
         calculateTotalPrice(order);

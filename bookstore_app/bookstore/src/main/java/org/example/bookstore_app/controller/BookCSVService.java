@@ -112,7 +112,7 @@ public class BookCSVService implements ICSVImportExport<Book> {
         List<BookCopy> currentCopies = stokService.getBooksCopy();
         
         for (BookCopy copy : currentCopies) {
-            int bookId = copy.getBook().getId();
+            int bookId = copy.getIdBook();
             if (!importedBooksMap.containsKey(bookId)) {
                 copiesToRemove.add(copy);
             }
@@ -122,7 +122,7 @@ public class BookCSVService implements ICSVImportExport<Book> {
         
        for (BookCopy copy : currentCopies) {
             if (!copiesToRemove.contains(copy)) {
-                Book updatedBook = importedBooksMap.get(copy.getBook().getId());
+                Book updatedBook = importedBooksMap.get(copy.getIdBook());
                 if (updatedBook != null) {
                     if (hasBookCopies(updatedBook.getId())) {
                         updatedBook.setStatusStok();
@@ -148,7 +148,7 @@ public class BookCSVService implements ICSVImportExport<Book> {
     
     private boolean hasBookCopies(int bookId) {
         return stokService.getBooksCopy().stream()
-            .anyMatch(copy -> copy.getBook().getId()==bookId);
+            .anyMatch(copy -> copy.getIdBook()==bookId);
     }
     
     private String escape(String field) {

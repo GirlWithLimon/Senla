@@ -5,29 +5,24 @@ import java.time.LocalDate;
 
 public class BookCopy implements Serializable {
     private final int id;
-    private final Book book;
+    private int idBook;
     private final LocalDate arrivalDate;
 
-    public BookCopy(int  id, Book book, LocalDate date) {
+    public BookCopy(int  id, int idBook, LocalDate date) {
         this.id = id;
-        this.book = book;
+        this.idBook = idBook;
         this.arrivalDate = date;
-        this.book.setStatusStok();
     }
     
     public int getId(){
         return this.id;
     }
-    public Book getBook() {
-        return this.book;
+    public int getIdBook() {
+        return this.idBook;
     }
     
     public LocalDate getArrivalDate() {
         return arrivalDate;
     }
-    
-    @Override
-    public String toString() {
-        return this.book.getName();
-    }
+
 }

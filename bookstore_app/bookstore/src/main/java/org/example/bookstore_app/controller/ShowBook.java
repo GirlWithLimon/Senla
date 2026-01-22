@@ -35,7 +35,7 @@ public class ShowBook implements IShowBook {
         LocalDate thresholdDate = LocalDate.now().minusMonths(config.getMonthsForOldBook());
         return stokService.getBooksCopy().stream()
                 .filter(copy -> copy.getArrivalDate().isBefore(thresholdDate))
-                .sorted(Comparator.comparing(copy -> copy.getBook().getPrice()))
+                .sorted(Comparator.comparing(copy -> stokService.getBooksById(copy.getIdBook()).getPrice()))
                 .collect(Collectors.toList());
     }
 
@@ -48,9 +48,9 @@ public class ShowBook implements IShowBook {
             System.out.println(" - Нет залежавшихся книг");
         } else {
             oldBooks.forEach(copy ->
-                    System.out.println(" - " + copy.getBook() + " | Поступление: " +
+                    System.out.println(" - " + copy.getIdBook() + " | Поступление: " +
                             copy.getArrivalDate() + " | Цена: " +
-                            copy.getBook().getPrice() + " руб."));
+                            stokService.getBooksById(copy.getIdBook()).getPrice() + " руб."));
         }
     }
 
@@ -63,9 +63,9 @@ public class ShowBook implements IShowBook {
             System.out.println(" - Нет залежавшихся книг");
         } else {
             oldBooks.forEach(copy ->
-                    System.out.println(" - " + copy.getBook() + " | Поступление: " +
+                    System.out.println(" - " + copy.getIdBook() + " | Поступление: " +
                             copy.getArrivalDate() + " | Цена: " +
-                            copy.getBook().getPrice() + " руб."));
+                            stokService.getBooksById(copy.getIdBook()).getPrice() + " руб."));
         }
     }
 
@@ -136,9 +136,9 @@ public class ShowBook implements IShowBook {
             return;
         }
 
-        Map<Book, Long> bookCount = stokService.getBooksCopy().stream()
+        Map<Integer, Long> bookCount = stokService.getBooksCopy().stream()
                 .collect(Collectors.groupingBy(
-                        BookCopy::getBook,
+                        BookCopy::getIdBook,
                         Collectors.counting()
                 ));
 

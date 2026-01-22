@@ -11,25 +11,25 @@ import org.example.bookstore_app.dao.StokService;
 import java.sql.Connection;
 
 public class ApplicationInitializer {
-    // Удалите @Inject конструктор
 
     public static ApplicationContext initialize() throws Exception {
         System.out.println("Инициализация приложения...");
         ApplicationContext context = ApplicationContext.getInstance();
+        context.initialize();
 
-        // Инициализируем конфигурацию через DI
         BookstoreConfig config = context.getBean(BookstoreConfig.class);
+        DBConnect dbConnect = context.getBean(DBConnect.class);
+        DataSave dataSave = context.getBean(DataSave.class);
         if (config == null) {
             System.out.println("Создаем BookstoreConfig через ConfigurationLoader...");
             config = ConfigurationLoader.loadConfiguration(BookstoreConfig.class);
             context.registerBean(BookstoreConfig.class, config);
         }
 
-        DataSave dataSave = DataSave.getInstance();
         context.registerBean(DataSave.class, dataSave);
         System.out.println("DataSave зарегистрирован");
 
-        Connection conn = DBConnect.getInstance().getConnection();
+        Connection conn = dbConnect.getConnection();
         StokService stokService = dataSave.loadDate(conn);
         context.registerBean(StokService.class, stokService);
         System.out.println("Stok загружен, размер книг: " + stokService.getBooks().size());
@@ -39,7 +39,6 @@ public class ApplicationInitializer {
         OperationController controller = context.getBean(OperationController.class);
         if (controller != null) {
             System.out.println("OperationController получен");
-            // Не инициализируем тестовые данные, если уже есть данные из БД
             if (stokService.getBooks().isEmpty()) {
                 System.out.println("Инициализируем тестовые данные");
                 controller.initializeTestData();

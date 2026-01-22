@@ -1,59 +1,97 @@
 package org.example.bookstore_app.dao;
 
-import org.example.bookstore_app.model.Book;
-import org.example.bookstore_app.model.BookCopy;
-import org.example.bookstore_app.model.BookOrder;
-import org.example.bookstore_app.model.Request;
+import org.example.bookstore_app.model.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class StokService implements Serializable {
-    private final List<BookCopy> booksCopy = new ArrayList<>();
-    private final List<Request> requests = new ArrayList<>();
-    private final List<BookOrder> orders = new ArrayList<>();
-    private final List<Book> books = new ArrayList<>();
+
+    BookDAO bookDAO = new BookDAO();
+    BookCopyDAO bookCopyDAO = new BookCopyDAO();
+    BookOrderDAO bookOrderDAO = new BookOrderDAO();
+    BookOrderItemDAO bookOrderItemDAO = new BookOrderItemDAO();
+    RequestDAO requestDAO = new RequestDAO();
+
+    //получение данных из таблиц полностью
+    public List<Book> getBooks() { return new ArrayList<>(bookDAO.findAll()); }
+    public List<BookCopy> getBooksCopy() {
+        return new ArrayList<>(bookCopyDAO.findAll());
+    }
+    public List<BookOrder> getOrders() {
+        return new ArrayList<>(bookOrderDAO.findAll());
+    }
+    public List<BookOrderItem> getBookOrderItem(Integer idOrder) {
+        return new ArrayList<>(bookOrderItemDAO.findByOrderId(idOrder));
+    }
+    public List<Request> getRequests() {
+        return new ArrayList<>(requestDAO.findAll());
+    }
+    //получение по своим ид
+    public Book getBooksById(Integer id) { return bookDAO.findById(id); }
+    public BookCopy getBooksCopyByID(Integer id) {
+        return bookCopyDAO.findById(id);
+    }
+    public BookOrder getOrders(Integer id) {
+        return bookOrderDAO.findById(id);
+    }
+    public BookOrderItem getBookOrderItemByID(Integer id) {
+        return bookOrderItemDAO.findById(id);
+    }
+    public Request getRequestsById(Integer id) {
+        return requestDAO.findById(id);
+    }
+    //получение по каким-то другим ид
+    public List<BookOrderItem> getBookOrderItemByidOrder(Integer idOrder) {
+        return new ArrayList<>(bookOrderItemDAO.findByOrderId(idOrder));
+    }
+    public List<Request> getRequestsByidOrderItem(Integer idOrderItem) {
+        return new ArrayList<>(requestDAO.findByidOrderItem(idOrderItem));
+    }
+
     
-    
-    public void addOrder(BookOrder order){
-        orders.add(order);
+
+
+
+    //Добавление новых значений (если такое уже было, то изменение)
+    public void addBook(Book book){
+       bookDAO.save(book);
     }
-    public void removeOrder(BookOrder order){
-        orders.remove(order);
-    }
-    public List<BookOrder> getOrders() { 
-        return new ArrayList<>(orders); 
-    }
-    
-    public void addRequest(Request request){
-        requests.add(request);
-    }
-    public void removeRequest(Request request){
-        requests.remove(request);
-    }
-    public void removeRequests(List<Request> requests){
-        requests.removeAll(requests);
-    }
-    public List<Request> getRequests() { 
-        return new ArrayList<>(requests); 
-    }
-    
     public void addBooksCopy(BookCopy copy){
-        booksCopy.add(copy);
+        bookCopyDAO.save(copy);
+    }
+    public void addOrder(BookOrder order){
+        bookOrderDAO.save(order);
+    }
+    public void addBookToOrder(BookOrderItem orderItem) {
+        bookOrderItemDAO.save(orderItem);
+    }
+    public void addRequest(Request request){
+        requestDAO.save(request);
+    }
+
+
+    //удаление полей по ид
+    public void removeBook(Book book){
+        bookDAO.deleteById(book.getId());
     }
     public void removeBooksCopy(BookCopy copy){
-        booksCopy.remove(copy);
+        bookCopyDAO.deleteById(copy.getId());
     }
-    public List<BookCopy> getBooksCopy() { 
-        return new ArrayList<>(booksCopy); 
+    public void removeOrder(BookOrder order){
+        bookOrderDAO.deleteById(order.getId());
     }
-    
-    public void addBook(Book book){
-        books.add(book);
+    public void removeOrderItem(BookOrderItem orderItem){
+        bookOrderItemDAO.deleteById(orderItem.getId());
     }
-    public void removeBook(Book book){
-        books.remove(book);
+    public void removeRequest(Request request){
+        requestDAO.deleteById(request.getId());
     }
-    public List<Book> getBooks() { return new ArrayList<>(books);  }
+
+
+    //изменения полей
+
+
 }

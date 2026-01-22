@@ -1,15 +1,22 @@
 package org.example.bookstore_app.dao;
 
+import org.example.annotation.Inject;
 import org.example.bookstore_app.model.Book;
 import org.example.bookstore_app.model.BookCopy;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
+    @Inject
+    DBConnect connect;
+    private Connection getConnection() throws Exception {
+        return connect.getConnection();
+    }
+
+
     private static final String TABLE_NAME = "bookCopy";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_ID_BOOK = "idBook";
@@ -34,18 +41,16 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
     private BookDAO bookDAO = new BookDAO();
 
     @Override
-    public Optional<BookCopy> findById(Integer id) {
+    public BookCopy findById(Integer id) {
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(SQL_SELECT_BY_ID)) {
 
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
-
             if (rs.next()) {
-                return Optional.of(mapResultSetToBookCopy(rs));
+                return mapResultSetToBookCopy(rs);
             }
-            return Optional.empty();
-
+            return null;
         } catch (Exception e) {
             throw new RuntimeException("Error finding book copy with id: " + id, e);
         }
@@ -104,7 +109,7 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(SQL_UPDATE)) {
 
-            stmt.setInt(1, bookCopy.getBook().getId());
+            stmt.setInt(1, bookCopy.getIdBook());
             stmt.setDate(2, Date.valueOf(bookCopy.getArrivalDate()));
             stmt.setInt(3, bookCopy.getId());
 
@@ -130,22 +135,22 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
 
     private BookCopy mapResultSetToBookCopy(ResultSet rs) throws SQLException {
         int bookId = rs.getInt(COLUMN_ID_BOOK);
-        Book book = bookDAO.findById(bookId)
-                .orElseThrow(() -> new SQLException("Book not found with id: " + bookId));
-
-        BookCopy copy = new BookCopy(
-                rs.getInt(COLUMN_ID),
-                book,
-                rs.getDate(COLUMN_ARRIVAL_DATE).toLocalDate()
-        );
-
-        return copy;
+        try {
+            Book book = bookDAO.findById(bookId);
+            BookCopy copy = new BookCopy(
+                    rs.getInt(COLUMN_ID),
+                    book.getId(),
+                    rs.getDate(COLUMN_ARRIVAL_DATE).toLocalDate()
+            );
+            return copy;
+        } catch(SQLException e){
+            throw new RuntimeException("Book not found with id: " + bookId, e);
+        }
     }
 
     private void setBookCopyParameters(PreparedStatement stmt, BookCopy bookCopy) throws SQLException {
-        stmt.setInt(1, bookCopy.getBook().getId());
-        stmt.setInt(2, 1); // idStock - фиксированное значение
-        stmt.setDate(3, Date.valueOf(bookCopy.getArrivalDate()));
+        stmt.setInt(1, bookCopy.getIdBook());
+        stmt.setDate(2, Date.valueOf(bookCopy.getArrivalDate()));
     }
 
     private void setIdUsingReflection(BookCopy bookCopy, int id) {

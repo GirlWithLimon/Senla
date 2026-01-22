@@ -1,6 +1,6 @@
 package org.example.bookstore_app.dao;
 
-import org.example.bookstore_app.model.Book;
+import org.example.annotation.Inject;
 import org.example.bookstore_app.model.BookOrderItem;
 import org.example.bookstore_app.model.Request;
 
@@ -10,6 +10,15 @@ import java.util.List;
 import java.util.Optional;
 
 public class RequestDAO implements GenericDAO<Request, Integer> {
+    @Inject
+    DBConnect connect;
+    private Connection getConnection() throws Exception {
+        return connect.getConnection();
+    }
+
+    private BookOrderItemDAO orderItemDAO = new BookOrderItemDAO();//надо б убрать
+
+
     private static final String TABLE_NAME = "request";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_ID_ORDER_ITEM = "idOrderItem";
@@ -18,19 +27,22 @@ public class RequestDAO implements GenericDAO<Request, Integer> {
             "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = ?";
     private static final String SQL_SELECT_ALL =
             "SELECT * FROM " + TABLE_NAME;
-    private static final String SQL_INSERT =
-            "INSERT INTO " + TABLE_NAME + " (" + COLUMN_ID_ORDER_ITEM + ") VALUES (?)";
-    private static final String SQL_DELETE =
-            "DELETE FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = ?";
     private static final String SQL_FIND_BY_BOOK_ID =
             "SELECT r.* FROM " + TABLE_NAME + " r " +
                     "JOIN orderItem oi ON r." + COLUMN_ID_ORDER_ITEM + " = oi.id " +
                     "WHERE oi.book = ?";
+    private static final String SQL_FIND_BY_ORDER_ITEM_ID =
+            "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_ID_ORDER_ITEM + " = ?";
+    private static final String SQL_INSERT =
+            "INSERT INTO " + TABLE_NAME + " (" + COLUMN_ID_ORDER_ITEM + ") VALUES (?)";
+    private static final String SQL_DELETE =
+            "DELETE FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = ?";
 
-    private BookOrderItemDAO orderItemDAO = new BookOrderItemDAO();
+
+
 
     @Override
-    public Optional<Request> findById(Integer id) {
+    public Request findById(Integer id) {
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(SQL_SELECT_BY_ID)) {
 
@@ -38,9 +50,9 @@ public class RequestDAO implements GenericDAO<Request, Integer> {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                return Optional.of(mapResultSetToRequest(rs));
+                return mapResultSetToRequest(rs);
             }
-            return Optional.empty();
+            return null;
 
         } catch (Exception e) {
             throw new RuntimeException("Error finding request with id: " + id, e);
@@ -64,6 +76,43 @@ public class RequestDAO implements GenericDAO<Request, Integer> {
             throw new RuntimeException("Error finding all requests", e);
         }
     }
+    public List<Request> findByBookId(Integer bookId) {
+        List<Request> requests = new ArrayList<>();
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(SQL_FIND_BY_BOOK_ID)) {
+
+            stmt.setInt(1, bookId);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                requests.add(mapResultSetToRequest(rs));
+            }
+            return requests;
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error finding requests for book id: " + bookId, e);
+        }
+    }
+    public List<Request> findByidOrderItem(Integer idOrderItem) {
+        List<Request> requests = new ArrayList<>();
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(SQL_FIND_BY_ORDER_ITEM_ID)) {
+
+            stmt.setInt(1, idOrderItem);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                requests.add(mapResultSetToRequest(rs));
+            }
+            return requests;
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error finding requests for orderItem id: " + idOrderItem, e);
+        }
+    }
+
 
     @Override
     public Request save(Request request) {
@@ -113,16 +162,18 @@ public class RequestDAO implements GenericDAO<Request, Integer> {
     }
 
     private Request mapResultSetToRequest(ResultSet rs) throws SQLException {
-        int orderItemId = rs.getInt(COLUMN_ID_ORDER_ITEM);
-        BookOrderItem orderItem = orderItemDAO.findById(orderItemId)
-                .orElseThrow(() -> new SQLException("OrderItem not found with id: " + orderItemId));
+        try{
+            int orderItemId = rs.getInt(COLUMN_ID_ORDER_ITEM);
+            BookOrderItem orderItem = orderItemDAO.findById(orderItemId);
+            Request request = new Request(
+                    rs.getInt(COLUMN_ID),
+                    orderItem
+            );
 
-        Request request = new Request(
-                rs.getInt(COLUMN_ID),
-                orderItem
-        );
-
-        return request;
+            return request;
+        }catch (Exception e){
+            throw new SQLException("OrderItem not found with rs: " + rs);
+        }
     }
 
     private void setIdUsingReflection(Request request, int id) {
@@ -135,24 +186,7 @@ public class RequestDAO implements GenericDAO<Request, Integer> {
         }
     }
 
-    public List<Request> findByBookId(Integer bookId) {
-        List<Request> requests = new ArrayList<>();
 
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(SQL_FIND_BY_BOOK_ID)) {
-
-            stmt.setInt(1, bookId);
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                requests.add(mapResultSetToRequest(rs));
-            }
-            return requests;
-
-        } catch (Exception e) {
-            throw new RuntimeException("Error finding requests for book id: " + bookId, e);
-        }
-    }
 
     public int countByBookId(Integer bookId) {
         String sql = "SELECT COUNT(*) FROM " + TABLE_NAME + " r " +

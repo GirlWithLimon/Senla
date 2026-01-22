@@ -1,5 +1,6 @@
 package org.example.bookstore_app.controller;
 
+import org.example.annotation.Inject;
 import org.example.bookstore_app.dao.*;
 import org.example.bookstore_app.model.Book;
 import org.example.bookstore_app.model.BookCopy;
@@ -13,6 +14,8 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public class DataSave {
+        @Inject
+        DBConnect dbConnect;
         private static final Logger logger = Logger.getLogger(DataSave.class.getName());
         private static final String DATA_FILE = "bookstore_data.out";
         private static DataSave instance;
@@ -20,7 +23,7 @@ public class DataSave {
         public DataSave() {}
         public  boolean initialize() {
             System.out.println("Выполняем подключение к базе данных");
-            try (Connection conn = DBConnect.getInstance().getConnection()) {
+            try (Connection conn = dbConnect.getConnection()) {
                 if (!tablesExist(conn)) {
                     System.out.println("БД пуста");
                     //   createTables(conn);

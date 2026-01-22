@@ -1,5 +1,6 @@
 package org.example.bookstore_app.dao;
 
+import org.example.annotation.Inject;
 import org.example.bookstore_app.model.Book;
 import org.example.bookstore_app.model.BookCopy;
 import org.example.bookstore_app.model.BookOrderItem;
@@ -11,6 +12,12 @@ import java.util.List;
 import java.util.Optional;
 
 public class BookOrderItemDAO implements GenericDAO<BookOrderItem, Integer> {
+    @Inject
+    DBConnect connect;
+    private Connection getConnection() throws Exception {
+        return connect.getConnection();
+    }
+
     private static final String TABLE_NAME = "orderItem";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_ID_ORDERS = "idOrders";
@@ -40,7 +47,7 @@ public class BookOrderItemDAO implements GenericDAO<BookOrderItem, Integer> {
     private BookCopyDAO bookCopyDAO = new BookCopyDAO();
 
     @Override
-    public Optional<BookOrderItem> findById(Integer id) {
+    public BookOrderItem findById(Integer id) {
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(SQL_SELECT_BY_ID)) {
 
@@ -48,9 +55,9 @@ public class BookOrderItemDAO implements GenericDAO<BookOrderItem, Integer> {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                return Optional.of(mapResultSetToOrderItem(rs));
+                return mapResultSetToOrderItem(rs);
             }
-            return Optional.empty();
+            return null;
 
         } catch (Exception e) {
             throw new RuntimeException("Error finding order item with id: " + id, e);
@@ -135,17 +142,19 @@ public class BookOrderItemDAO implements GenericDAO<BookOrderItem, Integer> {
 
     private BookOrderItem mapResultSetToOrderItem(ResultSet rs) throws SQLException {
         int bookId = rs.getInt(COLUMN_BOOK);
-        Book book = bookDAO.findById(bookId)
-                .orElseThrow(() -> new SQLException("Book not found with id: " + bookId));
+        try {
+            Book book = bookDAO.findById(bookId);
+            BookOrderItem orderItem = new BookOrderItem(
+                    rs.getInt(COLUMN_ID),
+                    book
+            );
+            setOrderItemFieldsFromResultSet(orderItem, rs);
+            return orderItem;
 
-        BookOrderItem orderItem = new BookOrderItem(
-                rs.getInt(COLUMN_ID),
-                book
-        );
+        } catch (Exception e) {
+            throw new SQLException("Book not found with id: " + bookId);
+        }
 
-        setOrderItemFieldsFromResultSet(orderItem, rs);
-
-        return orderItem;
     }
 
     private void setOrderItemParameters(PreparedStatement stmt, BookOrderItem orderItem) throws SQLException {
@@ -176,8 +185,8 @@ public class BookOrderItemDAO implements GenericDAO<BookOrderItem, Integer> {
         try {
             int bookCopyId = rs.getInt(COLUMN_BOOK_COPY);
             if (!rs.wasNull() && bookCopyId > 0) {
-                Optional<BookCopy> bookCopy = bookCopyDAO.findById(bookCopyId);
-                bookCopy.ifPresent(orderItem::setBookCopy);
+                BookCopy bookCopy = bookCopyDAO.findById(bookCopyId);
+                if (bookCopy!= null) orderItem.setBookCopy(bookCopy);
             }
 
             String statusStr = rs.getString(COLUMN_STATUS);

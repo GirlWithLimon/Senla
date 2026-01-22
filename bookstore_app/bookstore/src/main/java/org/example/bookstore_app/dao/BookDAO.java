@@ -1,5 +1,6 @@
 package org.example.bookstore_app.dao;
 
+import org.example.annotation.Inject;
 import org.example.bookstore_app.model.Book;
 import org.example.bookstore_app.model.BookStatus;
 
@@ -12,6 +13,12 @@ import java.util.Locale;
 import java.util.Optional;
 
 public class BookDAO implements GenericDAO<Book, Integer> {
+    @Inject
+    DBConnect connect;
+    private Connection getConnection() throws Exception {
+        return connect.getConnection();
+    }
+
     private static final String TABLE_NAME = "book";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_NAME = "name";
@@ -35,21 +42,16 @@ public class BookDAO implements GenericDAO<Book, Integer> {
             "DELETE FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = ?";
 
     @Override
-    public Optional<Book> findById(Integer id) {
+    public Book findById(Integer id) {
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(SQL_SELECT_BY_ID)) {
-
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return Optional.of(mapResultSetToBook(rs));
-            }
-            return Optional.empty();
 
         } catch (Exception e) {
             throw new RuntimeException("Error finding book with id: " + id, e);
         }
+        return null;
     }
 
     @Override

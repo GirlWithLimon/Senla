@@ -1,5 +1,8 @@
 package org.example.bookstore_app.dao;
 
+import org.example.annotation.Component;
+import org.example.annotation.Inject;
+import org.example.annotation.Singleton;
 import org.example.bookstore_app.config.BookstoreConfig;
 import org.example.bookstore_app.config.ConfigurationLoader;
 import org.example.bookstore_app.config.DI;
@@ -8,21 +11,15 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+@Component
+@Singleton
 public class DBConnect {
     private static DBConnect instance;
     private Connection connection;
+    @Inject
     private DBConfig dbConfig;
 
-    private DBConnect() throws SQLException {
-        this.dbConfig = DI.getConfig(DBConfig.class);
-        connect();
-    }
-    public static synchronized DBConnect getInstance() throws Exception {
-        if (instance == null) {
-            instance = new DBConnect();
-        }
-        return instance;
-    }
+
     public Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
             connect();

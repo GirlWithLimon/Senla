@@ -8,9 +8,9 @@ import java.util.stream.Collectors;
 
 public class BookOrder implements Serializable {
     private final int id;
-    private final List<BookOrderItem> orderItems;
+    private List<BookOrderItem> orderItems;
     private OrderStatus status;
-    private final LocalDate orderDate;
+    private LocalDate orderDate;
     private String customerName;
     private String customerContact;
     private double totalPrice;
@@ -24,13 +24,9 @@ public class BookOrder implements Serializable {
         this.customerContact = customerContact;
         this.totalPrice = 0.0;
     }
-    
-        
-    public void addBookToOrder(BookOrderItem orderItem) {
-        orderItems.add(orderItem);
-    }
 
-    
+
+
     public int getId() { 
         return this.id; 
     }
@@ -71,4 +67,7 @@ public class BookOrder implements Serializable {
         this.customerContact = customerContact; 
     }
     public void setTotalPrice(double totalPrice) { this.totalPrice = totalPrice;  }
+    public  void setOrderItems(List <BookOrderItem> orderItem){
+        this.orderItems = orderItem;
+    }
 }

@@ -1,5 +1,6 @@
 package org.example.bookstore_app.dao;
 
+import org.example.annotation.Inject;
 import org.example.bookstore_app.model.BookOrder;
 import org.example.bookstore_app.model.OrderStatus;
 
@@ -10,6 +11,12 @@ import java.util.List;
 import java.util.Optional;
 
 public class BookOrderDAO implements GenericDAO<BookOrder, Integer> {
+    @Inject
+    DBConnect connect;
+    private Connection getConnection() throws Exception {
+        return connect.getConnection();
+    }
+
     private static final String TABLE_NAME = "orders";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_CUSTOMER_NAME = "customerName";
@@ -36,7 +43,7 @@ public class BookOrderDAO implements GenericDAO<BookOrder, Integer> {
             "DELETE FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = ?";
 
     @Override
-    public Optional<BookOrder> findById(Integer id) {
+    public BookOrder findById(Integer id) {
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(SQL_SELECT_BY_ID)) {
 
@@ -44,9 +51,9 @@ public class BookOrderDAO implements GenericDAO<BookOrder, Integer> {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                return Optional.of(mapResultSetToOrder(rs));
+                return mapResultSetToOrder(rs);
             }
-            return Optional.empty();
+            return null;
 
         } catch (Exception e) {
             throw new RuntimeException("Error finding order with id: " + id, e);

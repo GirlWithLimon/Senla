@@ -44,15 +44,15 @@ public class BooksController implements IBookStok {
 
     public void addBookCopyToStock(int id, BookCopy bookCopy, LocalDate date) {
         stokService.addBooksCopy(bookCopy);
-        bookCopy.getBook().setStatusStok();
+        stokService.getBooksById(bookCopy.getIdBook()).setStatusStok();
 
-        System.out.println("Добавлена книга на склад: " + bookCopy.getBook().getName() +
-                " | Копий: " + countBookCopies(bookCopy.getBook()) +
+        System.out.println("Добавлена книга на склад: " + stokService.getBooksById(bookCopy.getIdBook()).getName() +
+                " | Копий: " + countBookCopies(bookCopy.getIdBook()) +
                 " | Книг в каталоге: " + stokService.getBooks().size());
 
          if (config.isAutoCompleteRequests()) {
             List<Request> requestsToRemove = stokService.getRequests().stream()
-                    .filter(request -> request.getBook().equals(bookCopy.getBook()))
+                    .filter(request -> request.getBook().equals(bookCopy.getIdBook()))
                     .toList();
 
             Set<BookOrder> ordersToUpdate = requestsToRemove.stream()
@@ -75,7 +75,7 @@ public class BooksController implements IBookStok {
 
             if (!requestsToRemove.isEmpty()) {
                 System.out.println("Выполнено запросов: " + requestsToRemove.size() +
-                        " для книги: " + bookCopy.getBook().getName());
+                        " для книги: " + stokService.getBooksById(bookCopy.getIdBook()).getName());
             }
         } else {
             System.out.println("Автоматическое выполнение запросов отключено в настройках");
@@ -93,19 +93,19 @@ public class BooksController implements IBookStok {
                 .orElse(null);
     }
 
-    private int countBookCopies(Book book) {
+    private int countBookCopies(Integer idBook) {
         return (int) stokService.getBooksCopy().stream()
-                .filter(copy -> copy.getBook().equals(book))
+                .filter(copy -> copy.getIdBook()==idBook)
                 .count();
     }
 
     @Override
-    public void removeBookCopyfromstock(BookCopy book) {
-        stokService.removeBooksCopy(book);
+    public void removeBookCopyfromstock(BookCopy bookCopy) {
+        stokService.removeBooksCopy(bookCopy);
         boolean hasOtherCopies = stokService.getBooksCopy().stream()
-                .anyMatch(copy -> copy.getBook().equals(book.getBook()));
+                .anyMatch(copy -> copy.getIdBook()==bookCopy.getIdBook());
         if (!hasOtherCopies) {
-            book.getBook().setStatusNo();
+            stokService.getBooksById(bookCopy.getIdBook()).setStatusNo();
         }
     }
 
