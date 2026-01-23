@@ -1,18 +1,27 @@
 package org.example.bookstore_app.dao;
 
+import org.example.annotation.Component;
 import org.example.annotation.Inject;
-import org.example.bookstore_app.model.Book;
 import org.example.bookstore_app.model.BookCopy;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
+@Component
 public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
+    private final DBConnect connect;
+
     @Inject
-    DBConnect connect;
+    public BookCopyDAO(DBConnect connect) {
+        this.connect = connect;
+        System.out.println("BookDAO created with connect = " + connect);
+    }
+
     private Connection getConnection() throws Exception {
+        if (connect == null) {
+            throw new IllegalStateException("DBConnect is not injected!");
+        }
         return connect.getConnection();
     }
 
@@ -20,25 +29,27 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
     private static final String TABLE_NAME = "bookCopy";
     private static final String COLUMN_ID = "id";
     private static final String COLUMN_ID_BOOK = "idBook";
-    private static final String COLUMN_ID_STOCK = "idStock";
     private static final String COLUMN_ARRIVAL_DATE = "arrivalDate";
+    private static final String COLUMN_SALE = "sale";
 
     private static final String SQL_SELECT_BY_ID =
             "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = ?";
     private static final String SQL_SELECT_ALL =
             "SELECT * FROM " + TABLE_NAME + " ORDER BY " + COLUMN_ARRIVAL_DATE + " DESC";
+    private static final String SQL_SELECT_BY_BOOK_ID =
+            "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_ID_BOOK + " = ?";
+    private static final String SQL_SELECT_COUNT =
+            "SELECT COUNT("+COLUMN_ID_BOOK+") FROM " + TABLE_NAME + " ORDER BY " + COLUMN_ID_BOOK + "GROUP BY"+COLUMN_ID_BOOK+" WHERE " + COLUMN_ID_BOOK + " = ?";
+
     private static final String SQL_INSERT =
-            "INSERT INTO " + TABLE_NAME + " (" + COLUMN_ID_BOOK + ", " +
-                    COLUMN_ID_STOCK + ", " + COLUMN_ARRIVAL_DATE + ") VALUES (?, ?, ?)";
+            "INSERT INTO " + TABLE_NAME + " (" + COLUMN_ID_BOOK + ", " + COLUMN_ARRIVAL_DATE + ","+ COLUMN_SALE +") VALUES (?, ?, ?)";
     private static final String SQL_UPDATE =
             "UPDATE " + TABLE_NAME + " SET " + COLUMN_ID_BOOK + " = ?, " +
-                    COLUMN_ARRIVAL_DATE + " = ? WHERE " + COLUMN_ID + " = ?";
+                    COLUMN_ARRIVAL_DATE+ " = ?, " + COLUMN_SALE + " = ? WHERE " + COLUMN_ID + " = ?";
     private static final String SQL_DELETE =
             "DELETE FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = ?";
-    private static final String SQL_FIND_BY_BOOK_ID =
-            "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_ID_BOOK + " = ?";
 
-    private BookDAO bookDAO = new BookDAO();
+
 
     @Override
     public BookCopy findById(Integer id) {
@@ -73,12 +84,42 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
             throw new RuntimeException("Error finding all book copies", e);
         }
     }
+    public List<BookCopy> findByBookId(Integer idBook) {
+        List<BookCopy> copies = new ArrayList<>();
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(SQL_SELECT_BY_BOOK_ID)) {
+            stmt.setInt(1, idBook);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                copies.add(mapResultSetToBookCopy(rs));
+            }
+            return copies;
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error finding book copies for book id: " + idBook, e);
+        }
+    }
+    public int findCountByIdBook(Integer idBook) {
+        try (Connection conn = getConnection();
+            PreparedStatement stmt = conn.prepareStatement(SQL_SELECT_COUNT)) {
+            stmt.setInt(1, idBook);
+            ResultSet rs = stmt.executeQuery();
+            return  rs.getInt(1);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error finding book copies for book id: " + idBook, e);
+        }
+    }
 
     @Override
     public BookCopy save(BookCopy bookCopy) {
         if (bookCopy.getId() == 0) {
             return insertBookCopy(bookCopy);
-        } else {
+        } else if (findById(bookCopy.getId())==null) {
+            return insertBookCopy(bookCopy);
+        }else {
             update(bookCopy);
             return bookCopy;
         }
@@ -86,15 +127,12 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
 
     private BookCopy insertBookCopy(BookCopy bookCopy) {
         try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(SQL_INSERT,
-                     Statement.RETURN_GENERATED_KEYS)) {
-
+            PreparedStatement stmt = conn.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
             setBookCopyParameters(stmt, bookCopy);
             stmt.executeUpdate();
-
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    setIdUsingReflection(bookCopy, generatedKeys.getInt(1));
+                    bookCopy.setId(generatedKeys.getInt(1));
                 }
             }
             return bookCopy;
@@ -112,6 +150,7 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
             stmt.setInt(1, bookCopy.getIdBook());
             stmt.setDate(2, Date.valueOf(bookCopy.getArrivalDate()));
             stmt.setInt(3, bookCopy.getId());
+            stmt.setBoolean(4, bookCopy.getSale());
 
             stmt.executeUpdate();
 
@@ -136,12 +175,13 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
     private BookCopy mapResultSetToBookCopy(ResultSet rs) throws SQLException {
         int bookId = rs.getInt(COLUMN_ID_BOOK);
         try {
-            Book book = bookDAO.findById(bookId);
             BookCopy copy = new BookCopy(
                     rs.getInt(COLUMN_ID),
-                    book.getId(),
+                    rs.getInt(COLUMN_ID_BOOK),
                     rs.getDate(COLUMN_ARRIVAL_DATE).toLocalDate()
             );
+            String saleStr = rs.getString(COLUMN_SALE);
+            copy.setSale(saleStr.equals("true"));
             return copy;
         } catch(SQLException e){
             throw new RuntimeException("Book not found with id: " + bookId, e);
@@ -151,54 +191,7 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
     private void setBookCopyParameters(PreparedStatement stmt, BookCopy bookCopy) throws SQLException {
         stmt.setInt(1, bookCopy.getIdBook());
         stmt.setDate(2, Date.valueOf(bookCopy.getArrivalDate()));
+        stmt.setBoolean(3,bookCopy.getSale());
     }
 
-    private void setIdUsingReflection(BookCopy bookCopy, int id) {
-        try {
-            java.lang.reflect.Field idField = BookCopy.class.getDeclaredField("id");
-            idField.setAccessible(true);
-            idField.set(bookCopy, id);
-        } catch (Exception e) {
-            throw new RuntimeException("Cannot set id for BookCopy", e);
-        }
-    }
-
-    public List<BookCopy> findByBookId(Integer bookId) {
-        List<BookCopy> copies = new ArrayList<>();
-
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(SQL_FIND_BY_BOOK_ID)) {
-
-            stmt.setInt(1, bookId);
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                copies.add(mapResultSetToBookCopy(rs));
-            }
-            return copies;
-
-        } catch (Exception e) {
-            throw new RuntimeException("Error finding book copies for book id: " + bookId, e);
-        }
-    }
-
-    public int countByBookId(Integer bookId) {
-        String sql = "SELECT COUNT(*) FROM " + TABLE_NAME +
-                " WHERE " + COLUMN_ID_BOOK + " = ?";
-
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, bookId);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
-            return 0;
-
-        } catch (Exception e) {
-            throw new RuntimeException("Error counting book copies for book id: " + bookId, e);
-        }
-    }
 }

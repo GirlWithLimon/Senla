@@ -4,5 +4,5 @@ CREATE TABLE orders (
 	orderDate DATE NOT NULL,
 	customerName VARCHAR(50) NOT NULL,
 	customerContact VARCHAR(50) NOT NULL,
-	totalPrice MONEY
+	totalPrice REAL DEFAULT 0
 );

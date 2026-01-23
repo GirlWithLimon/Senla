@@ -6,11 +6,11 @@ import java.time.LocalDate;
 
 public class Book implements Serializable {
     private int id;
-    private final String name;
-    private final String author;
+    private String name;
+    private String author;
     private BookStatus status;
     private double price;
-    private final LocalDate publicationDate;
+    private LocalDate publicationDate;
     private String information;
     
     public Book(int id, String name, String author, Double price, LocalDate date) {
@@ -36,56 +36,46 @@ public class Book implements Serializable {
     public  int getId(){
         return this.id;
     }
-    public String getAuthor() {
-        return author;
-    }
-
     public String getName() {
         return name;
     }
-    
-    public BookStatus getStatus() {
-        return status;
+    public String getAuthor() {
+        return author;
     }
-    
-    public Boolean getBoolStatus() {
-        return status == BookStatus.IN_STOCK;
-    }
-    
-    public void setStatusStok() {
-        this.status = BookStatus.IN_STOCK;
-    }
-    
-    public void setStatusNo() {
-        this.status = BookStatus.OUT_OF_STOCK;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
     public Double getPrice() {
         return price;
     }
-    
     public String getInfo() {
         return information;
     }
-    
-    public void setInfo(String info) {
-        this.information = info;
-    }
-    
     public LocalDate getPublicationDate() {
         return publicationDate;
+    }
+    public BookStatus getStatus() {
+        return status;
+    }
+    public Boolean getBoolStatus() {
+        return status == BookStatus.IN_STOCK;
+    }
+
+    public void setId(int newId) {
+        this.id =newId;
+    }
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+    public void setStatusStok() {
+        this.status = BookStatus.IN_STOCK;
+    }
+    public void setStatusNo() {
+        this.status = BookStatus.OUT_OF_STOCK;
+    }
+    public void setInfo(String info) {
+        this.information = info;
     }
     
     @Override
     public String toString() {
         return this.name;
-    }
-
-    public void setId(int newId) {
-        this.id =newId;
     }
 }

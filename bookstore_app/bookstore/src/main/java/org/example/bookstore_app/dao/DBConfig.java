@@ -9,11 +9,11 @@ public class DBConfig {
     @ConfigProperty( configFileName = "jdbc.properties", propertyName = "url", type = PropertyType.STRING)
     private  String URL = "jdbc:postgresql://localhost:5433/bookstore";
 
-    @ConfigProperty(propertyName = "user", type = PropertyType.STRING)
-    private  String USER = "postgress";
+    @ConfigProperty(configFileName = "jdbc.properties",propertyName = "user", type = PropertyType.STRING)
+    private  String USER = "postgres";
 
-    @ConfigProperty(propertyName = "password")
-    private  String password = "1235";
+    @ConfigProperty(configFileName = "jdbc.properties",propertyName = "password")
+    private  String password = "1234";
 
     public  String getURL() {
         return URL;

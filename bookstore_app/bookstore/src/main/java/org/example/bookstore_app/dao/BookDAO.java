@@ -1,21 +1,29 @@
 package org.example.bookstore_app.dao;
 
+import org.example.annotation.Component;
 import org.example.annotation.Inject;
 import org.example.bookstore_app.model.Book;
 import org.example.bookstore_app.model.BookStatus;
 
 import java.sql.*;
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
 
+
+@Component
 public class BookDAO implements GenericDAO<Book, Integer> {
+    private final DBConnect connect;
+
     @Inject
-    DBConnect connect;
+    public BookDAO(DBConnect connect) {
+        this.connect = connect;
+        System.out.println("BookDAO created with connect = " + connect);
+    }
+
     private Connection getConnection() throws Exception {
+        if (connect == null) {
+            System.out.println("DBConnect is not injected!");
+        }
         return connect.getConnection();
     }
 
@@ -44,30 +52,32 @@ public class BookDAO implements GenericDAO<Book, Integer> {
     @Override
     public Book findById(Integer id) {
         try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(SQL_SELECT_BY_ID)) {
+            PreparedStatement stmt = conn.prepareStatement(SQL_SELECT_BY_ID)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
-
+            if (rs.next()) {
+                return mapResultSetToBook(rs);
+            }
+            return null;
         } catch (Exception e) {
-            throw new RuntimeException("Error finding book with id: " + id, e);
+            System.out.println("Error finding book with id: " + id+" "+ e);
+            return null;
         }
-        return null;
     }
 
     @Override
     public List<Book> findAll() {
         List<Book> books = new ArrayList<>();
-
         try (Connection conn = getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(SQL_SELECT_ALL)) {
-
             while (rs.next()) {
                 books.add(mapResultSetToBook(rs));
             }
             return books;
 
         } catch (Exception e) {
+            System.out.println("Error finding all books  "+ e);
             throw new RuntimeException("Error finding all books", e);
         }
     }
@@ -75,6 +85,8 @@ public class BookDAO implements GenericDAO<Book, Integer> {
     @Override
     public Book save(Book book) {
         if (book.getId() == 0) {
+            return insertBook(book);
+        } else if (findById(book.getId())==null) {
             return insertBook(book);
         } else {
             update(book);
@@ -84,9 +96,7 @@ public class BookDAO implements GenericDAO<Book, Integer> {
 
     private Book insertBook(Book book) {
         try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(SQL_INSERT,
-                     Statement.RETURN_GENERATED_KEYS)) {
-
+            PreparedStatement stmt = conn.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
             setBookParameters(stmt, book);
             stmt.executeUpdate();
 
@@ -134,7 +144,7 @@ public class BookDAO implements GenericDAO<Book, Integer> {
                     rs.getInt(COLUMN_ID),
                     rs.getString(COLUMN_NAME),
                     rs.getString(COLUMN_AUTHOR),
-                    parsePrice(rs.getString(COLUMN_PRICE)), // Используем метод parsePrice
+                    rs.getDouble(COLUMN_PRICE),
                     rs.getString(COLUMN_INFORMATION),
                     rs.getDate(COLUMN_PUBLICATION_DATE).toLocalDate()
             );
@@ -145,40 +155,12 @@ public class BookDAO implements GenericDAO<Book, Integer> {
             } else {
                 book.setStatusNo();
             }
-
             return book;
-        } catch (ParseException e) {
+        } catch (Exception e) {
             throw new SQLException("Error parsing price from database", e);
         }
     }
 
-    private double parsePrice(String priceString) throws ParseException {
-        if (priceString == null || priceString.trim().isEmpty()) {
-            return 0.0;
-        }
-
-        // Убираем символы валюты и пробелы
-        String cleaned = priceString.replaceAll("[^\\d,.-]", "").trim();
-
-        // Если строка уже содержит точку как разделитель
-        if (cleaned.contains(".") && !cleaned.contains(",")) {
-            return Double.parseDouble(cleaned);
-        }
-
-        // Если содержит запятую, заменяем ее на точку
-        if (cleaned.contains(",")) {
-            cleaned = cleaned.replace(",", ".");
-        }
-
-        try {
-            return Double.parseDouble(cleaned);
-        } catch (NumberFormatException e) {
-            // Пробуем с локалью
-            NumberFormat format = NumberFormat.getInstance(Locale.FRANCE); // Используем локаль с запятой
-            Number number = format.parse(priceString);
-            return number.doubleValue();
-        }
-    }
 
     private void setBookParameters(PreparedStatement stmt, Book book) throws SQLException {
         stmt.setString(1, book.getName());

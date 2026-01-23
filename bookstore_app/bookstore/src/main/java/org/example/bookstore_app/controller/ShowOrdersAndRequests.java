@@ -55,16 +55,22 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests {
 
     @Override
     public void showRequestsByCount() {
-        Map<Book, Long> requestCount = stokService.getRequests().stream()
+        Map<BookOrderItem, Long> requestCount = stokService.getRequests().stream()
                 .collect(Collectors.groupingBy(
-                        Request::getBook,
+                        request -> stokService.getBookOrderItemByID(request.getIdOrderItem()),
                         Collectors.counting()
+                ))
+                .entrySet().stream()
+                .filter(entry -> entry.getKey() != null)
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue
                 ));
 
         requestCount.entrySet().stream()
                 .sorted((e1, e2) -> Long.compare(e2.getValue(), e1.getValue()))
                 .forEach(entry ->
-                        System.out.println(" - " + entry.getKey().getName() +
+                        System.out.println(" - " + entry.getKey().getIdBook().getName() +
                                 " - " + entry.getValue() + " запросов"));
     }
 
@@ -72,8 +78,17 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests {
     public void showRequestsByAlphabet() {
         Map<Book, Long> requestedBooks = stokService.getRequests().stream()
                 .collect(Collectors.groupingBy(
-                        Request::getBook,
+                        request -> {
+                            BookOrderItem orderItem = stokService.getBookOrderItemByID(request.getIdOrderItem());
+                            return orderItem != null ? orderItem.getIdBook() : null;
+                        },
                         Collectors.counting()
+                ))
+                .entrySet().stream()
+                .filter(entry -> entry.getKey() != null)
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue
                 ));
 
         requestedBooks.entrySet().stream()
@@ -116,7 +131,7 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests {
         System.out.println("Книги в заказе:");
 
         order.getOrderItems().forEach(item ->
-                System.out.println(" - " + item.getBook().getName() +
+                System.out.println(" - " + item.getIdBook().getName() +
                         " | " + item.getStatus() + " | " +
                         item.getPrice() + " руб."));
     }

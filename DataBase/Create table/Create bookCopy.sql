@@ -1,5 +1,6 @@
 CREATE TABLE bookCopy (
 	id INT NOT NULL PRIMARY KEY,
 	idBook INT NOT NULL REFERENCES  book(id),
-	arrivalDate DATE NOT NULL
+	arrivalDate DATE NOT NULL,
+	sale BOOLEAN DEFAULT FALSE
 );

@@ -1,19 +1,26 @@
 package org.example.bookstore_app.dao;
 
+import org.example.annotation.Component;
+import org.example.annotation.Inject;
 import org.example.bookstore_app.model.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
+@Component
 public class StokService implements Serializable {
+    @Inject
+    BookDAO bookDAO;
+    @Inject
+    BookCopyDAO bookCopyDAO;
+    @Inject
+    BookOrderDAO bookOrderDAO;
+    @Inject
+    BookOrderItemDAO bookOrderItemDAO;
+    @Inject
+    RequestDAO requestDAO;
 
-    BookDAO bookDAO = new BookDAO();
-    BookCopyDAO bookCopyDAO = new BookCopyDAO();
-    BookOrderDAO bookOrderDAO = new BookOrderDAO();
-    BookOrderItemDAO bookOrderItemDAO = new BookOrderItemDAO();
-    RequestDAO requestDAO = new RequestDAO();
 
     //получение данных из таблиц полностью
     public List<Book> getBooks() { return new ArrayList<>(bookDAO.findAll()); }
@@ -48,28 +55,26 @@ public class StokService implements Serializable {
         return new ArrayList<>(bookOrderItemDAO.findByOrderId(idOrder));
     }
     public List<Request> getRequestsByidOrderItem(Integer idOrderItem) {
-        return new ArrayList<>(requestDAO.findByidOrderItem(idOrderItem));
+        return new ArrayList<>(requestDAO.findByIdOrderItem(idOrderItem));
     }
-
-    
-
+    public int findCountByIdBook(Integer idBook){
+        return  bookCopyDAO.findCountByIdBook(idBook);
+    }
 
 
     //Добавление новых значений (если такое уже было, то изменение)
-    public void addBook(Book book){
-       bookDAO.save(book);
+    public Book addBook(Book book){return bookDAO.save(book);    }
+    public BookCopy addBooksCopy(BookCopy copy){
+        return bookCopyDAO.save(copy);
     }
-    public void addBooksCopy(BookCopy copy){
-        bookCopyDAO.save(copy);
+    public BookOrder addOrder(BookOrder order){
+        return bookOrderDAO.save(order);
     }
-    public void addOrder(BookOrder order){
-        bookOrderDAO.save(order);
+    public BookOrderItem addBookOrderItem(BookOrderItem orderItem) {
+        return bookOrderItemDAO.save(orderItem);
     }
-    public void addBookToOrder(BookOrderItem orderItem) {
-        bookOrderItemDAO.save(orderItem);
-    }
-    public void addRequest(Request request){
-        requestDAO.save(request);
+    public Request addRequest(Request request){
+        return requestDAO.save(request);
     }
 
 

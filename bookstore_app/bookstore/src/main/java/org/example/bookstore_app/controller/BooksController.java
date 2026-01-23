@@ -52,7 +52,7 @@ public class BooksController implements IBookStok {
 
          if (config.isAutoCompleteRequests()) {
             List<Request> requestsToRemove = stokService.getRequests().stream()
-                    .filter(request -> request.getBook().equals(bookCopy.getIdBook()))
+                    .filter(request -> stokService.getBookOrderItemByID(request.getIdOrderItem()).equals(bookCopy.getIdBook()))
                     .toList();
 
             Set<BookOrder> ordersToUpdate = requestsToRemove.stream()
@@ -61,7 +61,7 @@ public class BooksController implements IBookStok {
                     .collect(Collectors.toSet());
 
             requestsToRemove.forEach(request -> {
-                ContinueRequest(request.getOrderItem(), bookCopy);
+                ContinueRequest(stokService.getBookOrderItemByID(request.getIdOrderItem()), bookCopy);
                 removeBookCopyfromstock(bookCopy);
             });
 
@@ -82,13 +82,13 @@ public class BooksController implements IBookStok {
         }
     }
     public void ContinueRequest(BookOrderItem orderItem, BookCopy bookCopy) {
-        orderItem.setBookCopy(bookCopy);
+        orderItem.setIdBookCopy(bookCopy.getId());
         orderItem.setStatus(OrderItemStatus.COMPLETED);
     }
 
     private BookOrder findOrderByRequest(Request request) {
         return stokService.getOrders().stream()
-                .filter(order -> order.getOrderItems().contains(request.getOrderItem()))
+                .filter(order -> order.getOrderItems().contains(stokService.getBookOrderItemByID(request.getIdOrderItem())))
                 .findFirst()
                 .orElse(null);
     }
