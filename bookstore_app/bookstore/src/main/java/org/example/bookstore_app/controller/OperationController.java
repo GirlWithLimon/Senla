@@ -116,9 +116,6 @@ public class OperationController {
         return bookCopy;
     }
 
-    public void removeBookFromStock(BookCopy bookCopy) {
-        bookInStok.removeBookCopyfromstock(bookCopy);
-    }
 
     public List<Book> getBooks(){
         return  showBook.sortABCBook();

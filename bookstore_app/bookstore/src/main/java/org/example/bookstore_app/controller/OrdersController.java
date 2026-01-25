@@ -15,8 +15,8 @@ public class OrdersController implements IOrderOperation{
     public OrdersController() {  }
 
     private BookCopy findBook(Book book) {
-        return stokService.getBooksCopy().stream()
-            .filter(copy -> copy.getIdBook()==book.getId())
+        return stokService.getBookCopyByBookId(book.getId()).stream()
+            .filter(copy -> !copy.getSale())
             .findFirst()
             .orElse(null);
     }
@@ -24,55 +24,79 @@ public class OrdersController implements IOrderOperation{
     @Override
     public BookOrder createOrder(int id, List<Book> bookList, String customerName, String customerContact) {
         BookOrder order = new BookOrder(id, customerName, customerContact);
-        for(Book book:bookList){
-            createOrderItem(order.getId(),book);
-        }
-            
         stokService.addOrder(order);
-        order.setOrderItems(stokService.getBookOrderItem(order.getId()));
-        updateOrderStatus(order);
-
-        calculateTotalPrice(order);
-        System.out.println("Создан заказ #" + order.getId() +
+//        for(Book book:bookList){
+//            createOrderItem(0, order.getId(),book);
+//        }
+//        updateOrderStatus(order);
+//        calculateTotalPrice(order);
+        System.out.println("Выведен из БД заказ #" + order.getId() +
                          " на " + bookList.size() + " книг(и) с итоговой ценой: " + order.getTotalPrice());
         return order;
     }
-   
-    private BookOrderItem createOrderItem(int idOrder,Book book) {
-        BookCopy bookCopy = findBook(book);
-        int id;
-        if(stokService.getOrders().isEmpty()){
-            id = 1;
-        } else {
-            boolean anyOrderHasBooks = stokService.getOrders().stream()
-                    .anyMatch(order -> !order.getOrderItems().isEmpty());
 
-            if (anyOrderHasBooks) {
-               id = stokService.getOrders().stream()
-                        .flatMap(order -> order.getOrderItems().stream())
-                        .mapToInt(BookOrderItem::getId)
-                        .max()
-                        .orElse(0) + 1;
-            } else {
-                id = 1;
-            }
+    public BookOrder createNewOrder( List<Book> bookList, String customerName, String customerContact) {
+        BookOrder order = new BookOrder(0, customerName, customerContact);
+        stokService.addOrder(order);
+        for(Book book:bookList){
+            createOrderItem(0, order.getId(),book);
         }
-        BookOrderItem orderItem = new BookOrderItem(id, book.getId());
+        updateOrderStatus(order);
+        calculateTotalPrice(order);
+        System.out.println("Создан заказ #" + order.getId() +
+                " на " + bookList.size() + " книг(и) с итоговой ценой: " + order.getTotalPrice());
+        return order;
+    }
+   
+    private BookOrderItem createOrderItem(int idOrder,Book book) {//если вставка со стороны пользователя, то ид изначально 0
+        BookCopy bookCopy = findBook(book);
+        BookOrderItem orderItem = new BookOrderItem(id, book.getId(),idOrder);
+        orderItem = stokService.addBookOrderItem(orderItem);
 
         if (bookCopy != null) {
             orderItem.setIdBookCopy(bookCopy.getId());
             orderItem.setStatus(OrderItemStatus.COMPLETED);
             System.out.println("Продан экземпляр книги: " + bookCopy);
-            stokService.removeBooksCopy(bookCopy);
+            bookCopy.setSale(true);
             if (findBook(book) == null) {
                 book.setStatusNo();
+                stokService.addBook(book);
             }
+            stokService.addBookOrderItem(orderItem);
+            stokService.addBooksCopy(bookCopy);
         } else {
-            int idRequest = stokService.getRequests().isEmpty()? 1: stokService.getRequests().getLast().getId()+1;
-            Request request = new Request(idRequest, orderItem.getId());
-            stokService.addRequest(request);
+            Request request = new Request(0, orderItem.getId());
+            request = stokService.addRequest(request);
             orderItem.setStatus(OrderItemStatus.PENDING);
             System.out.println("Книга отсутствует. Создан запрос: " + book.getName());
+            stokService.addBookOrderItem(orderItem);
+            stokService.addRequest(request);
+        }
+        return orderItem;
+    }
+    private BookOrderItem createOrderItem(int id, int idOrder,Book book) {//если вставка со стороны пользователя, то ид изначально 0
+        BookCopy bookCopy = findBook(book);
+        BookOrderItem orderItem = new BookOrderItem(id, book.getId(),idOrder);
+        orderItem = stokService.addBookOrderItem(orderItem);
+
+        if (bookCopy != null) {
+            orderItem.setIdBookCopy(bookCopy.getId());
+            orderItem.setStatus(OrderItemStatus.COMPLETED);
+            System.out.println("Продан экземпляр книги: " + bookCopy);
+            bookCopy.setSale(true);
+            if (findBook(book) == null) {
+                book.setStatusNo();
+                stokService.addBook(book);
+            }
+            stokService.addBookOrderItem(orderItem);
+            stokService.addBooksCopy(bookCopy);
+        } else {
+            Request request = new Request(0, orderItem.getId());
+            request = stokService.addRequest(request);
+            orderItem.setStatus(OrderItemStatus.PENDING);
+            System.out.println("Книга отсутствует. Создан запрос: " + book.getName());
+            stokService.addBookOrderItem(orderItem);
+            stokService.addRequest(request);
         }
         return orderItem;
     }

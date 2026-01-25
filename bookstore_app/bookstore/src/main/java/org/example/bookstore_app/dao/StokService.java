@@ -30,8 +30,8 @@ public class StokService implements Serializable {
     public List<BookOrder> getOrders() {
         return new ArrayList<>(bookOrderDAO.findAll());
     }
-    public List<BookOrderItem> getBookOrderItem(Integer idOrder) {
-        return new ArrayList<>(bookOrderItemDAO.findByOrderId(idOrder));
+    public List<BookOrderItem> getBookOrderItem() {
+        return new ArrayList<>(bookOrderItemDAO.findAll());
     }
     public List<Request> getRequests() {
         return new ArrayList<>(requestDAO.findAll());
@@ -41,7 +41,7 @@ public class StokService implements Serializable {
     public BookCopy getBooksCopyByID(Integer id) {
         return bookCopyDAO.findById(id);
     }
-    public BookOrder getOrders(Integer id) {
+    public BookOrder getOrderByID(Integer id) {
         return bookOrderDAO.findById(id);
     }
     public BookOrderItem getBookOrderItemByID(Integer id) {
@@ -51,6 +51,7 @@ public class StokService implements Serializable {
         return requestDAO.findById(id);
     }
     //получение по каким-то другим ид
+    public List<BookCopy> getBookCopyByBookId(Integer idBook){return bookCopyDAO.findByBookId(idBook);}
     public List<BookOrderItem> getBookOrderItemByidOrder(Integer idOrder) {
         return new ArrayList<>(bookOrderItemDAO.findByOrderId(idOrder));
     }
