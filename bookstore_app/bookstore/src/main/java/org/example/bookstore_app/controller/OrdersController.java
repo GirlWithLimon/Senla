@@ -5,6 +5,7 @@ import org.example.annotation.Inject;
 import org.example.bookstore_app.dao.StockService;
 import org.example.bookstore_app.model.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Component
@@ -32,6 +33,8 @@ public class OrdersController implements IOrderOperation{
 
     public BookOrder createNewOrder( List<Book> bookList, String customerName, String customerContact) {
         BookOrder order = new BookOrder(0, customerName, customerContact);
+        order.setOrderDate(LocalDate.now());
+        order.setTotalPrice(0);
         stockService.addOrder(order);
         for(Book book:bookList){
             createNewOrderItem( order.getId(),book);
@@ -92,13 +95,13 @@ public class OrdersController implements IOrderOperation{
             orderItem.setStatus(OrderItemStatus.PENDING);
             System.out.println("Книга отсутствует. Создан запрос: " + book.getName());
             stockService.addBookOrderItem(orderItem);
-            stockService.addRequest(request);
         }
         return orderItem;
     }
     
     @Override
-    public void cancelOrder(BookOrder order) {
+    public void cancelOrder(int idOrder) {
+        BookOrder order = stockService.getOrderByID(idOrder);
         List<BookOrderItem> orderItems = stockService.getBookOrderItemByidOrder(order.getId());
         for(BookOrderItem item : orderItems){
             Request request = stockService.getRequestsByidOrderItem(item.getId());

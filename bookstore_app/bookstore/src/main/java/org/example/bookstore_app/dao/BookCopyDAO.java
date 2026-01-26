@@ -22,6 +22,7 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
         if (connect == null) {
             throw new IllegalStateException("DBConnect is not injected!");
         }
+
         return connect.getConnection();
     }
 
@@ -39,7 +40,7 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
     private static final String SQL_SELECT_BY_BOOK_ID =
             "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_ID_BOOK + " = ?";
     private static final String SQL_SELECT_COUNT =
-            "SELECT COUNT("+COLUMN_ID_BOOK+") FROM " + TABLE_NAME + " ORDER BY " + COLUMN_ID_BOOK + "GROUP BY"+COLUMN_ID_BOOK+" WHERE " + COLUMN_ID_BOOK + " = ?";
+            "SELECT COUNT(*) FROM " + TABLE_NAME + " WHERE " + COLUMN_ID_BOOK + " = ?";
 
     private static final String SQL_INSERT =
             "INSERT INTO " + TABLE_NAME + " (" + COLUMN_ID_BOOK + ", " + COLUMN_ARRIVAL_DATE + ","+ COLUMN_SALE +") VALUES (?, ?, ?)";
@@ -53,6 +54,11 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
 
     @Override
     public BookCopy findById(Integer id) {
+        try {
+            syncSequence();
+        } catch (Exception e) {
+            System.out.println("Warning: Could not sync sequence: " + e.getMessage());
+        }
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(SQL_SELECT_BY_ID)) {
 
@@ -69,6 +75,11 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
 
     @Override
     public List<BookCopy> findAll() {
+        try {
+            syncSequence();
+        } catch (Exception e) {
+            System.out.println("Warning: Could not sync sequence: " + e.getMessage());
+        }
         List<BookCopy> copies = new ArrayList<>();
 
         try (Connection conn = getConnection();
@@ -85,6 +96,11 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
         }
     }
     public List<BookCopy> findByBookId(Integer idBook) {
+        try {
+            syncSequence();
+        } catch (Exception e) {
+            System.out.println("Warning: Could not sync sequence: " + e.getMessage());
+        }
         List<BookCopy> copies = new ArrayList<>();
 
         try (Connection conn = getConnection();
@@ -106,7 +122,10 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
             PreparedStatement stmt = conn.prepareStatement(SQL_SELECT_COUNT)) {
             stmt.setInt(1, idBook);
             ResultSet rs = stmt.executeQuery();
-            return  rs.getInt(1);
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+            return 0;
 
         } catch (Exception e) {
             throw new RuntimeException("Error finding book copies for book id: " + idBook, e);
@@ -126,6 +145,11 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
     }
 
     private BookCopy insertBookCopy(BookCopy bookCopy) {
+        try {
+            syncSequence();
+        } catch (Exception e) {
+            System.out.println("Warning: Could not sync sequence: " + e.getMessage());
+        }
         try (Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
             setBookCopyParameters(stmt, bookCopy);
@@ -144,6 +168,11 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
 
     @Override
     public void update(BookCopy bookCopy) {
+        try {
+            syncSequence();
+        } catch (Exception e) {
+            System.out.println("Warning: Could not sync sequence: " + e.getMessage());
+        }
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(SQL_UPDATE)) {
 
@@ -161,6 +190,11 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
 
     @Override
     public void deleteById(Integer id) {
+        try {
+            syncSequence();
+        } catch (Exception e) {
+            System.out.println("Warning: Could not sync sequence: " + e.getMessage());
+        }
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(SQL_DELETE)) {
 
@@ -193,5 +227,14 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
         stmt.setDate(2, Date.valueOf(bookCopy.getArrivalDate()));
         stmt.setBoolean(3,bookCopy.getSale());
     }
+    public void syncSequence() {
+        String sql = "SELECT setval(pg_get_serial_sequence('bookCopy', 'id'), COALESCE((SELECT MAX(id) FROM bookCopy), 0) + 1, false)";
 
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement()) {
+            stmt.execute(sql);
+        } catch (Exception e) {
+            System.out.println("Error syncing sequence: " + e.getMessage());
+        }
+    }
 }

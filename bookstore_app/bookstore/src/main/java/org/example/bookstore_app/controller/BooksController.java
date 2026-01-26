@@ -27,22 +27,19 @@ public class BooksController implements IBookStok {
     }
 
     @Override
-    public void addBookToStock(int id, Book book, LocalDate date) {
-        boolean bookExists = stockService.getBooks().stream()
-                .anyMatch(b -> b.getId() == book.getId());
-
-        if (!bookExists) {
+    public void addBookToStock(Book book) {
+        try {
             stockService.addBook(book);
             System.out.println("Книга добавлена в каталог: " + book.getName() +
                     " | ID: " + book.getId() +
                     " | Всего в каталоге: " + stockService.getBooks().size());
-        } else {
-            System.out.println("Книга уже есть в каталоге: " + book.getName() +
-                    " | ID: " + book.getId());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
+
     }
 
-    public void addBookCopyToStock(int id, BookCopy bookCopy, LocalDate date) {
+    public void addBookCopyToStock(BookCopy bookCopy, LocalDate date) {
         stockService.addBooksCopy(bookCopy);
         stockService.getBooksById(bookCopy.getIdBook()).setStatusStok();
 
@@ -119,5 +116,9 @@ public class BooksController implements IBookStok {
             order.setStatus(OrderStatus.NEW);
         }
         stockService.addOrder(order);
+    }
+
+    public Book getBooksById(int idBook){
+        return stockService.getBooksById(idBook);
     }
 }

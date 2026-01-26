@@ -24,6 +24,7 @@ public class BookDAO implements GenericDAO<Book, Integer> {
         if (connect == null) {
             System.out.println("DBConnect is not injected!");
         }
+
         return connect.getConnection();
     }
 
@@ -51,6 +52,11 @@ public class BookDAO implements GenericDAO<Book, Integer> {
 
     @Override
     public Book findById(Integer id) {
+        try {
+            syncSequence();
+        } catch (Exception e) {
+            System.out.println("Warning: Could not sync sequence: " + e.getMessage());
+        }
         try (Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement(SQL_SELECT_BY_ID)) {
             stmt.setInt(1, id);
@@ -67,6 +73,11 @@ public class BookDAO implements GenericDAO<Book, Integer> {
 
     @Override
     public List<Book> findAll() {
+        try {
+            syncSequence();
+        } catch (Exception e) {
+            System.out.println("Warning: Could not sync sequence: " + e.getMessage());
+        }
         List<Book> books = new ArrayList<>();
         try (Connection conn = getConnection();
              Statement stmt = conn.createStatement();
@@ -86,8 +97,6 @@ public class BookDAO implements GenericDAO<Book, Integer> {
     public Book save(Book book) {
         if (book.getId() == 0) {
             return insertBook(book);
-        } else if (findById(book.getId())==null) {
-            return insertBook(book);
         } else {
             update(book);
             return book;
@@ -95,6 +104,11 @@ public class BookDAO implements GenericDAO<Book, Integer> {
     }
 
     private Book insertBook(Book book) {
+        try {
+            syncSequence();
+        } catch (Exception e) {
+            System.out.println("Warning: Could not sync sequence: " + e.getMessage());
+        }
         try (Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
             setBookParameters(stmt, book);
@@ -113,6 +127,11 @@ public class BookDAO implements GenericDAO<Book, Integer> {
 
     @Override
     public void update(Book book) {
+        try {
+            syncSequence();
+        } catch (Exception e) {
+            System.out.println("Warning: Could not sync sequence: " + e.getMessage());
+        }
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(SQL_UPDATE)) {
 
@@ -127,6 +146,11 @@ public class BookDAO implements GenericDAO<Book, Integer> {
 
     @Override
     public void deleteById(Integer id) {
+        try {
+            syncSequence();
+        } catch (Exception e) {
+            System.out.println("Warning: Could not sync sequence: " + e.getMessage());
+        }
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(SQL_DELETE)) {
 
@@ -169,5 +193,16 @@ public class BookDAO implements GenericDAO<Book, Integer> {
         stmt.setDouble(4, book.getPrice());
         stmt.setDate(5, Date.valueOf(book.getPublicationDate()));
         stmt.setString(6, book.getInfo());
+    }
+
+    public void syncSequence() {
+        String sql = "SELECT setval(pg_get_serial_sequence('book', 'id'), COALESCE((SELECT MAX(id) FROM book), 0) + 1, false)";
+
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement()) {
+            stmt.execute(sql);
+        } catch (Exception e) {
+            System.out.println("Error syncing sequence: " + e.getMessage());
+        }
     }
 }

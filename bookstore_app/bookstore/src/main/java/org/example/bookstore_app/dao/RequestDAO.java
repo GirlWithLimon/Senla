@@ -132,6 +132,11 @@ public class RequestDAO implements GenericDAO<Request, Integer> {
     }
 
     private Request insertRequest(Request request) {
+        try {
+            syncSequence();
+        } catch (Exception e) {
+            System.out.println("Warning: Could not sync sequence: " + e.getMessage());
+        }
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setInt(1, request.getIdOrderItem());
@@ -199,6 +204,16 @@ public class RequestDAO implements GenericDAO<Request, Integer> {
 
         } catch (Exception e) {
             throw new RuntimeException("Error counting requests for book id: " + bookId, e);
+        }
+    }
+    public void syncSequence() {
+        String sql = "SELECT setval(pg_get_serial_sequence('request', 'id'), COALESCE((SELECT MAX(id) FROM request), 0) + 1, false)";
+
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement()) {
+            stmt.execute(sql);
+        } catch (Exception e) {
+            System.out.println("Error syncing sequence: " + e.getMessage());
         }
     }
 }

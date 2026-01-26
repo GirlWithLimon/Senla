@@ -1,2 +1,6 @@
 DELETE FROM bookCopy;
-INSERT INTO bookCopy VALUES (1,1,'2024-03-15');
+ALTER SEQUENCE book_id_seq RESTART WITH 1;
+
+INSERT INTO bookCopy (idBook, arrivalDate)
+VALUES
+(1, '2000-09-09');

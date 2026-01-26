@@ -77,7 +77,7 @@ public class OperationController {
             Book book4 = addBookToStock("1984", "Дж.Оруэлл", 300.0, LocalDate.of(2019, 1, 15), LocalDate.now().minusMonths(5));
 
             Book book5 = addBookToStock("Старая книга", "Автор", 150.0, LocalDate.of(2020, 1, 1), LocalDate.now().minusMonths(24));
-            BookCopy bookCopy = addBookCopyToStock(1, LocalDate.now());
+            addBookCopyToStock(1, LocalDate.now());
             List<Book> order1Books = List.of(book1, book2);
             createOrder(order1Books, "Иван Иванов", "ivan@mail.com");
 
@@ -90,30 +90,29 @@ public class OperationController {
 
     public static Book addBookToStock(int id, String name, String author, Double price, LocalDate datePublication, LocalDate date) {
         Book book = new Book(id, name, author, price, datePublication);
-        bookInStok.addBookToStock(id, book, date);
+        bookInStok.addBookToStock(book);
         return book;
     }
 
     public Book addBookToStock(String name, String author, Double price, LocalDate datePublication, LocalDate date) {
-        int id = stockService.getBooks().isEmpty() ? 1 : stockService.getBooks().getLast().getId() + 1;
+        int id = 0;
         Book book = new Book(id, name, author, price, datePublication);
-        bookInStok.addBookToStock(id, book, date);
+        bookInStok.addBookToStock(book);
         return book;
     }
 
-    public BookCopy addBookCopyToStock(int idBook, LocalDate date) {
-        int id = stockService.getBooksCopy().isEmpty() ? 1 : stockService.getBooksCopy().getLast().getId() + 1;
-        Book book = stockService.getBooks().stream().filter(books -> books.getId()==idBook)
-                .findFirst().orElse(null);
+    public void addBookCopyToStock(int idBook, LocalDate date) {
+        int id = 0;
+        Book book = bookInStok.getBooksById(idBook);
 
         if (book == null) {
             System.out.println("Ошибка: книга с ID " + idBook + " не найдена!");
-            return null;
+            return;
         }
 
         BookCopy bookCopy = new BookCopy(id, book.getId(), date);
-        bookInStok.addBookCopyToStock(id, bookCopy, date);
-        return bookCopy;
+        bookInStok.addBookCopyToStock(bookCopy, date);
+        return;
     }
 
 
@@ -168,8 +167,8 @@ public class OperationController {
         return orderOperation.createNewOrder(books, customerName, customerContact);
     }
 
-    public void cancelOrder(BookOrder order) {
-        orderOperation.cancelOrder(order);
+    public void cancelOrder(int idOrder) {
+        orderOperation.cancelOrder(idOrder);
     }
 
     public void cancelOrderItem(BookOrder order, Book book) {

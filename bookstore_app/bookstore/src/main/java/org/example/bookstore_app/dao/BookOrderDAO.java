@@ -92,8 +92,6 @@ public class BookOrderDAO implements GenericDAO<BookOrder, Integer> {
     public BookOrder save(BookOrder order) {
         if (order.getId() == 0) {
             return insertOrder(order);
-        } else if (findById(order.getId())==null) {
-            return insertOrder(order);
         } else {
             update(order);
             return order;
@@ -101,6 +99,11 @@ public class BookOrderDAO implements GenericDAO<BookOrder, Integer> {
     }
 
     private BookOrder insertOrder(BookOrder order) {
+        try {
+            syncSequence();
+        } catch (Exception e) {
+            System.out.println("Warning: Could not sync sequence: " + e.getMessage());
+        }
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
             setOrderParameters(stmt, order);
@@ -182,6 +185,16 @@ public class BookOrderDAO implements GenericDAO<BookOrder, Integer> {
         stmt.setString(2, order.getCustomerContact());
         stmt.setString(3, order.getStatus().name());
         stmt.setDouble(4, order.getTotalPrice());
+    }
+    public void syncSequence() {
+        String sql = "SELECT setval(pg_get_serial_sequence('orders', 'id'), COALESCE((SELECT MAX(id) FROM orders), 0) + 1, false)";
+
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement()) {
+            stmt.execute(sql);
+        } catch (Exception e) {
+            System.out.println("Error syncing sequence: " + e.getMessage());
+        }
     }
 
 }

@@ -10,7 +10,7 @@ public interface IOrderOperation {
     BookOrder createOrder(int id, List<Book> books, String customerName, String customerContact);
     BookOrder createNewOrder( List<Book> bookList, String customerName, String customerContact);
     BookOrderItem createOrderItem(int id, int idOrder,Book book);
-    void cancelOrder(BookOrder order);
+    void cancelOrder(int idOrder);
     void cancelOrderItem(BookOrder order, Book book);
    
 }

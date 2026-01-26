@@ -143,10 +143,11 @@ public class ShowBook implements IShowBook {
                 ));
 
         List<Book> sortedBooks = stockService.getBooks().stream()
-                .sorted((b1, b2) -> Long.compare(
-                        bookCount.getOrDefault(b2, 0L),
-                        bookCount.getOrDefault(b1, 0L)
-                ))
+                .sorted((b1, b2) -> {
+                    long count1 = bookCount.getOrDefault(b1.getId(), 0L);
+                    long count2 = bookCount.getOrDefault(b2.getId(), 0L);
+                    return Long.compare(count2, count1);
+                })
                 .toList();
 
         System.out.println("Книги по количеству экземпляров:");

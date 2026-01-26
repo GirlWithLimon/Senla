@@ -1,5 +1,5 @@
 CREATE TABLE orderItem (
-	id INT NOT NULL PRIMARY KEY,
+	id SERIAL NOT NULL PRIMARY KEY,
 	idOrders INT NOT NULL REFERENCES  orders(id),
 	idBook INT NOT NULL REFERENCES  book(id),
 	idBookCopy INT REFERENCES  bookCopy(id),

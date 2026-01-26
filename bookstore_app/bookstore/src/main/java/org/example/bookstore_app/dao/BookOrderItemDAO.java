@@ -38,7 +38,7 @@ public class BookOrderItemDAO implements GenericDAO<BookOrderItem, Integer> {
             "SELECT * FROM " + TABLE_NAME;
     private static final String SQL_INSERT =
             "INSERT INTO " + TABLE_NAME + " (" + COLUMN_ID_ORDERS + ", " +
-                    COLUMN_BOOK + ", " + COLUMN_BOOK_COPY + ", " + COLUMN_STATUS + ") VALUES (?, ?, ?, ?, ?)";
+                    COLUMN_BOOK + ", " + COLUMN_BOOK_COPY + ", " + COLUMN_STATUS + ") VALUES (?, ?, ?, ?)";
     private static final String SQL_UPDATE =
             "UPDATE " + TABLE_NAME + " SET " + COLUMN_ID_ORDERS + " = ?, " +
                     COLUMN_BOOK + " = ?, " + COLUMN_BOOK_COPY + " = ?, " +
@@ -109,6 +109,11 @@ public class BookOrderItemDAO implements GenericDAO<BookOrderItem, Integer> {
     }
 
     private BookOrderItem insertOrderItem(BookOrderItem orderItem) {
+        try {
+            syncSequence();
+        } catch (Exception e) {
+            System.out.println("Warning: Could not sync sequence: " + e.getMessage());
+        }
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
             setOrderItemParameters(stmt, orderItem);
@@ -129,7 +134,7 @@ public class BookOrderItemDAO implements GenericDAO<BookOrderItem, Integer> {
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(SQL_UPDATE)) {
             setOrderItemParameters(stmt, orderItem);
-            stmt.setInt(6, orderItem.getId());
+            stmt.setInt(5, orderItem.getId());
             stmt.executeUpdate();
 
         } catch (Exception e) {
@@ -185,7 +190,16 @@ public class BookOrderItemDAO implements GenericDAO<BookOrderItem, Integer> {
         }
         stmt.setString(4, orderItem.getStatus().name());
     }
+    public void syncSequence() {
+        String sql = "SELECT setval(pg_get_serial_sequence('orderItem', 'id'), COALESCE((SELECT MAX(id) FROM orderItem), 0) + 1, false)";
 
+        try (Connection conn = getConnection();
+             Statement stmt = conn.createStatement()) {
+            stmt.execute(sql);
+        } catch (Exception e) {
+            System.out.println("Error syncing sequence: " + e.getMessage());
+        }
+    }
 
 
 }
