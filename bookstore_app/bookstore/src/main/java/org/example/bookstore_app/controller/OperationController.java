@@ -165,8 +165,7 @@ public class OperationController {
     }
 
     public BookOrder createOrder(List<Book> books, String customerName, String customerContact) {
-        int id = stokService.getOrders().isEmpty()? 1 : stokService.getOrders().getLast().getId()+1;
-        return orderOperation.createOrder(id, books, customerName, customerContact);
+        return orderOperation.createNewOrder(books, customerName, customerContact);
     }
 
     public void cancelOrder(BookOrder order) {

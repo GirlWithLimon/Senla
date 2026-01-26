@@ -79,27 +79,27 @@ public class DataSave {
 
             // Сохраняем книги
             for (Book book : stokService.getBooks()) {
-                bookDAO.save(book);
+                stokService.addBook(book);
             }
 
             // Сохраняем копии книг
             for (BookCopy copy : stokService.getBooksCopy()) {
-                bookCopyDAO.save(copy);
+               stokService.addBooksCopy(copy);
             }
 
             // Сохраняем заказы
             for (var order : stokService.getOrders()) {
-                bookOrderDAO.save(order);
+                stokService.addOrder(order);
             }
 
             // Сохраняем элементы заказов
             for (var orderItem : bookOrderItemDAO.findAll()) {
-                bookOrderItemDAO.save(orderItem);
+                stokService.addBookOrderItem(orderItem);
             }
 
             // Сохраняем запросы
             for (var request : stokService.getRequests()) {
-                requestDAO.save(request);
+                stokService.addRequest(request);
             }
 
             System.out.println("Состояние сохранено в БД");
@@ -110,12 +110,7 @@ public class DataSave {
         try {
             System.out.println("Начинаем загрузку данных из БД...");
 
-            // Проверяем и инициализируем DAO через DI
             initializeDAOs();
-
-            // Загружаем книги
-            List<Book> books = bookDAO.findAll();
-            System.out.println("Найдено книг в БД: " + books.size());
 
             // Используем существующий StokService из DI или создаем новый
             StokService loadedStokService;
@@ -127,6 +122,17 @@ public class DataSave {
                 System.out.println("Создан новый StokService");
             }
 
+
+            // Проверяем, что StokService корректно инициализирован
+            if (stokService == null) {
+                // Регистрируем загруженный StokService в DI контейнере
+                ApplicationContext context = ApplicationContext.getInstance();
+                context.registerBean(StokService.class, loadedStokService);
+                this.stokService = loadedStokService;
+            }
+            // Загружаем книги
+            List<Book> books = stokService.getBooks();
+            System.out.println("Найдено книг в БД: " + books.size());
             for (Book book : books) {
                 System.out.println("Загружаем книгу: " + book.getName() + " (ID: " + book.getId() + ")");
                 loadedStokService.addBook(book);
@@ -143,20 +149,16 @@ public class DataSave {
             }
 
             // Загружаем заказы
-            List<?> orders = bookOrderDAO.findAll();
+            List<?> orders = stokService.getOrders();
             System.out.println("Найдено заказов в БД: " + orders.size());
 
-            // Загружаем запросы
-            List<?> requests = requestDAO.findAll();
-            System.out.println("Найдено запросов в БД: " + requests.size());
+            // Загружаем подзаказы
+            List<?> orderItems = stokService.getBookOrderItem();
+            System.out.println("Найдено подзаказов в БД: " + orders.size());
 
-            // Проверяем, что StokService корректно инициализирован
-            if (stokService == null) {
-                // Регистрируем загруженный StokService в DI контейнере
-                ApplicationContext context = ApplicationContext.getInstance();
-                context.registerBean(StokService.class, loadedStokService);
-                this.stokService = loadedStokService;
-            }
+            // Загружаем запросы
+            List<?> requests = stokService.getRequests();
+            System.out.println("Найдено запросов в БД: " + requests.size());
 
             System.out.println("Загрузка данных из БД завершена успешно");
             System.out.println("Всего загружено: " + books.size() + " книг, " +

@@ -42,10 +42,10 @@ public class OrdersController implements IOrderOperation{
                 " на " + bookList.size() + " книг(и) с итоговой ценой: " + order.getTotalPrice());
         return order;
     }
-   
-    private BookOrderItem createOrderItem(int idOrder,Book book) {//если вставка со стороны пользователя, то ид изначально 0
+    @Override
+    public BookOrderItem createOrderItem(int id, int idOrder,Book book) {//если вставка со стороны пользователя, то ид изначально 0
         BookCopy bookCopy = findBook(book);
-        BookOrderItem orderItem = new BookOrderItem(0, book.getId(),idOrder);
+        BookOrderItem orderItem = new BookOrderItem(id, book.getId(),idOrder);
         orderItem = stokService.addBookOrderItem(orderItem);
 
         if (bookCopy != null) {
@@ -69,6 +69,7 @@ public class OrdersController implements IOrderOperation{
         }
         return orderItem;
     }
+
     private BookOrderItem createNewOrderItem(int idOrder,Book book) {//если вставка со стороны пользователя, то ид изначально 0
         BookCopy bookCopy = findBook(book);
         BookOrderItem orderItem = new BookOrderItem(0, book.getId(),idOrder);
