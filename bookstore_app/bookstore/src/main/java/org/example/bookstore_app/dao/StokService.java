@@ -55,8 +55,8 @@ public class StokService implements Serializable {
     public List<BookOrderItem> getBookOrderItemByidOrder(Integer idOrder) {
         return new ArrayList<>(bookOrderItemDAO.findByOrderId(idOrder));
     }
-    public List<Request> getRequestsByidOrderItem(Integer idOrderItem) {
-        return new ArrayList<>(requestDAO.findByIdOrderItem(idOrderItem));
+    public Request getRequestsByidOrderItem(Integer idOrderItem) {
+        return requestDAO.findByIdOrderItem(idOrderItem);
     }
     public int findCountByIdBook(Integer idBook){
         return  bookCopyDAO.findCountByIdBook(idBook);

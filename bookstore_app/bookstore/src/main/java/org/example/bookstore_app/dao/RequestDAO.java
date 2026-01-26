@@ -101,19 +101,18 @@ public class RequestDAO implements GenericDAO<Request, Integer> {
             throw new RuntimeException("Error finding requests for book id: " + bookId, e);
         }
     }
-    public List<Request> findByIdOrderItem(Integer idOrderItem) {
-        List<Request> requests = new ArrayList<>();
+    public Request findByIdOrderItem(int idOrderItem) {
 
         try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(SQL_SELECT_BY_ORDER_ITEM_ID)) {
+            PreparedStatement stmt = conn.prepareStatement(SQL_SELECT_BY_ORDER_ITEM_ID)) {
 
             stmt.setInt(1, idOrderItem);
             ResultSet rs = stmt.executeQuery();
 
-            while (rs.next()) {
-                requests.add(mapResultSetToRequest(rs));
+            if (rs.next()) {
+                return mapResultSetToRequest(rs);
             }
-            return requests;
+            return null;
 
         } catch (Exception e) {
             throw new RuntimeException("Error finding requests for orderItem id: " + idOrderItem, e);

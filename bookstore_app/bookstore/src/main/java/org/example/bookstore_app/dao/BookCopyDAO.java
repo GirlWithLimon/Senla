@@ -149,8 +149,8 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
 
             stmt.setInt(1, bookCopy.getIdBook());
             stmt.setDate(2, Date.valueOf(bookCopy.getArrivalDate()));
-            stmt.setInt(3, bookCopy.getId());
-            stmt.setBoolean(4, bookCopy.getSale());
+            stmt.setBoolean(3, bookCopy.getSale());
+            stmt.setInt(4, bookCopy.getId());
 
             stmt.executeUpdate();
 

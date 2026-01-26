@@ -50,14 +50,14 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests {
         System.out.println("Заказы по статусу:");
         sortedOrders.forEach(order ->
                 System.out.println(" - " + order.getId() + " | " + order.getStatus() +
-                        " | " + order.getOrderItems().size() + " книг(и)"));
+                        " | " + stokService.getBookOrderItemByidOrder(order.getId()).size() + " книг(и)"));
     }
 
     @Override
     public void showRequestsByCount() {
-        Map<BookOrderItem, Long> requestCount = stokService.getRequests().stream()
+        Map<Book, Long> requestCount = stokService.getRequests().stream()
                 .collect(Collectors.groupingBy(
-                        request -> stokService.getBookOrderItemByID(request.getIdOrderItem()),
+                        request -> stokService.getBooksById(stokService.getBookOrderItemByID(request.getIdOrderItem()).getIdBook()),
                         Collectors.counting()
                 ))
                 .entrySet().stream()
@@ -69,9 +69,9 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests {
 
         requestCount.entrySet().stream()
                 .sorted((e1, e2) -> Long.compare(e2.getValue(), e1.getValue()))
-                .forEach(entry ->
-                        System.out.println(" - " + entry.getKey().getIdBook().getName() +
-                                " - " + entry.getValue() + " запросов"));
+                .forEach(item ->
+                        System.out.println(" - " + item.getKey().getName() +
+                                " - " + item.getValue() + " запросов"));
     }
 
     @Override
@@ -80,7 +80,7 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests {
                 .collect(Collectors.groupingBy(
                         request -> {
                             BookOrderItem orderItem = stokService.getBookOrderItemByID(request.getIdOrderItem());
-                            return orderItem != null ? orderItem.getIdBook() : null;
+                            return orderItem != null ? stokService.getBooksById(orderItem.getIdBook())  : null;
                         },
                         Collectors.counting()
                 ))
@@ -130,10 +130,10 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests {
         System.out.println("Общая стоимость: " + order.getTotalPrice() + " руб.");
         System.out.println("Книги в заказе:");
 
-        order.getOrderItems().forEach(item ->
-                System.out.println(" - " + item.getIdBook().getName() +
+        stokService.getBookOrderItemByidOrder(order.getId()).forEach(item ->
+                System.out.println(" - " + stokService.getBooksById(item.getIdBook()).getName() +
                         " | " + item.getStatus() + " | " +
-                        item.getPrice() + " руб."));
+                        stokService.getBooksById(item.getIdBook()) + " руб."));
     }
 
     @Override
