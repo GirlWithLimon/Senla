@@ -151,7 +151,7 @@ public class ShowBook implements IShowBook {
 
         System.out.println("Книги по количеству экземпляров:");
         sortedBooks.forEach(book -> {
-            long count = bookCount.getOrDefault(book, 0L);
+            long count = bookCount.getOrDefault(book.getId(), 0L);
             System.out.println(" - " + book.getName() + " - " + count + " шт.");
         });
     }
