@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class StokService implements Serializable {
+public class StockService implements Serializable {
     @Inject
     BookDAO bookDAO;
     @Inject
@@ -20,7 +20,14 @@ public class StokService implements Serializable {
     BookOrderItemDAO bookOrderItemDAO;
     @Inject
     RequestDAO requestDAO;
+    private static StockService instance;
 
+    public static StockService getInstance() {
+        if (instance == null) {
+            instance = new StockService();
+        }
+        return instance;
+    }
 
     //получение данных из таблиц полностью
     public List<Book> getBooks() { return new ArrayList<>(bookDAO.findAll()); }

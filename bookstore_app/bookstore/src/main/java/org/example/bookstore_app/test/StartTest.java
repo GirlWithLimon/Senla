@@ -5,14 +5,9 @@ import org.example.bookstore_app.view.ApplicationInitializer;
 import org.example.bookstore_app.view.MenuBuilder;
 import org.example.bookstore_app.view.MenuController;
 import org.example.bookstore_app.view.Navigator;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 
 public class StartTest {
-
     public static void main(String[] args) {
-
         Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
             System.err.println("Необработанное исключение в потоке " + thread.getName() + ":");
             throwable.printStackTrace();

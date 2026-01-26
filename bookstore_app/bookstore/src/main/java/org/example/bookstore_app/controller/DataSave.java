@@ -6,7 +6,7 @@ import org.example.bookstore_app.config.ApplicationContext;
 import org.example.bookstore_app.dao.*;
 import org.example.bookstore_app.model.Book;
 import org.example.bookstore_app.model.BookCopy;
-import org.example.bookstore_app.dao.StokService;
+import org.example.bookstore_app.dao.StockService;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -22,7 +22,7 @@ public class DataSave {
     DBConnect dbConnect;
 
     @Inject
-    StokService stokService;
+    StockService stockService;
 
     @Inject
     BookDAO bookDAO;
@@ -72,76 +72,76 @@ public class DataSave {
         return instance;
     }
 
-    public void saveState(StokService stokService, Connection conn) throws Exception {
+    public void saveState(StockService stockService, Connection conn) throws Exception {
         if(tablesExist(conn)) {
             // Сохраняем состояние в БД
             System.out.println("Сохраняем состояние в базу данных...");
 
             // Сохраняем книги
-            for (Book book : stokService.getBooks()) {
-                stokService.addBook(book);
+            for (Book book : stockService.getBooks()) {
+                stockService.addBook(book);
             }
 
             // Сохраняем копии книг
-            for (BookCopy copy : stokService.getBooksCopy()) {
-               stokService.addBooksCopy(copy);
+            for (BookCopy copy : stockService.getBooksCopy()) {
+               stockService.addBooksCopy(copy);
             }
 
             // Сохраняем заказы
-            for (var order : stokService.getOrders()) {
-                stokService.addOrder(order);
+            for (var order : stockService.getOrders()) {
+                stockService.addOrder(order);
             }
 
             // Сохраняем элементы заказов
             for (var orderItem : bookOrderItemDAO.findAll()) {
-                stokService.addBookOrderItem(orderItem);
+                stockService.addBookOrderItem(orderItem);
             }
 
             // Сохраняем запросы
-            for (var request : stokService.getRequests()) {
-                stokService.addRequest(request);
+            for (var request : stockService.getRequests()) {
+                stockService.addRequest(request);
             }
 
             System.out.println("Состояние сохранено в БД");
         }
     }
 
-    public StokService loadDate(Connection conn) {
+    public StockService loadDate(Connection conn) {
         try {
             System.out.println("Начинаем загрузку данных из БД...");
 
             initializeDAOs();
 
             // Используем существующий StokService из DI или создаем новый
-            StokService loadedStokService;
-            if (stokService != null) {
-                loadedStokService = stokService;
+            StockService loadedStockService;
+            if (stockService != null) {
+                loadedStockService = stockService;
                 System.out.println("Используем существующий StokService из DI");
             } else {
-                loadedStokService = new StokService();
+                loadedStockService = new StockService();
                 System.out.println("Создан новый StokService");
             }
 
 
             // Проверяем, что StokService корректно инициализирован
-            if (stokService == null) {
+            if (stockService == null) {
                 // Регистрируем загруженный StokService в DI контейнере
                 ApplicationContext context = ApplicationContext.getInstance();
-                context.registerBean(StokService.class, loadedStokService);
-                this.stokService = loadedStokService;
+                context.registerBean(StockService.class, loadedStockService);
+                this.stockService = loadedStockService;
             }
             // Загружаем книги
-            List<Book> books = stokService.getBooks();
+            List<Book> books = stockService.getBooks();
             System.out.println("Найдено книг в БД: " + books.size());
             for (Book book : books) {
                 System.out.println("Загружаем книгу: " + book.getName() + " (ID: " + book.getId() + ")");
-                loadedStokService.addBook(book);
+                loadedStockService.addBook(book);
 
                 // Загружаем копии этой книги
                 List<BookCopy> copies = bookCopyDAO.findByBookId(book.getId());
                 if (copies != null && !copies.isEmpty()) {
                     for (BookCopy copy : copies) {
-                        loadedStokService.addBooksCopy(copy);
+                        loadedStockService.addBooksCopy(copy);
                         book.setStatusStok();
                         System.out.println("  - Загружена копия ID: " + copy.getId());
                     }
@@ -149,28 +149,28 @@ public class DataSave {
             }
 
             // Загружаем заказы
-            List<?> orders = stokService.getOrders();
+            List<?> orders = stockService.getOrders();
             System.out.println("Найдено заказов в БД: " + orders.size());
 
             // Загружаем подзаказы
-            List<?> orderItems = stokService.getBookOrderItem();
+            List<?> orderItems = stockService.getBookOrderItem();
             System.out.println("Найдено подзаказов в БД: " + orders.size());
 
             // Загружаем запросы
-            List<?> requests = stokService.getRequests();
+            List<?> requests = stockService.getRequests();
             System.out.println("Найдено запросов в БД: " + requests.size());
 
             System.out.println("Загрузка данных из БД завершена успешно");
             System.out.println("Всего загружено: " + books.size() + " книг, " +
                     orders.size() + " заказов, " + requests.size() + " запросов");
 
-            return loadedStokService;
+            return loadedStockService;
         } catch (Exception e) {
             System.out.println("Ошибка при загрузке данных из БД: " + e.getMessage());
             e.printStackTrace();
 
             // Возвращаем пустой StokService в случае ошибки
-            return new StokService();
+            return new StockService();
         }
     }
 
@@ -283,11 +283,11 @@ public class DataSave {
         this.dbConnect = dbConnect;
     }
 
-    public StokService getStokService() {
-        return stokService;
+    public StockService getStokService() {
+        return stockService;
     }
 
-    public void setStokService(StokService stokService) {
-        this.stokService = stokService;
+    public void setStokService(StockService stockService) {
+        this.stockService = stockService;
     }
 }

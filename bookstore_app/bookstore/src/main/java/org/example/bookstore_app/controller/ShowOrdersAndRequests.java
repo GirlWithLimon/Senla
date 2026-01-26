@@ -3,7 +3,7 @@ package org.example.bookstore_app.controller;
 
 import org.example.annotation.Component;
 import org.example.annotation.Inject;
-import org.example.bookstore_app.dao.StokService;
+import org.example.bookstore_app.dao.StockService;
 import org.example.bookstore_app.model.*;
 
 import java.time.LocalDate;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Component
 public class ShowOrdersAndRequests implements IShowOrdersAndRequests {
     @Inject
-    StokService stokService;
+    StockService stockService;
 
     public ShowOrdersAndRequests() { }
 
@@ -31,7 +31,7 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests {
 
     @Override
     public void showOrdersByPrice() {
-        List<BookOrder> sortedOrders = stokService.getOrders().stream()
+        List<BookOrder> sortedOrders = stockService.getOrders().stream()
                 .sorted(Comparator.comparing(BookOrder::getTotalPrice))
                 .toList();
 
@@ -43,21 +43,21 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests {
 
     @Override
     public void showOrdersByStatus() {
-        List<BookOrder> sortedOrders = stokService.getOrders().stream()
+        List<BookOrder> sortedOrders = stockService.getOrders().stream()
                 .sorted(Comparator.comparing(BookOrder::getStatus))
                 .toList();
 
         System.out.println("Заказы по статусу:");
         sortedOrders.forEach(order ->
                 System.out.println(" - " + order.getId() + " | " + order.getStatus() +
-                        " | " + stokService.getBookOrderItemByidOrder(order.getId()).size() + " книг(и)"));
+                        " | " + stockService.getBookOrderItemByidOrder(order.getId()).size() + " книг(и)"));
     }
 
     @Override
     public void showRequestsByCount() {
-        Map<Book, Long> requestCount = stokService.getRequests().stream()
+        Map<Book, Long> requestCount = stockService.getRequests().stream()
                 .collect(Collectors.groupingBy(
-                        request -> stokService.getBooksById(stokService.getBookOrderItemByID(request.getIdOrderItem()).getIdBook()),
+                        request -> stockService.getBooksById(stockService.getBookOrderItemByID(request.getIdOrderItem()).getIdBook()),
                         Collectors.counting()
                 ))
                 .entrySet().stream()
@@ -76,11 +76,11 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests {
 
     @Override
     public void showRequestsByAlphabet() {
-        Map<Book, Long> requestedBooks = stokService.getRequests().stream()
+        Map<Book, Long> requestedBooks = stockService.getRequests().stream()
                 .collect(Collectors.groupingBy(
                         request -> {
-                            BookOrderItem orderItem = stokService.getBookOrderItemByID(request.getIdOrderItem());
-                            return orderItem != null ? stokService.getBooksById(orderItem.getIdBook())  : null;
+                            BookOrderItem orderItem = stockService.getBookOrderItemByID(request.getIdOrderItem());
+                            return orderItem != null ? stockService.getBooksById(orderItem.getIdBook())  : null;
                         },
                         Collectors.counting()
                 ))
@@ -100,7 +100,7 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests {
 
     @Override
     public List<BookOrder> getCompletedOrdersByPeriod(LocalDate start, LocalDate end) {
-        return stokService.getOrders().stream()
+        return stockService.getOrders().stream()
                 .filter(order -> OrderStatus.COMPLETED.equals(order.getStatus()))
                 .filter(order -> !order.getOrderDate().isBefore(start) &&
                         !order.getOrderDate().isAfter(end))
@@ -130,15 +130,15 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests {
         System.out.println("Общая стоимость: " + order.getTotalPrice() + " руб.");
         System.out.println("Книги в заказе:");
 
-        stokService.getBookOrderItemByidOrder(order.getId()).forEach(item ->
-                System.out.println(" - " + stokService.getBooksById(item.getIdBook()).getName() +
+        stockService.getBookOrderItemByidOrder(order.getId()).forEach(item ->
+                System.out.println(" - " + stockService.getBooksById(item.getIdBook()).getName() +
                         " | " + item.getStatus() + " | " +
-                        stokService.getBooksById(item.getIdBook()) + " руб."));
+                        stockService.getBooksById(item.getIdBook()) + " руб."));
     }
 
     @Override
     public List<BookOrder> sortOrderByDate(){
-        return stokService.getOrders().stream()
+        return stockService.getOrders().stream()
                 .sorted(Comparator.comparing(BookOrder::getOrderDate))
                 .collect(Collectors.toList());
     }

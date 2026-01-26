@@ -6,7 +6,7 @@ import org.example.bookstore_app.dao.DBConnect;
 import org.example.bookstore_app.model.Book;
 import org.example.bookstore_app.model.BookCopy;
 import org.example.bookstore_app.model.BookOrder;
-import org.example.bookstore_app.dao.StokService;
+import org.example.bookstore_app.dao.StockService;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Component
 public class OperationController {
     @Inject
-    private StokService stokService;
+    private StockService stockService;
     @Inject
     private static IBookStok bookInStok;
     @Inject
@@ -47,10 +47,10 @@ public class OperationController {
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("\nСохранение состояния программы...");
-            if (dataSave != null && stokService != null) {
+            if (dataSave != null && stockService != null) {
                 try {
                     Connection conn = dbConnect.getConnection();
-                    dataSave.saveState(stokService,conn);
+                    dataSave.saveState(stockService,conn);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -62,12 +62,12 @@ public class OperationController {
     }
 
     public void initializeTestData() {
-        if (!stokService.getBooks().isEmpty() || !stokService.getOrders().isEmpty()) {
+        if (!stockService.getBooks().isEmpty() || !stockService.getOrders().isEmpty()) {
             System.out.println("Загружены сохраненные данные:");
-            System.out.println("- Книг в каталоге: " + stokService.getBooks().size());
-            System.out.println("- Экземпляров на складе: " + stokService.getBooksCopy().size());
-            System.out.println("- Активных заказов: " + stokService.getOrders().size());
-            System.out.println("- Активных запросов: " + stokService.getRequests().size());
+            System.out.println("- Книг в каталоге: " + stockService.getBooks().size());
+            System.out.println("- Экземпляров на складе: " + stockService.getBooksCopy().size());
+            System.out.println("- Активных заказов: " + stockService.getOrders().size());
+            System.out.println("- Активных запросов: " + stockService.getRequests().size());
             return;
         }
         else {
@@ -95,15 +95,15 @@ public class OperationController {
     }
 
     public Book addBookToStock(String name, String author, Double price, LocalDate datePublication, LocalDate date) {
-        int id = stokService.getBooks().isEmpty() ? 1 : stokService.getBooks().getLast().getId() + 1;
+        int id = stockService.getBooks().isEmpty() ? 1 : stockService.getBooks().getLast().getId() + 1;
         Book book = new Book(id, name, author, price, datePublication);
         bookInStok.addBookToStock(id, book, date);
         return book;
     }
 
     public BookCopy addBookCopyToStock(int idBook, LocalDate date) {
-        int id = stokService.getBooksCopy().isEmpty() ? 1 : stokService.getBooksCopy().getLast().getId() + 1;
-        Book book = stokService.getBooks().stream().filter(books -> books.getId()==idBook)
+        int id = stockService.getBooksCopy().isEmpty() ? 1 : stockService.getBooksCopy().getLast().getId() + 1;
+        Book book = stockService.getBooks().stream().filter(books -> books.getId()==idBook)
                 .findFirst().orElse(null);
 
         if (book == null) {
@@ -250,13 +250,13 @@ public class OperationController {
 
     public void importFromCSV(String entityType, String filePath) throws IOException {
         System.out.println("Начало импорта " + entityType + " из " + filePath);
-        System.out.println("До импорта - Книги: " + stokService.getBooks().size() +
-                ", Заказы: " + stokService.getOrders().size());
+        System.out.println("До импорта - Книги: " + stockService.getBooks().size() +
+                ", Заказы: " + stockService.getOrders().size());
 
         importExportService.importEntities(entityType, filePath);
 
-        System.out.println("После импорта - Книги: " + stokService.getBooks().size() +
-                ", Заказы: " + stokService.getOrders().size());
+        System.out.println("После импорта - Книги: " + stockService.getBooks().size() +
+                ", Заказы: " + stockService.getOrders().size());
     }
 
     public String getAvailableEntityTypes() {

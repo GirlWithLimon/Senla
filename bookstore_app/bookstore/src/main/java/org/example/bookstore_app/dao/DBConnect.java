@@ -3,9 +3,6 @@ package org.example.bookstore_app.dao;
 import org.example.annotation.Component;
 import org.example.annotation.Inject;
 import org.example.annotation.Singleton;
-import org.example.bookstore_app.config.BookstoreConfig;
-import org.example.bookstore_app.config.ConfigurationLoader;
-import org.example.bookstore_app.config.DI;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -19,6 +16,14 @@ public class DBConnect {
     @Inject
     private DBConfig dbConfig;
 
+
+
+    public static DBConnect getInstance() {
+        if (instance == null) {
+            instance = new DBConnect();
+        }
+        return instance;
+    }
 
     public Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {

@@ -10,7 +10,7 @@ public class DBConfig {
     private  String URL = "jdbc:postgresql://localhost:5433/bookstore";
 
     @ConfigProperty(configFileName = "jdbc.properties",propertyName = "user", type = PropertyType.STRING)
-    private  String USER = "postgres";
+    private  String USER = "postgress";
 
     @ConfigProperty(configFileName = "jdbc.properties",propertyName = "password")
     private  String password = "1234";
