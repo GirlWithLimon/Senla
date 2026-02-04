@@ -45,7 +45,7 @@ public class MenuController {
 
                 int choice = scanner.nextInt();
                 scanner.nextLine();
-                logger.info("DEBUG: User selected option: " + choice);
+                logger.info("Пользователь выбрал: " + choice);
                 navigator.navigate(choice);
             } catch (InputMismatchException e) {
                 System.out.print("Ошибка ввода! Пожалуйста, введите ЧИСЛО.");
