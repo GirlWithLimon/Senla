@@ -2,6 +2,8 @@ package org.example.bookstore_app.config;
 
 import org.example.annotation.ConfigProperty;
 import org.example.annotation.PropertyType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.lang.reflect.Field;
