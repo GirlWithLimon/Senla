@@ -5,6 +5,8 @@ import org.example.annotation.Component;
 import org.example.annotation.Inject;
 import org.example.bookstore_app.dao.StockService;
 import org.example.bookstore_app.model.*;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,6 +20,7 @@ public class BooksController implements IBookStok {
     StockService stockService;
     @Inject
     private BookstoreConfig config;
+    Logger logger = LoggerFactory.getLogger(BooksController.class);
 
     public BooksController() {  }
 
@@ -30,11 +33,11 @@ public class BooksController implements IBookStok {
     public void addBookToStock(Book book) {
         try {
             stockService.addBook(book);
-            System.out.println("Книга добавлена в каталог: " + book.getName() +
-                    " | ID: " + book.getId() +
-                    " | Всего в каталоге: " + stockService.getBooks().size());
+            logger.info("\"Книга добавлена в каталог: \" + book.getName() +\n" +
+                    "                    \" | ID: \" + book.getId() +\n" +
+                    "                    \" | Всего в каталоге: \" + stockService.getBooks().size()");
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            logger.error("Ошибка при добавлении книги {}", e.getMessage());
         }
 
     }
@@ -43,7 +46,7 @@ public class BooksController implements IBookStok {
         stockService.addBooksCopy(bookCopy);
         stockService.getBooksById(bookCopy.getIdBook()).setStatusStok();
 
-        System.out.println("Добавлена книга на склад: " + stockService.getBooksById(bookCopy.getIdBook()).getName() +
+        logger.info("Добавлена книга на склад: " + stockService.getBooksById(bookCopy.getIdBook()).getName() +
                 " | Копий: " + stockService.findCountByIdBook(bookCopy.getIdBook()) +
                 " | Книг в каталоге: " + stockService.getBooks().size());
 
@@ -75,7 +78,7 @@ public class BooksController implements IBookStok {
                         " для книги: " + stockService.getBooksById(bookCopy.getIdBook()).getName());
             }
         } else {
-            System.out.println("Автоматическое выполнение запросов отключено в настройках");
+            logger.info("Автоматическое выполнение запросов отключено в настройках");
         }
     }
     public void ContinueRequest(BookOrderItem orderItem, BookCopy bookCopy) {

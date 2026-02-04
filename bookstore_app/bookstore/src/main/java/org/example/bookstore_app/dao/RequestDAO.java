@@ -4,6 +4,8 @@ import org.example.annotation.Component;
 import org.example.annotation.Inject;
 import org.example.bookstore_app.model.BookOrderItem;
 import org.example.bookstore_app.model.Request;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ import java.util.List;
 
 @Component
 public class RequestDAO implements GenericDAO<Request, Integer> {
+    private static final Logger logger = LoggerFactory.getLogger(RequestDAO.class);
     private final DBConnect connect;
 
     @Inject

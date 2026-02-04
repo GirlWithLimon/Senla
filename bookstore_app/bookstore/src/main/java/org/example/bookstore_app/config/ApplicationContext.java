@@ -5,6 +5,8 @@ import org.example.annotation.Inject;
 import org.example.annotation.Singleton;
 import org.example.bookstore_app.dao.DBConfig;
 import org.example.bookstore_app.dao.DBConnect;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -15,7 +17,7 @@ import java.util.*;
 @Component
 @Singleton
 public class ApplicationContext {
-
+    private static final Logger logger = LoggerFactory.getLogger(ApplicationContext.class);
     private static ApplicationContext instance;
     private final Map<Class<?>, Object> beans = new HashMap<>();
     private final Set<String> scannedPackages = new HashSet<>();

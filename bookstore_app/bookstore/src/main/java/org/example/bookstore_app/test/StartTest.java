@@ -5,11 +5,15 @@ import org.example.bookstore_app.view.ApplicationInitializer;
 import org.example.bookstore_app.view.MenuBuilder;
 import org.example.bookstore_app.view.MenuController;
 import org.example.bookstore_app.view.Navigator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class StartTest {
+    private static final Logger logger = LoggerFactory.getLogger(StartTest.class);
+
     public static void main(String[] args) {
         Thread.setDefaultUncaughtExceptionHandler((thread, throwable) -> {
-            System.err.println("Необработанное исключение в потоке " + thread.getName() + ":");
+            logger.error("Необработанное исключение в потоке " + thread.getName() + ":");
             throwable.printStackTrace();
         });
 
@@ -20,41 +24,40 @@ public class StartTest {
 
             MenuBuilder menuBuilder = context.getBean(MenuBuilder.class);
             if (menuBuilder == null) {
-                System.err.println("ОШИБКА: MenuBuilder не создан!");
+                logger.error("ОШИБКА: MenuBuilder не создан!");
                 context.printRegisteredBeans();
                 return;
             }
 
-            System.out.println("Создаем Navigator...");
+            logger.debug("Создаем Navigator...");
             Navigator navigator = menuBuilder.createNavigator();
             if (navigator == null) {
-                System.err.println("ОШИБКА: Navigator не создан!");
+                logger.error("ОШИБКА: Navigator не создан!");
                 return;
             }
 
-            System.out.println("Создаем MenuController...");
+            logger.debug("Создаем MenuController...");
             MenuController menuController = context.getBean(MenuController.class);
             if (menuController == null) {
-                System.err.println("ОШИБКА: MenuController не найден в DI!");
+                logger.error("ОШИБКА: MenuController не найден в DI!");
                 return;
             }
 
             try {
                 java.lang.reflect.Method setNavigatorMethod =
-                        MenuController.class.getMethod("setNavigator", Navigator.class);
+                 MenuController.class.getMethod("setNavigator", Navigator.class);
                 setNavigatorMethod.invoke(menuController, navigator);
-                System.out.println("Navigator установлен в MenuController через сеттер");
+                logger.debug("Navigator установлен в MenuController через сеттер");
             } catch (NoSuchMethodException e) {
-                System.out.println("Метод setNavigator не найден, используем конструктор");
+                logger.debug("Метод setNavigator не найден, используем конструктор");
                 menuController = new MenuController(navigator);
                 context.registerBean(MenuController.class, menuController);
             }
 
-            System.out.println("Запускаем меню...");
+            logger.debug("Запускаем меню...");
             menuController.run();
         } catch (Exception e) {
-            System.err.println("Ошибка при запуске приложения: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("Ошибка при запуске приложения: " + e.getMessage());
         }
     }
 }

@@ -2,6 +2,9 @@ package org.example.bookstore_app.view;
 
 import org.example.annotation.Inject;
 import org.example.annotation.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -13,6 +16,7 @@ public class MenuController {
     public MenuController() {
         this.scanner = new Scanner(System.in);
     }
+    private static final Logger logger = LoggerFactory.getLogger(MenuController.class);
 
     @Inject
     public MenuController(Navigator navigator) {
@@ -25,10 +29,10 @@ public class MenuController {
     }
 
     public void run() {
-        System.out.println("DEBUG: Scanner object = " + scanner);
-        System.out.println("DEBUG: Navigator = " + navigator);
+        logger.debug("DEBUG: Scanner object = " + scanner);
+        logger.debug("DEBUG: Navigator = " + navigator);
         if (navigator == null) {
-            System.err.println("ОШИБКА: Navigator не установлен!");
+            logger.error("ОШИБКА: Navigator не установлен!");
             return;
         }
 
@@ -41,19 +45,16 @@ public class MenuController {
 
                 int choice = scanner.nextInt();
                 scanner.nextLine();
-                System.out.println("DEBUG: User selected option: " + choice);
+                logger.info("DEBUG: User selected option: " + choice);
                 navigator.navigate(choice);
             } catch (InputMismatchException e) {
-                System.out.println("Ошибка ввода! Пожалуйста, введите ЧИСЛО.");
+                System.out.print("Ошибка ввода! Пожалуйста, введите ЧИСЛО.");
                 scanner.nextLine();
             } catch (NullPointerException e) {
-                System.err.println("Ошибка: меню не инициализировано!");
-                System.err.println("Сообщение: " + e.getMessage());
+                logger.error("Ошибка: меню не инициализировано! Сообщение: "+ e.getMessage());
                 return;
             } catch (Exception e) {
-                System.out.println("Произошла ошибка при выполнении команды: " + e.getClass().getSimpleName());
-                System.out.println("Сообщение: " + e.getMessage());
-                e.printStackTrace();
+                logger.error("Произошла ошибка при выполнении команды: " + e.getClass().getSimpleName()+" Сообщение: " + e.getMessage());
                 scanner.nextLine();
             }
         }

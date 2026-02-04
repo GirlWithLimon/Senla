@@ -5,6 +5,8 @@ import org.example.annotation.Inject;
 import org.example.bookstore_app.model.BookOrder;
 import org.example.bookstore_app.model.BookStatus;
 import org.example.bookstore_app.model.OrderStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -14,12 +16,13 @@ import java.util.Optional;
 
 @Component
 public class BookOrderDAO implements GenericDAO<BookOrder, Integer> {
+    private static final Logger logger = LoggerFactory.getLogger(BookOrderDAO.class);
     private final DBConnect connect;
 
     @Inject
     public BookOrderDAO(DBConnect connect) {
         this.connect = connect;
-        System.out.println("BookDAO created with connect = " + connect);
+        logger.debug("BookDAO created with connect = {}", connect);
     }
 
     private Connection getConnection() throws Exception {

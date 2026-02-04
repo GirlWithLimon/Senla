@@ -6,6 +6,7 @@ import org.example.annotation.PropertyType;
 
 @Component
 public class DBConfig {
+
     @ConfigProperty( configFileName = "jdbc.properties", propertyName = "url", type = PropertyType.STRING)
     private  String URL = "jdbc:postgresql://localhost:5433/bookstore";
 

@@ -3,6 +3,8 @@ package org.example.bookstore_app.dao;
 import org.example.annotation.Component;
 import org.example.annotation.Inject;
 import org.example.bookstore_app.model.BookCopy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,19 +12,20 @@ import java.util.List;
 
 @Component
 public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
+    private static final Logger logger = LoggerFactory.getLogger(BookCopyDAO.class);
     private final DBConnect connect;
 
     @Inject
     public BookCopyDAO(DBConnect connect) {
         this.connect = connect;
-        System.out.println("BookDAO created with connect = " + connect);
+        logger.debug("BookDAO created with connect = {}", connect);
     }
 
     private Connection getConnection() throws Exception {
         if (connect == null) {
-            throw new IllegalStateException("DBConnect is not injected!");
+            logger.error("DBConnect не инициализирован!");
         }
-
+        assert connect != null;
         return connect.getConnection();
     }
 
@@ -57,7 +60,7 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
         try {
             syncSequence();
         } catch (Exception e) {
-            System.out.println("Warning: Could not sync sequence: " + e.getMessage());
+            logger.warn("Не получается синхронизировать данные: {}", e.getMessage());
         }
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(SQL_SELECT_BY_ID)) {
@@ -69,8 +72,9 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
             }
             return null;
         } catch (Exception e) {
-            throw new RuntimeException("Error finding book copy with id: " + id, e);
+            logger.error("Ошибка при поиске копии с id: {}", id, e);
         }
+        return null;
     }
 
     @Override
@@ -78,7 +82,7 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
         try {
             syncSequence();
         } catch (Exception e) {
-            System.out.println("Warning: Could not sync sequence: " + e.getMessage());
+            logger.warn("Не получилось синхронизировать данные: {}", e.getMessage());
         }
         List<BookCopy> copies = new ArrayList<>();
 
@@ -92,14 +96,15 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
             return copies;
 
         } catch (Exception e) {
-            throw new RuntimeException("Error finding all book copies", e);
+            logger.error("Ошибка при поиске всех экземпляров книг", e);
         }
+        return null;
     }
     public List<BookCopy> findByBookId(Integer idBook) {
         try {
             syncSequence();
         } catch (Exception e) {
-            System.out.println("Warning: Could not sync sequence: " + e.getMessage());
+            logger.warn("Не удалось синхронизировать данные: {}", e.getMessage());
         }
         List<BookCopy> copies = new ArrayList<>();
 
@@ -114,8 +119,9 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
             return copies;
 
         } catch (Exception e) {
-            throw new RuntimeException("Error finding book copies for book id: " + idBook, e);
+            logger.error("Ошибка поиска экземпляра книги по id книги: {}", idBook, e);
         }
+        return null;
     }
     public int findCountByIdBook(Integer idBook) {
         try (Connection conn = getConnection();
@@ -128,8 +134,9 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
             return 0;
 
         } catch (Exception e) {
-            throw new RuntimeException("Error finding book copies for book id: " + idBook, e);
+            logger.error("Ошибка поиска количества экземпляров книг по id книги: {}", idBook, e);
         }
+        return 0;
     }
 
     @Override
@@ -148,7 +155,7 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
         try {
             syncSequence();
         } catch (Exception e) {
-            System.out.println("Warning: Could not sync sequence: " + e.getMessage());
+            logger.warn("Не удалось выполнить синхронизацию данных: {}", e.getMessage());
         }
         try (Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
@@ -162,8 +169,9 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
             return bookCopy;
 
         } catch (Exception e) {
-            throw new RuntimeException("Error inserting book copy", e);
+            logger.error("Ошибки при добавлении экземпляра книги ", e);
         }
+        return null;
     }
 
     @Override
@@ -171,7 +179,7 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
         try {
             syncSequence();
         } catch (Exception e) {
-            System.out.println("Warning: Could not sync sequence: " + e.getMessage());
+            logger.warn("Не удалось выполнить синхронизацию данных: {}", e.getMessage());
         }
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(SQL_UPDATE)) {
@@ -184,7 +192,7 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
             stmt.executeUpdate();
 
         } catch (Exception e) {
-            throw new RuntimeException("Error updating book copy: " + bookCopy.getId(), e);
+            logger.error("Error updating book copy: " + bookCopy.getId(), e);
         }
     }
 
@@ -193,7 +201,7 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
         try {
             syncSequence();
         } catch (Exception e) {
-            System.out.println("Warning: Could not sync sequence: " + e.getMessage());
+            logger.warn("Не удалось выполнить синхронизацию данных: {}", e.getMessage());
         }
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(SQL_DELETE)) {
@@ -202,7 +210,7 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
             stmt.executeUpdate();
 
         } catch (Exception e) {
-            throw new RuntimeException("Error deleting book copy: " + id, e);
+            logger.error("Ошибка при удалении экземпляра: {}", id, e);
         }
     }
 
@@ -218,8 +226,9 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
             copy.setSale(saleStr.equals("true"));
             return copy;
         } catch(SQLException e){
-            throw new RuntimeException("Book not found with id: " + bookId, e);
+            logger.error("Книга с не найдена, id: {}", bookId, e);
         }
+        return null;
     }
 
     private void setBookCopyParameters(PreparedStatement stmt, BookCopy bookCopy) throws SQLException {
@@ -234,7 +243,7 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
              Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
         } catch (Exception e) {
-            System.out.println("Error syncing sequence: " + e.getMessage());
+            logger.warn("Ошибка синхронизации: {}", e.getMessage());
         }
     }
 }
