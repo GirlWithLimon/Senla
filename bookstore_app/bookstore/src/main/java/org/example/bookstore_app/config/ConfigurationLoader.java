@@ -18,12 +18,19 @@ public class ConfigurationLoader {
         Set<String> configFiles = new HashSet<>();
         Map<Field, ConfigProperty> fieldAnnotations = new HashMap<>();
 
+        // Собираем все аннотации @ConfigProperty
         for (Field field : configClass.getDeclaredFields()) {
             ConfigProperty annotation = field.getAnnotation(ConfigProperty.class);
             if (annotation != null) {
                 fieldAnnotations.put(field, annotation);
                 configFiles.add(annotation.configFileName());
             }
+        }
+
+        // Если нет аннотаций @ConfigProperty, просто возвращаем экземпляр
+        if (fieldAnnotations.isEmpty()) {
+            System.out.println("В классе " + configClass.getSimpleName() + " нет аннотаций @ConfigProperty");
+            return configInstance;
         }
 
         Properties allProperties = new Properties();
@@ -43,6 +50,7 @@ public class ConfigurationLoader {
             }
         }
 
+        // Применяем значения из свойств к полям
         for (Map.Entry<Field, ConfigProperty> entry : fieldAnnotations.entrySet()) {
             Field field = entry.getKey();
             ConfigProperty annotation = entry.getValue();
@@ -83,7 +91,9 @@ public class ConfigurationLoader {
                 if (file.exists()) {
                     return new FileInputStream(file);
                 }
-            } catch (FileNotFoundException e) { }
+            } catch (FileNotFoundException e) {
+                System.out.println("Файл не найден: " + resourcePath);
+            }
         }
 
         return input;
@@ -167,5 +177,41 @@ public class ConfigurationLoader {
         } else {
             throw new IllegalArgumentException("Неподдерживаемый тип поля: " + fieldType);
         }
+    }
+
+    // Дополнительный метод для загрузки конфигурации с пользовательскими свойствами
+    public static <T> T loadConfiguration(Class<T> configClass, Properties customProperties) throws Exception {
+        T configInstance = configClass.getDeclaredConstructor().newInstance();
+        Map<Field, ConfigProperty> fieldAnnotations = new HashMap<>();
+
+        // Собираем все аннотации @ConfigProperty
+        for (Field field : configClass.getDeclaredFields()) {
+            ConfigProperty annotation = field.getAnnotation(ConfigProperty.class);
+            if (annotation != null) {
+                fieldAnnotations.put(field, annotation);
+            }
+        }
+
+        if (fieldAnnotations.isEmpty()) {
+            return configInstance;
+        }
+
+        // Применяем значения из пользовательских свойств
+        for (Map.Entry<Field, ConfigProperty> entry : fieldAnnotations.entrySet()) {
+            Field field = entry.getKey();
+            ConfigProperty annotation = entry.getValue();
+
+            String propertyKey = annotation.propertyName();
+            if (propertyKey.isEmpty()) {
+                propertyKey = configClass.getSimpleName().toLowerCase() + "." + field.getName();
+            }
+
+            String propertyValue = customProperties.getProperty(propertyKey);
+            if (propertyValue != null) {
+                setFieldValue(configInstance, field, propertyValue, annotation.type());
+            }
+        }
+
+        return configInstance;
     }
 }

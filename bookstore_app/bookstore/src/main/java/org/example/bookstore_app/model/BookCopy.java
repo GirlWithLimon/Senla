@@ -1,36 +1,34 @@
 package org.example.bookstore_app.model;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 
 public class BookCopy implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
-    private final int id;
-    private final Book book;
-    private final LocalDate arrivalDate;
+    private  int id;
+    private  int idBook;
+    private  LocalDate arrivalDate;
+    private boolean sale;
 
-    public BookCopy(int  id, Book book, LocalDate date) {
+    public BookCopy(int  id, int idBook, LocalDate date) {
         this.id = id;
-        this.book = book;
+        this.idBook = idBook;
         this.arrivalDate = date;
-        this.book.setStatusStok();
+        this.sale = false;
     }
     
     public int getId(){
         return this.id;
     }
-    public Book getBook() {
-        return this.book;
+    public int getIdBook() {
+        return this.idBook;
     }
-    
     public LocalDate getArrivalDate() {
         return arrivalDate;
     }
-    
-    @Override
-    public String toString() {
-        return this.book.getName();
-    }
+    public boolean getSale(){return  sale;}
+
+    public void setId(int id){this.id = id;}
+    public void setSale(boolean sale){this.sale=sale;}
+
+
 }

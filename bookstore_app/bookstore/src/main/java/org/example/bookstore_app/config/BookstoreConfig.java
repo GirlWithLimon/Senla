@@ -1,8 +1,10 @@
 package org.example.bookstore_app.config;
 
+import org.example.annotation.Component;
 import org.example.annotation.ConfigProperty;
 import org.example.annotation.PropertyType;
 
+@Component
 public class BookstoreConfig {
 
     @ConfigProperty(propertyName = "months.for.old.book", type = PropertyType.INTEGER)
@@ -14,7 +16,7 @@ public class BookstoreConfig {
     @ConfigProperty(propertyName = "csv.delimiter")
     private String csvDelimiter = ",";
 
-     public int getMonthsForOldBook() {
+    public int getMonthsForOldBook() {
         return monthsForOldBook;
     }
 

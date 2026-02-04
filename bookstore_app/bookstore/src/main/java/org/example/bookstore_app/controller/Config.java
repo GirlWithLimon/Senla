@@ -90,6 +90,7 @@ public class Config {
         }
     }
 
+
     public void loadFromFile(String configFile) {
         try {
             System.setProperty("config.file", configFile);

@@ -190,13 +190,8 @@ public final class MenuBuilder {
                 scanner.nextLine();
                 return;
             }
-
-            if (choice > 0 && choice <= controller.getOrder().size()) {
-                controller.cancelOrder(controller.getOrder().get(choice - 1));
-                System.out.println("Заказ отменен!");
-            } else {
-                System.out.println("Неверный выбор!");
-            }
+            controller.cancelOrder(choice);
+            System.out.println("Заказ отменен!");
         }));
 
         menu.addMenuItem(new MenuItem("Показать все заказы", () -> {
@@ -445,7 +440,6 @@ public final class MenuBuilder {
             System.out.println("Настройка сохранена! Автовыполнение запросов: " +
                     (newValue ? "Включено" : "Отключено"));
         }));
-
         return menu;
     }
 

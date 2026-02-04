@@ -1,0 +1,4 @@
+CREATE TABLE request (
+	id SERIAL NOT NULL PRIMARY KEY,
+	idOrderItem INT NOT NULL REFERENCES  orderItem(id)
+);

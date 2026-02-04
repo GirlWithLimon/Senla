@@ -1,32 +1,27 @@
 package org.example.bookstore_app.model;
 
-import java.io.Serial;
 import java.io.Serializable;
 
 public class Request implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
-    private final int id;
-    private final BookOrderItem orderItem;
+    private  int id;
+    private  int idOrderItem;
     
-    public Request(int id, BookOrderItem orderItem) {
+    public Request(int id, int idOrderItem) {
         this.id = id;
-        this.orderItem = orderItem;
+        this.idOrderItem = idOrderItem;
     }
     
     public int getId(){
         return this.id;
     }
-    public Book getBook() {
-        return orderItem.getBook();
+    public int getIdOrderItem() {
+        return this.idOrderItem;
     }
-    
-    public BookOrderItem getOrderItem() {
-        return orderItem;
+
+    public void setId(int id) {
+        this.id = id;
     }
-    
-    public void ContinueRequest(BookCopy bookCopy) {
-        orderItem.setBookCopy(bookCopy);
-        orderItem.setStatus(OrderItemStatus.COMPLETED);
+    public void setIdOrderItem(int idOrderItem) {
+        this.idOrderItem = idOrderItem;
     }
 }

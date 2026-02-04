@@ -5,7 +5,7 @@ import org.example.annotation.Component;
 import org.example.annotation.Inject;
 import org.example.bookstore_app.model.Book;
 import org.example.bookstore_app.model.BookCopy;
-import org.example.bookstore_app.model.Stok;
+import org.example.bookstore_app.dao.StockService;
 
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Component
 public class ShowBook implements IShowBook {
     @Inject
-    private Stok stok;
+    private StockService stockService;
     @Inject
     private BookstoreConfig config;
     public ShowBook(){}
@@ -24,7 +24,7 @@ public class ShowBook implements IShowBook {
     @Override
     public List<BookCopy> getOldBooksSortedByDate() {
         LocalDate thresholdDate = LocalDate.now().minusMonths(config.getMonthsForOldBook());
-        return stok.getBooksCopy().stream()
+        return stockService.getBooksCopy().stream()
                 .filter(copy -> copy.getArrivalDate().isBefore(thresholdDate))
                 .sorted(Comparator.comparing(BookCopy::getArrivalDate))
                 .collect(Collectors.toList());
@@ -33,9 +33,9 @@ public class ShowBook implements IShowBook {
     @Override
     public List<BookCopy> getOldBooksSortedByPrice() {
         LocalDate thresholdDate = LocalDate.now().minusMonths(config.getMonthsForOldBook());
-        return stok.getBooksCopy().stream()
+        return stockService.getBooksCopy().stream()
                 .filter(copy -> copy.getArrivalDate().isBefore(thresholdDate))
-                .sorted(Comparator.comparing(copy -> copy.getBook().getPrice()))
+                .sorted(Comparator.comparing(copy -> stockService.getBooksById(copy.getIdBook()).getPrice()))
                 .collect(Collectors.toList());
     }
 
@@ -48,9 +48,9 @@ public class ShowBook implements IShowBook {
             System.out.println(" - Нет залежавшихся книг");
         } else {
             oldBooks.forEach(copy ->
-                    System.out.println(" - " + copy.getBook() + " | Поступление: " +
+                    System.out.println(" - " + copy.getIdBook() + " | Поступление: " +
                             copy.getArrivalDate() + " | Цена: " +
-                            copy.getBook().getPrice() + " руб."));
+                            stockService.getBooksById(copy.getIdBook()).getPrice() + " руб."));
         }
     }
 
@@ -63,19 +63,19 @@ public class ShowBook implements IShowBook {
             System.out.println(" - Нет залежавшихся книг");
         } else {
             oldBooks.forEach(copy ->
-                    System.out.println(" - " + copy.getBook() + " | Поступление: " +
+                    System.out.println(" - " + copy.getIdBook() + " | Поступление: " +
                             copy.getArrivalDate() + " | Цена: " +
-                            copy.getBook().getPrice() + " руб."));
+                            stockService.getBooksById(copy.getIdBook()).getPrice() + " руб."));
         }
     }
 
     @Override
     public void showBook() {
-        if (stok.getBooks().isEmpty()) {
+        if (stockService.getBooks().isEmpty()) {
             System.out.println("Каталог книг пуст");
             return;
         }
-        List<Book> sortedBooks = stok.getBooks().stream()
+        List<Book> sortedBooks = stockService.getBooks().stream()
                 .sorted(Comparator.comparing(Book::getId))
                 .toList();
 
@@ -86,7 +86,7 @@ public class ShowBook implements IShowBook {
 
     @Override
     public void sortByABC() {
-        if (stok.getBooks().isEmpty()) {
+        if (stockService.getBooks().isEmpty()) {
             System.out.println("Каталог книг пуст");
             return;
         }
@@ -101,11 +101,11 @@ public class ShowBook implements IShowBook {
 
     @Override
     public void sortByPublicationDate() {
-        if (stok.getBooks().isEmpty()) {
+        if (stockService.getBooks().isEmpty()) {
             System.out.println("Каталог книг пуст");
             return;
         }
-        List<Book> sortedBooks = stok.getBooks().stream()
+        List<Book> sortedBooks = stockService.getBooks().stream()
                 .sorted(Comparator.comparing(Book::getPublicationDate))
                 .toList();
 
@@ -116,11 +116,11 @@ public class ShowBook implements IShowBook {
 
     @Override
     public void sortByPrice() {
-        if (stok.getBooks().isEmpty()) {
+        if (stockService.getBooks().isEmpty()) {
             System.out.println("Каталог книг пуст");
             return;
         }
-        List<Book> sortedBooks = stok.getBooks().stream()
+        List<Book> sortedBooks = stockService.getBooks().stream()
                 .sorted(Comparator.comparing(Book::getPrice))
                 .toList();
 
@@ -131,34 +131,35 @@ public class ShowBook implements IShowBook {
 
     @Override
     public void sortByNumberCopies() {
-        if (stok.getBooks().isEmpty()) {
+        if (stockService.getBooks().isEmpty()) {
             System.out.println("Каталог книг пуст");
             return;
         }
 
-        Map<Book, Long> bookCount = stok.getBooksCopy().stream()
+        Map<Integer, Long> bookCount = stockService.getBooksCopy().stream()
                 .collect(Collectors.groupingBy(
-                        BookCopy::getBook,
+                        BookCopy::getIdBook,
                         Collectors.counting()
                 ));
 
-        List<Book> sortedBooks = stok.getBooks().stream()
-                .sorted((b1, b2) -> Long.compare(
-                        bookCount.getOrDefault(b2, 0L),
-                        bookCount.getOrDefault(b1, 0L)
-                ))
+        List<Book> sortedBooks = stockService.getBooks().stream()
+                .sorted((b1, b2) -> {
+                    long count1 = bookCount.getOrDefault(b1.getId(), 0L);
+                    long count2 = bookCount.getOrDefault(b2.getId(), 0L);
+                    return Long.compare(count2, count1);
+                })
                 .toList();
 
         System.out.println("Книги по количеству экземпляров:");
         sortedBooks.forEach(book -> {
-            long count = bookCount.getOrDefault(book, 0L);
+            long count = bookCount.getOrDefault(book.getId(), 0L);
             System.out.println(" - " + book.getName() + " - " + count + " шт.");
         });
     }
 
     @Override
     public List<Book> sortABCBook() {
-        return stok.getBooks().stream()
+        return stockService.getBooks().stream()
                 .sorted(Comparator.comparing(Book::getName))
                 .collect(Collectors.toList());
     }
@@ -186,7 +187,7 @@ public class ShowBook implements IShowBook {
     }
 
     public long getOldBooksCount() {
-        return stok.getBooksCopy().stream()
+        return stockService.getBooksCopy().stream()
                 .filter(this::isOldBook)
                 .count();
     }

@@ -5,7 +5,10 @@ import org.example.bookstore_app.config.BookstoreConfig;
 import org.example.bookstore_app.config.ConfigurationLoader;
 import org.example.bookstore_app.controller.DataSave;
 import org.example.bookstore_app.controller.OperationController;
-import org.example.bookstore_app.model.Stok;
+import org.example.bookstore_app.dao.DBConfig;
+import org.example.bookstore_app.dao.DBConnect;
+import org.example.bookstore_app.dao.StockService;
+
 
 public class ApplicationInitializer {
 
@@ -13,21 +16,30 @@ public class ApplicationInitializer {
         System.out.println("Инициализация приложения...");
         ApplicationContext context = ApplicationContext.getInstance();
 
-        BookstoreConfig config = loadConfiguration();
+        BookstoreConfig config = loadConfiguration(BookstoreConfig.class);
         context.registerBean(BookstoreConfig.class, config);
         System.out.println("Конфигурация зарегистрирована");
+        DBConfig dbConfig = loadConfiguration(DBConfig.class);
+        context.registerBean(DBConfig.class, dbConfig);
+        System.out.println("Конфигурация зарегистрирована");
+
+        DBConnect conn =  DBConnect.getInstance();
+        context.registerBean(DBConnect.class, conn);
+        System.out.println("DBConnect загружен");
+
+        StockService stock = StockService.getInstance();
+        context.registerBean(StockService.class, stock);
+        System.out.println("Stok загружен");
 
         DataSave dataSave = DataSave.getInstance();
         context.registerBean(DataSave.class, dataSave);
         System.out.println("DataSave зарегистрирован");
 
-        Stok stok = dataSave.loadState();
-        context.registerBean(Stok.class, stok);
-        System.out.println("Stok загружен, размер книг: " + stok.getBooks().size());
+
 
         context.initialize();
 
-       OperationController controller = context.getBean(OperationController.class);
+        OperationController controller = context.getBean(OperationController.class);
         if (controller != null) {
             System.out.println("OperationController получен, инициализируем тестовые данные");
             controller.initializeTestData();
@@ -40,13 +52,13 @@ public class ApplicationInitializer {
         return context;
     }
 
-    private static BookstoreConfig loadConfiguration() {
+    private static <T> T loadConfiguration(Class <T> configClass) {
         try {
-            return ConfigurationLoader.loadConfiguration(BookstoreConfig.class);
+            return ConfigurationLoader.loadConfiguration(configClass);
         } catch (Exception e) {
             System.err.println("Ошибка загрузки конфигурации: " + e.getMessage());
             System.err.println("Используются значения по умолчанию");
-            return new BookstoreConfig();
+            return null;
         }
     }
 }

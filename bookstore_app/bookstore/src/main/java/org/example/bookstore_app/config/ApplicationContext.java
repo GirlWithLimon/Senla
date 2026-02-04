@@ -3,6 +3,8 @@ package org.example.bookstore_app.config;
 import org.example.annotation.Component;
 import org.example.annotation.Inject;
 import org.example.annotation.Singleton;
+import org.example.bookstore_app.dao.DBConfig;
+import org.example.bookstore_app.dao.DBConnect;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -97,19 +99,42 @@ public class ApplicationContext {
         Object instance = defaultConstructor.newInstance();
         beans.put(clazz, instance);
 
+        System.out.println("DEBUG: Created simple bean: " + clazz.getSimpleName());
+
         for (Class<?> iface : clazz.getInterfaces()) {
             beans.put(iface, instance);
         }
     }
 
     private void createAllBeanInstances() {
-        List<Class<?>> classesToCreate = new ArrayList<>();
-        for (Class<?> clazz : beans.keySet()) {
-            if (beans.get(clazz) == null && !clazz.isInterface()) {
-                classesToCreate.add(clazz);
+        // Сначала создаем DBConnect и другие конфигурационные бины
+        Class<?>[] priorityClasses = {DBConnect.class, DBConfig.class, BookstoreConfig.class};
+        for (Class<?> priorityClass : priorityClasses) {
+            if (beans.containsKey(priorityClass) && beans.get(priorityClass) == null && !priorityClass.isInterface()) {
+                try {
+                    System.out.println("DEBUG: Creating priority bean: " + priorityClass.getSimpleName());
+                    createBeanInstance(priorityClass);
+                } catch (Exception e) {
+                    System.err.println("Ошибка при создании приоритетного бина " +
+                            priorityClass.getSimpleName() + ": " + e.getMessage());
+                }
             }
         }
 
+        List<Class<?>> classesToCreate = new ArrayList<>();
+        for (Class<?> clazz : beans.keySet()) {
+            if (beans.get(clazz) == null && !clazz.isInterface()) {
+                // Проверяем, не создали ли мы уже этот класс как приоритетный
+                if (!Arrays.asList(priorityClasses).contains(clazz)) {
+                    classesToCreate.add(clazz);
+                }
+            }
+        }
+
+        System.out.println("DEBUG: Classes to create: " +
+                classesToCreate.stream().map(Class::getSimpleName).toList());
+
+        // Сортируем по количеству зависимостей (от меньшего к большему)
         classesToCreate.sort(Comparator.comparingInt(this::countDependencies));
 
         System.out.println("Создаем бины с зависимостями в порядке: " +
@@ -118,7 +143,16 @@ public class ApplicationContext {
         for (Class<?> clazz : classesToCreate) {
             try {
                 if (beans.get(clazz) == null) {
+                    System.out.println("DEBUG: Creating instance of " + clazz.getName());
                     createBeanInstance(clazz);
+
+                    // После создания проверяем, что зависимости внедрены
+                    Object bean = beans.get(clazz);
+                    if (bean != null) {
+                        System.out.println("DEBUG: Successfully created " + clazz.getSimpleName());
+                        // Логируем состояние @Inject полей
+                        checkInjectedFields(bean);
+                    }
                 }
             } catch (Exception e) {
                 System.err.println("Ошибка при создании экземпляра " + clazz.getSimpleName() + ": " + e.getMessage());
@@ -127,26 +161,47 @@ public class ApplicationContext {
         }
     }
 
+    private void checkInjectedFields(Object bean) {
+        Class<?> clazz = bean.getClass();
+        for (Field field : clazz.getDeclaredFields()) {
+            if (field.isAnnotationPresent(Inject.class)) {
+                try {
+                    field.setAccessible(true);
+                    Object fieldValue = field.get(bean);
+                    if (fieldValue == null) {
+                        System.out.println("WARNING: Field " + field.getName() +
+                                " in " + clazz.getSimpleName() + " is NULL!");
+                    } else {
+                        System.out.println("DEBUG: Field " + field.getName() +
+                                " in " + clazz.getSimpleName() + " = " +
+                                fieldValue.getClass().getSimpleName());
+                    }
+                } catch (Exception e) {
+                    System.err.println("DEBUG: Cannot check field " + field.getName() +
+                            ": " + e.getMessage());
+                }
+            }
+        }
+    }
+
     private int countDependencies(Class<?> clazz) {
         int count = 0;
 
+        // Проверяем конструкторы с @Inject
         for (Constructor<?> constructor : clazz.getDeclaredConstructors()) {
             if (constructor.isAnnotationPresent(Inject.class)) {
                 return constructor.getParameterCount();
             }
         }
 
-       try {
-            Constructor<?> defaultConstructor = clazz.getDeclaredConstructor();
-             return 0;
-        } catch (NoSuchMethodException e) {
-            Constructor<?>[] constructors = clazz.getDeclaredConstructors();
-            if (constructors.length > 0) {
-                return constructors[0].getParameterCount();
+        // Считаем поля с @Inject
+        for (Field field : clazz.getDeclaredFields()) {
+            if (field.isAnnotationPresent(Inject.class)) {
+                count++;
             }
         }
 
-        return 0;
+        return count;
     }
 
     private void createBeanInstance(Class<?> clazz) throws Exception {
@@ -156,10 +211,12 @@ public class ApplicationContext {
 
         System.out.println("Создаем экземпляр: " + clazz.getSimpleName());
 
+        // Ищем конструктор с @Inject
         Constructor<?> injectConstructor = null;
         Constructor<?> defaultConstructor = null;
+        Constructor<?>[] constructors = clazz.getDeclaredConstructors();
 
-        for (Constructor<?> constructor : clazz.getDeclaredConstructors()) {
+        for (Constructor<?> constructor : constructors) {
             if (constructor.isAnnotationPresent(Inject.class)) {
                 injectConstructor = constructor;
                 break;
@@ -171,6 +228,7 @@ public class ApplicationContext {
 
         Object instance;
         if (injectConstructor != null) {
+            System.out.println("DEBUG: Using @Inject constructor for " + clazz.getSimpleName());
             Class<?>[] paramTypes = injectConstructor.getParameterTypes();
             Object[] params = new Object[paramTypes.length];
 
@@ -183,20 +241,26 @@ public class ApplicationContext {
                 if (params[i] == null) {
                     System.err.println("Внимание: зависимость не найдена для конструктора " +
                             clazz.getSimpleName() + " параметр: " + paramTypes[i].getSimpleName());
+                    // Пытаемся создать дефолтное значение
+                    params[i] = getDefaultValue(paramTypes[i]);
                 }
             }
 
             injectConstructor.setAccessible(true);
             instance = injectConstructor.newInstance(params);
         } else if (defaultConstructor != null) {
+            System.out.println("DEBUG: Using default constructor for " + clazz.getSimpleName());
             defaultConstructor.setAccessible(true);
             instance = defaultConstructor.newInstance();
         } else {
-            Constructor<?>[] constructors = clazz.getDeclaredConstructors();
+            // Используем первый доступный конструктор
             if (constructors.length > 0) {
-                constructors[0].setAccessible(true);
-                Class<?>[] paramTypes = constructors[0].getParameterTypes();
+                System.out.println("DEBUG: Using first constructor for " + clazz.getSimpleName());
+                Constructor<?> constructor = constructors[0];
+                constructor.setAccessible(true);
+                Class<?>[] paramTypes = constructor.getParameterTypes();
                 Object[] params = new Object[paramTypes.length];
+
                 for (int i = 0; i < paramTypes.length; i++) {
                     params[i] = getBean(paramTypes[i]);
                     if (params[i] == null) {
@@ -206,7 +270,7 @@ public class ApplicationContext {
                         params[i] = getDefaultValue(paramTypes[i]);
                     }
                 }
-                instance = constructors[0].newInstance(params);
+                instance = constructor.newInstance(params);
             } else {
                 throw new RuntimeException("Не найден подходящий конструктор для класса " + clazz.getName());
             }
@@ -214,9 +278,12 @@ public class ApplicationContext {
 
         beans.put(clazz, instance);
 
+        // Регистрируем интерфейсы
         for (Class<?> iface : clazz.getInterfaces()) {
             beans.put(iface, instance);
         }
+
+        System.out.println("DEBUG: " + clazz.getSimpleName() + " added to beans map");
     }
 
     private Object findBeanByInterface(Class<?> interfaceType) {
@@ -241,16 +308,21 @@ public class ApplicationContext {
     }
 
     private void injectDependencies() {
+        System.out.println("DEBUG: Starting dependency injection");
+
         List<Object> beanInstances = new ArrayList<>();
         for (Object bean : beans.values()) {
             if (bean != null) {
                 beanInstances.add(bean);
+                System.out.println("DEBUG: Bean to inject: " + bean.getClass().getSimpleName());
             }
         }
 
         for (Object bean : beanInstances) {
             injectFieldDependencies(bean);
         }
+
+        System.out.println("DEBUG: Dependency injection completed");
     }
 
     private void injectFieldDependencies(Object bean) {
@@ -274,10 +346,17 @@ public class ApplicationContext {
 
                     if (dependency != null) {
                         field.set(bean, dependency);
+                        System.out.println("DEBUG: Injected " + fieldType.getSimpleName() +
+                                " into field " + field.getName() + " of " + clazz.getSimpleName());
                     } else {
                         System.err.println("Внимание: зависимость не найдена для поля " +
                                 field.getName() + " класса " + clazz.getSimpleName() +
                                 " типа " + fieldType.getSimpleName());
+
+                        // Для DAO классов, попробуем найти DBConnect
+                        if (fieldType == DBConnect.class) {
+                            System.err.println("ERROR: DBConnect not found for " + clazz.getSimpleName());
+                        }
                     }
                 } catch (Exception e) {
                     System.err.println("Ошибка при внедрении зависимости в поле " +
@@ -309,6 +388,8 @@ public class ApplicationContext {
         for (Class<?> iface : type.getInterfaces()) {
             beans.put(iface, instance);
         }
+
+        System.out.println("DEBUG: Registered bean " + type.getSimpleName());
     }
 
     private List<Class<?>> getClasses(String packageName) throws Exception {
@@ -358,12 +439,39 @@ public class ApplicationContext {
     public void printRegisteredBeans() {
         System.out.println("\n=== Зарегистрированные компоненты ===");
         int count = 0;
-        for (Class<?> clazz : beans.keySet()) {
-            Object bean = beans.get(clazz);
-            System.out.println("  " + clazz.getSimpleName() + " -> " +
-                    (bean != null ? bean.getClass().getSimpleName() + " (INSTANCE)" : "NULL"));
-            if (bean != null) count++;
+        int nullCount = 0;
+
+        // Сначала выводим созданные бины
+        System.out.println("\n--- Созданные бины ---");
+        for (Map.Entry<Class<?>, Object> entry : beans.entrySet()) {
+            if (entry.getValue() != null) {
+                System.out.println("  " + entry.getKey().getSimpleName() + " -> " +
+                        entry.getValue().getClass().getSimpleName() + " (INSTANCE)");
+                count++;
+            } else {
+                nullCount++;
+            }
         }
-        System.out.println("Всего экземпляров: " + count + " из " + beans.size());
+
+        // Затем выводим не созданные
+        if (nullCount > 0) {
+            System.out.println("\n--- Не созданные бины (NULL) ---");
+            for (Map.Entry<Class<?>, Object> entry : beans.entrySet()) {
+                if (entry.getValue() == null) {
+                    System.out.println("  " + entry.getKey().getSimpleName() + " -> NULL");
+                }
+            }
+        }
+
+        System.out.println("\nВсего экземпляров: " + count + " из " + beans.size());
+        System.out.println("NULL компонентов: " + nullCount);
+
+        // Дополнительная проверка для DBConnect
+        DBConnect dbConnect = getBean(DBConnect.class);
+        if (dbConnect == null) {
+            System.err.println("CRITICAL: DBConnect is NULL!");
+        } else {
+            System.out.println("✓ DBConnect initialized successfully");
+        }
     }
 }

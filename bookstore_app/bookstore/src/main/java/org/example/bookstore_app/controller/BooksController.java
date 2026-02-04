@@ -3,6 +3,7 @@ package org.example.bookstore_app.controller;
 import org.example.bookstore_app.config.BookstoreConfig;
 import org.example.annotation.Component;
 import org.example.annotation.Inject;
+import org.example.bookstore_app.dao.StockService;
 import org.example.bookstore_app.model.*;
 
 import java.time.LocalDate;
@@ -14,7 +15,7 @@ import java.util.stream.Collectors;
 @Component
 public class BooksController implements IBookStok {
     @Inject
-    Stok stok;
+    StockService stockService;
     @Inject
     private BookstoreConfig config;
 
@@ -26,32 +27,29 @@ public class BooksController implements IBookStok {
     }
 
     @Override
-    public void addBookToStock(int id, Book book, LocalDate date) {
-        boolean bookExists = stok.getBooks().stream()
-                .anyMatch(b -> b.getId() == book.getId());
-
-        if (!bookExists) {
-            stok.addBook(book);
+    public void addBookToStock(Book book) {
+        try {
+            stockService.addBook(book);
             System.out.println("Книга добавлена в каталог: " + book.getName() +
                     " | ID: " + book.getId() +
-                    " | Всего в каталоге: " + stok.getBooks().size());
-        } else {
-            System.out.println("Книга уже есть в каталоге: " + book.getName() +
-                    " | ID: " + book.getId());
+                    " | Всего в каталоге: " + stockService.getBooks().size());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
+
     }
 
-    public void addBookCopyToStock(int id, BookCopy bookCopy, LocalDate date) {
-        stok.addBooksCopy(bookCopy);
-        bookCopy.getBook().setStatusStok();
+    public void addBookCopyToStock(BookCopy bookCopy, LocalDate date) {
+        stockService.addBooksCopy(bookCopy);
+        stockService.getBooksById(bookCopy.getIdBook()).setStatusStok();
 
-        System.out.println("Добавлена книга на склад: " + bookCopy.getBook().getName() +
-                " | Копий: " + countBookCopies(bookCopy.getBook()) +
-                " | Книг в каталоге: " + stok.getBooks().size());
+        System.out.println("Добавлена книга на склад: " + stockService.getBooksById(bookCopy.getIdBook()).getName() +
+                " | Копий: " + stockService.findCountByIdBook(bookCopy.getIdBook()) +
+                " | Книг в каталоге: " + stockService.getBooks().size());
 
          if (config.isAutoCompleteRequests()) {
-            List<Request> requestsToRemove = stok.getRequests().stream()
-                    .filter(request -> request.getBook().equals(bookCopy.getBook()))
+            List<Request> requestsToRemove = stockService.getRequests().stream()
+                    .filter(request -> stockService.getBookOrderItemByID(request.getIdOrderItem()).getIdBook()==bookCopy.getIdBook())
                     .toList();
 
             Set<BookOrder> ordersToUpdate = requestsToRemove.stream()
@@ -60,11 +58,11 @@ public class BooksController implements IBookStok {
                     .collect(Collectors.toSet());
 
             requestsToRemove.forEach(request -> {
-                request.ContinueRequest(bookCopy);
+                ContinueRequest(stockService.getBookOrderItemByID(request.getIdOrderItem()), bookCopy);
                 removeBookCopyfromstock(bookCopy);
             });
 
-            requestsToRemove.forEach(stok::removeRequest);
+            requestsToRemove.forEach(stockService::removeRequest);
 
             ordersToUpdate.forEach(order -> {
                 updateOrderStatus(order);
@@ -74,46 +72,39 @@ public class BooksController implements IBookStok {
 
             if (!requestsToRemove.isEmpty()) {
                 System.out.println("Выполнено запросов: " + requestsToRemove.size() +
-                        " для книги: " + bookCopy.getBook().getName());
+                        " для книги: " + stockService.getBooksById(bookCopy.getIdBook()).getName());
             }
         } else {
             System.out.println("Автоматическое выполнение запросов отключено в настройках");
         }
     }
+    public void ContinueRequest(BookOrderItem orderItem, BookCopy bookCopy) {
+        orderItem.setIdBookCopy(bookCopy.getId());
+        orderItem.setStatus(OrderItemStatus.COMPLETED);
+        stockService.addBookOrderItem(orderItem);
+    }
 
     private BookOrder findOrderByRequest(Request request) {
-        return stok.getOrders().stream()
-                .filter(order -> order.getOrderItems().contains(request.getOrderItem()))
-                .findFirst()
-                .orElse(null);
+        return stockService.getOrderByID(stockService.getBookOrderItemByID(request.getIdOrderItem()).getIdOrder());
     }
 
-    private int countBookCopies(Book book) {
-        return (int) stok.getBooksCopy().stream()
-                .filter(copy -> copy.getBook().equals(book))
-                .count();
-    }
 
     @Override
-    public void removeBookCopyfromstock(BookCopy book) {
-        stok.removeBooksCopy(book);
-        boolean hasOtherCopies = stok.getBooksCopy().stream()
-                .anyMatch(copy -> copy.getBook().equals(book.getBook()));
-        if (!hasOtherCopies) {
-            book.getBook().setStatusNo();
-        }
+    public void removeBookCopyfromstock(BookCopy bookCopy) {
+      bookCopy.setSale(true);
+      stockService.addBooksCopy(bookCopy);
     }
 
     private void updateOrderStatus(BookOrder order) {
-        long completedCount = order.getOrderItems().stream()
+        long completedCount = stockService.getBookOrderItemByidOrder(order.getId()).stream()
                 .filter(item -> OrderItemStatus.COMPLETED.equals(item.getStatus()))
                 .count();
 
-        long pendingCount = order.getOrderItems().stream()
+        long pendingCount = stockService.getBookOrderItemByidOrder(order.getId()).stream()
                 .filter(item -> OrderItemStatus.PENDING.equals(item.getStatus()))
                 .count();
 
-        long totalCount = order.getOrderItems().size();
+        long totalCount = stockService.getBookOrderItemByidOrder(order.getId()).size();
 
         if (completedCount == totalCount) {
             order.setStatus(OrderStatus.COMPLETED);
@@ -124,5 +115,10 @@ public class BooksController implements IBookStok {
         } else {
             order.setStatus(OrderStatus.NEW);
         }
+        stockService.addOrder(order);
+    }
+
+    public Book getBooksById(int idBook){
+        return stockService.getBooksById(idBook);
     }
 }

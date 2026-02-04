@@ -5,7 +5,7 @@ import org.example.annotation.Inject;
 import org.example.bookstore_app.model.Book;
 import org.example.bookstore_app.model.BookCopy;
 import org.example.bookstore_app.model.BookStatus;
-import org.example.bookstore_app.model.Stok;
+import org.example.bookstore_app.dao.StockService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @Component
 public class BookCSVService implements ICSVImportExport<Book> {
     @Inject
-    private Stok stok;
+    private StockService stockService;
     
     public BookCSVService() { }
     
@@ -59,18 +59,18 @@ public class BookCSVService implements ICSVImportExport<Book> {
         } else {
             book.setStatusNo();
         }
-        stok.addBook(book);
+        stockService.addBook(book);
         return book;
     }
     
     @Override
     public List<Book> getAllEntities() {
-        return stok.getBooks();
+        return stockService.getBooks();
     }
     
     @Override
     public void saveEntities(List<Book> importedBooks) {
-        List<Book> currentBooks = stok.getBooks();
+        List<Book> currentBooks = stockService.getBooks();
         
         Map<Integer, Book> importedBooksMap = importedBooks.stream()
             .collect(Collectors.toMap(Book::getId, book -> book));
@@ -109,20 +109,20 @@ public class BookCSVService implements ICSVImportExport<Book> {
             .collect(Collectors.toMap(Book::getId, book -> book));
         
         List<BookCopy> copiesToRemove = new ArrayList<>();
-        List<BookCopy> currentCopies = stok.getBooksCopy();
+        List<BookCopy> currentCopies = stockService.getBooksCopy();
         
         for (BookCopy copy : currentCopies) {
-            int bookId = copy.getBook().getId();
+            int bookId = copy.getIdBook();
             if (!importedBooksMap.containsKey(bookId)) {
                 copiesToRemove.add(copy);
             }
         }
         
-        copiesToRemove.forEach(stok::removeBooksCopy);
+        copiesToRemove.forEach(stockService::removeBooksCopy);
         
        for (BookCopy copy : currentCopies) {
             if (!copiesToRemove.contains(copy)) {
-                Book updatedBook = importedBooksMap.get(copy.getBook().getId());
+                Book updatedBook = importedBooksMap.get(copy.getIdBook());
                 if (updatedBook != null) {
                     if (hasBookCopies(updatedBook.getId())) {
                         updatedBook.setStatusStok();
@@ -147,8 +147,8 @@ public class BookCSVService implements ICSVImportExport<Book> {
     }
     
     private boolean hasBookCopies(int bookId) {
-        return stok.getBooksCopy().stream()
-            .anyMatch(copy -> copy.getBook().getId()==bookId);
+        return stockService.getBooksCopy().stream()
+            .anyMatch(copy -> copy.getIdBook()==bookId);
     }
     
     private String escape(String field) {

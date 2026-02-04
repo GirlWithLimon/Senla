@@ -4,7 +4,7 @@ import org.example.annotation.Component;
 import org.example.annotation.Inject;
 import org.example.bookstore_app.model.BookOrder;
 import org.example.bookstore_app.model.OrderStatus;
-import org.example.bookstore_app.model.Stok;
+import org.example.bookstore_app.dao.StockService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Component
 public class BookOrderCSVService implements ICSVImportExport<BookOrder> {
     @Inject
-    private Stok stok;
+    private StockService stockService;
 
     
     public BookOrderCSVService() { }
@@ -53,18 +53,18 @@ public class BookOrderCSVService implements ICSVImportExport<BookOrder> {
         
         BookOrder order = new BookOrder(Integer.parseInt(id), customerName, customerContact);
         order.setStatus(status);
-        stok.addOrder(order);
+        stockService.addOrder(order);
         return order;
     }
     
     @Override
     public List<BookOrder> getAllEntities() {
-        return (List<BookOrder>) stok.getOrders();
+        return (List<BookOrder>) stockService.getOrders();
     }
     
     @Override
     public void saveEntities(List<BookOrder> importedOrders) {
-        List<BookOrder> currentOrders = (List<BookOrder>) stok.getOrders();
+        List<BookOrder> currentOrders = (List<BookOrder>) stockService.getOrders();
         
         Map<Integer, BookOrder> importedOrdersMap = importedOrders.stream()
             .collect(Collectors.toMap(BookOrder::getId, order -> order));
