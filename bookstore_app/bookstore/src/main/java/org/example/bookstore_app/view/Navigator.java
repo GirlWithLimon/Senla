@@ -2,9 +2,12 @@ package org.example.bookstore_app.view;
 
 import org.example.annotation.Component;
 import org.example.annotation.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component
 public class Navigator {
+    private static final Logger logger = LoggerFactory.getLogger(Navigator.class);
     private Menu currentMenu;
     private Menu rootMenu;
 
@@ -25,13 +28,13 @@ public class Navigator {
 
     public void printMenu() {
         if (currentMenu == null) {
-            System.err.println("ОШИБКА: currentMenu не установлен!");
-            System.err.println("rootMenu = " + rootMenu);
+            logger.error("ОШИБКА: currentMenu не установлен!");
+            logger.error("rootMenu = " + rootMenu);
             if (rootMenu != null) {
                 currentMenu = rootMenu;
-                System.out.println("Используем rootMenu как currentMenu");
+                logger.debug("Используем rootMenu как currentMenu");
             } else {
-                System.out.println("Создаем временное меню...");
+                logger.debug("Создаем временное меню...");
                 Menu tempMenu = new Menu("Главное меню");
                 tempMenu.addMenuItem(new MenuItem("Выйти", () -> {
                     System.out.println("Выход из программы...");

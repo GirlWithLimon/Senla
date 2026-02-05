@@ -5,12 +5,15 @@ import org.example.annotation.Inject;
 import org.example.bookstore_app.config.ApplicationContext;
 import org.example.bookstore_app.config.BookstoreConfig;
 import org.example.bookstore_app.controller.OperationController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.util.Scanner;
 
 @Component
 public final class MenuBuilder {
+    private static final Logger logger = LoggerFactory.getLogger(MenuBuilder.class);
     private volatile Menu rootMenu;
     private final BookstoreConfig config;
     private final OperationController controller;
@@ -27,10 +30,10 @@ public final class MenuBuilder {
     public Navigator createNavigator() {
         buildMenu();
         if (rootMenu == null) {
-            System.err.println("ОШИБКА: rootMenu не создан!");
+            logger.error("ОШИБКА: rootMenu не создан!");
             rootMenu = new Menu("Главное меню");
             rootMenu.addMenuItem(new MenuItem("Тестовая функция", () ->
-                    System.out.println("Меню работает!")));
+                    logger.debug("Меню работает!")));
         }
 
         Navigator navigator = new Navigator(rootMenu);
@@ -39,7 +42,7 @@ public final class MenuBuilder {
             ApplicationContext context = ApplicationContext.getInstance();
             context.registerBean(Navigator.class, navigator);
         } catch (Exception e) {
-            System.err.println("Не удалось зарегистрировать Navigator в DI: " + e.getMessage());
+            logger.warn("Не удалось зарегистрировать Navigator в DI: {}", e.getMessage());
         }
 
         return navigator;
@@ -51,7 +54,7 @@ public final class MenuBuilder {
                 return;
             }
 
-            System.out.println("Создаем меню...");
+            logger.debug("Создаем меню...");
 
             try {
                 rootMenu = new Menu("Главное меню");
@@ -70,10 +73,9 @@ public final class MenuBuilder {
                 rootMenu.addMenuItem(new MenuItem("Импорт/Экспорт данных", importExportMenu));
                 rootMenu.addMenuItem(new MenuItem("Настройки", propertiesMenu));
 
-                System.out.println("Меню успешно создано с " + rootMenu.getMenuItems().size() + " пунктами");
+                logger.debug("Меню успешно создано с " + rootMenu.getMenuItems().size() + " пунктами");
             } catch (Exception e) {
-                System.err.println("Ошибка при создании меню: " + e.getMessage());
-                e.printStackTrace();
+                logger.error("Ошибка при создании меню: " + e.getMessage());
                 rootMenu = new Menu("Главное меню");
                 rootMenu.addMenuItem(new MenuItem("Тест", () -> System.out.println("Тест")));
             }
@@ -329,10 +331,9 @@ public final class MenuBuilder {
 
             try {
                 controller.exportToCSV("books", filePath);
-                System.out.println("Книги успешно экспортированы в: " + filePath);
+                logger.debug("Книги успешно экспортированы в: {}", filePath);
             } catch (Exception e) {
-                System.out.println("Ошибка при экспорте: " + e.getMessage());
-                e.printStackTrace();
+                logger.error("Ошибка при экспорте книг: {}", e.getMessage());
             }
         }));
 
@@ -343,10 +344,9 @@ public final class MenuBuilder {
 
             try {
                 controller.importFromCSV("books", filePath);
-                System.out.println("Книги успешно импортированы из: " + filePath);
+                logger.debug("Книги успешно импортированы из: {}", filePath);
             } catch (Exception e) {
-                System.out.println("Ошибка при импорте: " + e.getMessage());
-                e.printStackTrace();
+                logger.error("Ошибка при импорте книг: {}", e.getMessage());
             }
         }));
 
@@ -359,8 +359,7 @@ public final class MenuBuilder {
                 controller.exportToCSV("orders", filePath);
                 System.out.println("Заказы успешно экспортированы в: " + filePath);
             } catch (Exception e) {
-                System.out.println("Ошибка при экспорте: " + e.getMessage());
-                e.printStackTrace();
+                logger.error("Ошибка при экспорте заказов: {}", e.getMessage());
             }
         }));
 
@@ -373,8 +372,7 @@ public final class MenuBuilder {
                 controller.importFromCSV("orders", filePath);
                 System.out.println("Заказы успешно импортированы из: " + filePath);
             } catch (Exception e) {
-                System.out.println("Ошибка при импорте: " + e.getMessage());
-                e.printStackTrace();
+                logger.error("Ошибка при импорте заказов: {}", e.getMessage());
             }
         }));
 

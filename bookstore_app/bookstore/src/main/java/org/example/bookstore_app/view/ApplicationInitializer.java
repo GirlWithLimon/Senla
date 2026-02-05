@@ -8,57 +8,59 @@ import org.example.bookstore_app.controller.OperationController;
 import org.example.bookstore_app.dao.DBConfig;
 import org.example.bookstore_app.dao.DBConnect;
 import org.example.bookstore_app.dao.StockService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class ApplicationInitializer {
+   private static final Logger logger = LoggerFactory
+                                        .getLogger(ApplicationInitializer.class);
+   public static ApplicationContext initialize() {
+      logger.debug("Инициализация приложения...");
+      ApplicationContext context = ApplicationContext.getInstance();
 
-    public static ApplicationContext initialize() {
-        System.out.println("Инициализация приложения...");
-        ApplicationContext context = ApplicationContext.getInstance();
+      BookstoreConfig config = loadConfiguration(BookstoreConfig.class);
+      context.registerBean(BookstoreConfig.class, config);
+      logger.debug("Конфигурация зарегистрирована");
+      DBConfig dbConfig = loadConfiguration(DBConfig.class);
+      context.registerBean(DBConfig.class, dbConfig);
+      logger.debug("Конфигурация зарегистрирована");
 
-        BookstoreConfig config = loadConfiguration(BookstoreConfig.class);
-        context.registerBean(BookstoreConfig.class, config);
-        System.out.println("Конфигурация зарегистрирована");
-        DBConfig dbConfig = loadConfiguration(DBConfig.class);
-        context.registerBean(DBConfig.class, dbConfig);
-        System.out.println("Конфигурация зарегистрирована");
+      DBConnect conn =  DBConnect.getInstance();
+      context.registerBean(DBConnect.class, conn);
+      logger.debug("DBConnect загружен");
 
-        DBConnect conn =  DBConnect.getInstance();
-        context.registerBean(DBConnect.class, conn);
-        System.out.println("DBConnect загружен");
+      StockService stock = StockService.getInstance();
+      context.registerBean(StockService.class, stock);
+      logger.debug("Stok загружен");
 
-        StockService stock = StockService.getInstance();
-        context.registerBean(StockService.class, stock);
-        System.out.println("Stok загружен");
-
-        DataSave dataSave = DataSave.getInstance();
-        context.registerBean(DataSave.class, dataSave);
-        System.out.println("DataSave зарегистрирован");
+      DataSave dataSave = DataSave.getInstance();
+      context.registerBean(DataSave.class, dataSave);
+      logger.debug("DataSave зарегистрирован");
 
 
+      context.initialize();
 
-        context.initialize();
+      OperationController controller = context.getBean(OperationController.class);
+      if (controller != null) {
+         logger.debug("OperationController получен, инициализируем тестовые данные");
+         controller.initializeTestData();
+      } else {
+         logger.error("Ошибка: не удалось получить OperationController");
+         context.printRegisteredBeans();
+      }
 
-        OperationController controller = context.getBean(OperationController.class);
-        if (controller != null) {
-            System.out.println("OperationController получен, инициализируем тестовые данные");
-            controller.initializeTestData();
-        } else {
-            System.err.println("Ошибка: не удалось получить OperationController");
-            context.printRegisteredBeans();
-        }
-
-        System.out.println("Инициализация завершена");
-        return context;
+      logger.debug("Инициализация завершена");
+      return context;
     }
 
-    private static <T> T loadConfiguration(Class <T> configClass) {
-        try {
-            return ConfigurationLoader.loadConfiguration(configClass);
-        } catch (Exception e) {
-            System.err.println("Ошибка загрузки конфигурации: " + e.getMessage());
-            System.err.println("Используются значения по умолчанию");
-            return null;
+   private static <T> T loadConfiguration(Class <T> configClass) {
+      try {
+         return ConfigurationLoader.loadConfiguration(configClass);
+      } catch (Exception e) {
+         logger.warn("Ошибка загрузки конфигурации: {}" +
+                    "Используются значения по умолчанию", e.getMessage());
+         return null;
         }
     }
 }

@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Component
@@ -19,6 +20,7 @@ public class ShowBook implements IShowBook {
     private StockService stockService;
     @Inject
     private BookstoreConfig config;
+    Logger logger = Logger.getLogger(getClass().getName());
     public ShowBook(){}
 
     @Override
@@ -108,7 +110,7 @@ public class ShowBook implements IShowBook {
         List<Book> sortedBooks = stockService.getBooks().stream()
                 .sorted(Comparator.comparing(Book::getPublicationDate))
                 .toList();
-
+        logger.info("Книги по дате публикации:");
         System.out.println("Книги по дате публикации:");
         sortedBooks.forEach(book ->
                 System.out.println(" - " + book.getName() + " (" + book.getPublicationDate() + ")"));
@@ -171,8 +173,7 @@ public class ShowBook implements IShowBook {
         if (sortedBooks.isEmpty()) {
             System.out.println("Пуст");
         } else {
-            for (int i = 0; i < sortedBooks.size(); i++) {
-                Book book = sortedBooks.get(i);
+            for (Book book : sortedBooks) {
                 System.out.println(book.getId() + ". " + book.getName() + " - " +
                         book.getAuthor() + " - " + book.getPrice() + " руб.");
             }

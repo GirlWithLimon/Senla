@@ -4,6 +4,8 @@ import org.example.annotation.Component;
 import org.example.annotation.Inject;
 import org.example.bookstore_app.model.Book;
 import org.example.bookstore_app.model.BookStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,19 +14,21 @@ import java.util.List;
 
 @Component
 public class BookDAO implements GenericDAO<Book, Integer> {
+    private static final Logger logger = LoggerFactory.getLogger(BookDAO.class);
     private final DBConnect connect;
+
 
     @Inject
     public BookDAO(DBConnect connect) {
         this.connect = connect;
-        System.out.println("BookDAO created with connect = " + connect);
+        logger.debug("BookDAO created with connect = {}", connect);
     }
 
     private Connection getConnection() throws Exception {
         if (connect == null) {
-            System.out.println("DBConnect is not injected!");
+            logger.warn("DBConnect не установлено!");
         }
-
+        assert connect != null;
         return connect.getConnection();
     }
 
@@ -55,7 +59,7 @@ public class BookDAO implements GenericDAO<Book, Integer> {
         try {
             syncSequence();
         } catch (Exception e) {
-            System.out.println("Warning: Could not sync sequence: " + e.getMessage());
+            logger.warn("Не удалось синхронизировать данные: {}", e.getMessage());
         }
         try (Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement(SQL_SELECT_BY_ID)) {
@@ -66,7 +70,7 @@ public class BookDAO implements GenericDAO<Book, Integer> {
             }
             return null;
         } catch (Exception e) {
-            System.out.println("Error finding book with id: " + id+" "+ e);
+            logger.error("Ошибка поиска книги с id: {} с ошибкой: {}", id, e.getMessage());
             return null;
         }
     }
@@ -76,7 +80,7 @@ public class BookDAO implements GenericDAO<Book, Integer> {
         try {
             syncSequence();
         } catch (Exception e) {
-            System.out.println("Warning: Could not sync sequence: " + e.getMessage());
+            logger.warn("Не удалось синхронизировать данные: {}", e.getMessage());
         }
         List<Book> books = new ArrayList<>();
         try (Connection conn = getConnection();
@@ -88,9 +92,9 @@ public class BookDAO implements GenericDAO<Book, Integer> {
             return books;
 
         } catch (Exception e) {
-            System.out.println("Error finding all books  "+ e);
-            throw new RuntimeException("Error finding all books", e);
+            logger.error("Ошибка поиска всех книг  {}", e.getMessage());
         }
+        return null;
     }
 
     @Override
@@ -107,7 +111,7 @@ public class BookDAO implements GenericDAO<Book, Integer> {
         try {
             syncSequence();
         } catch (Exception e) {
-            System.out.println("Warning: Could not sync sequence: " + e.getMessage());
+            logger.warn("Не удалось синхронизировать данные: {}", e.getMessage());
         }
         try (Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
@@ -121,8 +125,9 @@ public class BookDAO implements GenericDAO<Book, Integer> {
             }
             return book;
         } catch (Exception e) {
-            throw new RuntimeException("Error inserting book: " + book.getName(), e);
+            logger.error("Ошибка при вставке книги: {}", book.getName(), e);
         }
+        return null;
     }
 
     @Override
@@ -130,7 +135,7 @@ public class BookDAO implements GenericDAO<Book, Integer> {
         try {
             syncSequence();
         } catch (Exception e) {
-            System.out.println("Warning: Could not sync sequence: " + e.getMessage());
+            logger.warn("Не удалось синхронизировать данные: {}", e.getMessage());
         }
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(SQL_UPDATE)) {
@@ -149,7 +154,7 @@ public class BookDAO implements GenericDAO<Book, Integer> {
         try {
             syncSequence();
         } catch (Exception e) {
-            System.out.println("Warning: Could not sync sequence: " + e.getMessage());
+            logger.warn("Не удалось синхронизировать данные: {}", e.getMessage());
         }
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(SQL_DELETE)) {

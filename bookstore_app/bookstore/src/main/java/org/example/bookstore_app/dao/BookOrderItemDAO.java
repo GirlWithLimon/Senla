@@ -3,6 +3,8 @@ package org.example.bookstore_app.dao;
 import org.example.annotation.Component;
 import org.example.annotation.Inject;
 import org.example.bookstore_app.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,13 +12,13 @@ import java.util.List;
 
 @Component
 public class BookOrderItemDAO implements GenericDAO<BookOrderItem, Integer> {
-
+    private static final Logger logger = LoggerFactory.getLogger(BookOrderItemDAO.class);
     private final DBConnect connect;
 
     @Inject
     public BookOrderItemDAO(DBConnect connect) {
         this.connect = connect;
-        System.out.println("BookDAO created with connect = " + connect);
+        logger.debug("BookDAO created with connect = " + connect);
     }
     private Connection getConnection() throws Exception {
         if (connect == null) {
@@ -200,6 +202,4 @@ public class BookOrderItemDAO implements GenericDAO<BookOrderItem, Integer> {
             System.out.println("Error syncing sequence: " + e.getMessage());
         }
     }
-
-
 }

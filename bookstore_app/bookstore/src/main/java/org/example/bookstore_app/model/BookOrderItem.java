@@ -41,5 +41,4 @@ public class BookOrderItem implements Serializable {
         this.status = status;
     }
 
-
 }

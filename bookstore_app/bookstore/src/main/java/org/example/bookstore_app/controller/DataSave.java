@@ -7,6 +7,8 @@ import org.example.bookstore_app.dao.*;
 import org.example.bookstore_app.model.Book;
 import org.example.bookstore_app.model.BookCopy;
 import org.example.bookstore_app.dao.StockService;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -14,10 +16,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.lang.reflect.Field;
 import java.util.List;
-import java.util.logging.Logger;
 
 @Component
 public class DataSave {
+    private static final Logger logger = LoggerFactory.getLogger(DataSave.class);
     @Inject
     DBConnect dbConnect;
 
@@ -39,28 +41,25 @@ public class DataSave {
     @Inject
     RequestDAO requestDAO;
 
-    private static final Logger logger = Logger.getLogger(DataSave.class.getName());
-    private static final String DATA_FILE = "bookstore_data.out";
     private static DataSave instance;
 
     public DataSave() {}
 
     public boolean initialize() {
-        System.out.println("Выполняем подключение к базе данных");
+        logger.debug("Выполняем подключение к базе данных");
         try (Connection conn = dbConnect.getConnection()) {
             if (!tablesExist(conn)) {
-                System.out.println("БД пуста");
+                logger.warn("БД пуста");
                 //   createTables(conn);
                 //   insertInitialData(conn);
                 return false;
             } else {
-                System.out.println("Выполнено подключение к базе данных");
+                logger.info("Выполнено подключение к базе данных");
                 loadDate(conn);
                 return true;
             }
         } catch (Exception e) {
-            System.out.println("Ошибка подключения к базе данных: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("Ошибка подключения к базе данных: " + e.getMessage());
             return false;
         }
     }
@@ -74,52 +73,46 @@ public class DataSave {
 
     public void saveState(StockService stockService, Connection conn) throws Exception {
         if(tablesExist(conn)) {
-            // Сохраняем состояние в БД
-            System.out.println("Сохраняем состояние в базу данных...");
+            logger.info("Сохраняем состояние в базу данных...");
 
-            // Сохраняем книги
+            logger.debug("Сохраняем книги в базу данных...");
             for (Book book : stockService.getBooks()) {
                 stockService.addBook(book);
             }
-
-            // Сохраняем копии книг
+            logger.debug("Сохраняем экземпляры книг в базу данных...");
             for (BookCopy copy : stockService.getBooksCopy()) {
                stockService.addBooksCopy(copy);
             }
-
-            // Сохраняем заказы
+            logger.debug("Сохраняем заказы в базу данных...");
             for (var order : stockService.getOrders()) {
                 stockService.addOrder(order);
             }
-
-            // Сохраняем элементы заказов
+            logger.debug("Сохраняем подзаказы (список книг из заказа) в базу данных...");
             for (var orderItem : bookOrderItemDAO.findAll()) {
                 stockService.addBookOrderItem(orderItem);
             }
-
-            // Сохраняем запросы
+            logger.debug("Сохраняем запросы в базу данных...");
             for (var request : stockService.getRequests()) {
                 stockService.addRequest(request);
             }
 
-            System.out.println("Состояние сохранено в БД");
+            logger.info("Состояние сохранено в БД");
         }
     }
 
     public StockService loadDate(Connection conn) {
         try {
-            System.out.println("Начинаем загрузку данных из БД...");
+            logger.info("Начинаем загрузку данных из БД...");
 
             initializeDAOs();
 
-            // Используем существующий StokService из DI или создаем новый
             StockService loadedStockService;
             if (stockService != null) {
                 loadedStockService = stockService;
-                System.out.println("Используем существующий StokService из DI");
+                logger.debug("Используем существующий StokService из DI");
             } else {
                 loadedStockService = new StockService();
-                System.out.println("Создан новый StokService");
+                logger.debug("Создан новый StokService");
             }
 
 
@@ -132,9 +125,9 @@ public class DataSave {
             }
             // Загружаем книги
             List<Book> books = stockService.getBooks();
-            System.out.println("Найдено книг в БД: " + books.size());
+            logger.info("Найдено книг в БД: " + books.size());
             for (Book book : books) {
-                System.out.println("Загружаем книгу: " + book.getName() + " (ID: " + book.getId() + ")");
+                logger.debug("Загружаем книгу: " + book.getName() + " (ID: " + book.getId() + ")");
                 loadedStockService.addBook(book);
 
                 // Загружаем копии этой книги
@@ -143,39 +136,37 @@ public class DataSave {
                     for (BookCopy copy : copies) {
                         loadedStockService.addBooksCopy(copy);
                         book.setStatusStok();
-                        System.out.println("  - Загружена копия ID: " + copy.getId());
+                        logger.debug("  - Загружена копия ID: " + copy.getId());
                     }
                 }
             }
 
             // Загружаем заказы
             List<?> orders = stockService.getOrders();
-            System.out.println("Найдено заказов в БД: " + orders.size());
+            logger.debug("Найдено заказов в БД: " + orders.size());
 
             // Загружаем подзаказы
             List<?> orderItems = stockService.getBookOrderItem();
-            System.out.println("Найдено подзаказов в БД: " + orders.size());
+            logger.debug("Найдено подзаказов в БД: " + orders.size());
 
             // Загружаем запросы
             List<?> requests = stockService.getRequests();
-            System.out.println("Найдено запросов в БД: " + requests.size());
+            logger.debug("Найдено запросов в БД: " + requests.size());
 
-            System.out.println("Загрузка данных из БД завершена успешно");
-            System.out.println("Всего загружено: " + books.size() + " книг, " +
+            logger.debug("Загрузка данных из БД завершена успешно");
+            logger.debug("Всего загружено: " + books.size() + " книг, " +
                     orders.size() + " заказов, " + requests.size() + " запросов");
 
             return loadedStockService;
         } catch (Exception e) {
-            System.out.println("Ошибка при загрузке данных из БД: " + e.getMessage());
-            e.printStackTrace();
-
+            logger.info("Ошибка при загрузке данных из БД: " + e.getMessage());
             // Возвращаем пустой StokService в случае ошибки
             return new StockService();
         }
     }
 
     private void initializeDAOs() {
-        System.out.println("Инициализация DAO...");
+        logger.info("Инициализация DAO...");
 
         ApplicationContext context = ApplicationContext.getInstance();
 
@@ -184,23 +175,23 @@ public class DataSave {
             if (bookDAO == null) {
                 bookDAO = context.getBean(BookDAO.class);
                 if (bookDAO == null) {
-                    System.err.println("BookDAO не найден в DI контейнере");
+                    logger.error("BookDAO не найден в DI контейнере");
                     bookDAO = new BookDAO(dbConnect);
                     injectDBConnect(bookDAO);
                     context.registerBean(BookDAO.class, bookDAO);
                 }
-                System.out.println("BookDAO инициализирован: " + (bookDAO != null));
+                logger.debug("BookDAO инициализирован: " + (bookDAO != null));
             }
 
             if (bookCopyDAO == null) {
                 bookCopyDAO = context.getBean(BookCopyDAO.class);
                 if (bookCopyDAO == null) {
-                    System.err.println("BookCopyDAO не найден в DI контейнере");
+                    logger.error("BookCopyDAO не найден в DI контейнере");
                     bookCopyDAO = new BookCopyDAO(dbConnect);
                     injectDBConnect(bookCopyDAO);
                     context.registerBean(BookCopyDAO.class, bookCopyDAO);
                 }
-                System.out.println("BookCopyDAO инициализирован: " + (bookCopyDAO != null));
+                logger.debug("BookCopyDAO инициализирован: " + (bookCopyDAO != null));
             }
 
             if (bookOrderDAO == null) {
@@ -211,7 +202,7 @@ public class DataSave {
                     injectDBConnect(bookOrderDAO);
                     context.registerBean(BookOrderDAO.class, bookOrderDAO);
                 }
-                System.out.println("BookOrderDAO инициализирован: " + (bookOrderDAO != null));
+                logger.info("BookOrderDAO инициализирован: " + (bookOrderDAO != null));
             }
 
             if (bookOrderItemDAO == null) {
@@ -222,7 +213,7 @@ public class DataSave {
                     injectDBConnect(bookOrderItemDAO);
                     context.registerBean(BookOrderItemDAO.class, bookOrderItemDAO);
                 }
-                System.out.println("BookOrderItemDAO инициализирован: " + (bookOrderItemDAO != null));
+                logger.info("BookOrderItemDAO инициализирован: " + (bookOrderItemDAO != null));
             }
 
             if (requestDAO == null) {
@@ -233,7 +224,7 @@ public class DataSave {
                     injectDBConnect(requestDAO);
                     context.registerBean(RequestDAO.class, requestDAO);
                 }
-                System.out.println("RequestDAO инициализирован: " + (requestDAO != null));
+                logger.info("RequestDAO инициализирован: " + (requestDAO != null));
             }
 
         } catch (Exception e) {
@@ -248,7 +239,7 @@ public class DataSave {
                 Field connectField = dao.getClass().getDeclaredField("connect");
                 connectField.setAccessible(true);
                 connectField.set(dao, dbConnect);
-                System.out.println("DBConnect внедрен в " + dao.getClass().getSimpleName());
+                logger.info("DBConnect внедрен в " + dao.getClass().getSimpleName());
             } else {
                 System.err.println("DBConnect не найден для внедрения в " + dao.getClass().getSimpleName());
             }
@@ -268,7 +259,7 @@ public class DataSave {
 
             if (rs.next()) {
                 boolean exists = rs.getBoolean(1);
-                System.out.println("Таблица 'book' существует: " + exists);
+                logger.info("Таблица 'book' существует: " + exists);
                 return exists;
             }
             return false;
