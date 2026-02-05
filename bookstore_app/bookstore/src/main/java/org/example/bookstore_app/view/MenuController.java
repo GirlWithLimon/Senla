@@ -36,7 +36,8 @@ public class MenuController {
             return;
         }
 
-        System.out.println("Добро пожаловать в систему управления книжным магазином!");
+        System.out.println("Добро пожаловать в систему управления "
+                           +"книжным магазином!");
 
         while (true) {
             try {
@@ -45,16 +46,19 @@ public class MenuController {
 
                 int choice = scanner.nextInt();
                 scanner.nextLine();
-                logger.info("Пользователь выбрал: " + choice);
+                logger.info("Пользователь выбрал: {}", choice);
                 navigator.navigate(choice);
             } catch (InputMismatchException e) {
                 System.out.print("Ошибка ввода! Пожалуйста, введите ЧИСЛО.");
                 scanner.nextLine();
             } catch (NullPointerException e) {
-                logger.error("Ошибка: меню не инициализировано! Сообщение: "+ e.getMessage());
+                logger.error("Ошибка: меню не инициализировано! Сообщение: {}",
+                              e.getMessage());
                 return;
             } catch (Exception e) {
-                logger.error("Произошла ошибка при выполнении команды: " + e.getClass().getSimpleName()+" Сообщение: " + e.getMessage());
+                logger.error("Произошла ошибка при выполнении команды: {} "
+                             +"Сообщение: {}", e.getClass().getSimpleName(),
+                             e.getMessage());
                 scanner.nextLine();
             }
         }

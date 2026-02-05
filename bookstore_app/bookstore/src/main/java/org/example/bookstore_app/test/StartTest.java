@@ -57,7 +57,7 @@ public class StartTest {
             logger.debug("Запускаем меню...");
             menuController.run();
         } catch (Exception e) {
-            logger.error("Ошибка при запуске приложения: " + e.getMessage());
+            logger.error("Ошибка при запуске приложения: {}", e.getMessage());
         }
     }
 }

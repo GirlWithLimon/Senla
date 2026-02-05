@@ -1,11 +1,10 @@
 package org.example.bookstore_app.view;
 
-import org.example.annotation.Component;
-import org.example.annotation.Inject;
 
 import java.util.ArrayList;
 import java.util.List;
 public class Menu {
+    //главное меню
     private final String name;
     private final List<MenuItem> menuItems = new ArrayList<>();
     public Menu(String name) {

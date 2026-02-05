@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 public class Book implements Serializable {
+    //книги
     private int id;
     private String name;
     private String author;
@@ -12,8 +13,8 @@ public class Book implements Serializable {
     private double price;
     private LocalDate publicationDate;
     private String information;
-    
     public Book(int id, String name, String author, Double price, LocalDate date) {
+        //создание книг без указания описания
         this.id = id;
         this.name = name;
         this.author = author;
@@ -24,6 +25,7 @@ public class Book implements Serializable {
     }
 
     public Book(int id, String name, String author, Double price, String information, LocalDate date) {
+        //создание книг с указанием описания
         this.id = id;
         this.name = name;
         this.author = author;

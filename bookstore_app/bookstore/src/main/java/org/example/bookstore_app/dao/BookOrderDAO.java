@@ -199,5 +199,4 @@ public class BookOrderDAO implements GenericDAO<BookOrder, Integer> {
             System.out.println("Error syncing sequence: " + e.getMessage());
         }
     }
-
 }

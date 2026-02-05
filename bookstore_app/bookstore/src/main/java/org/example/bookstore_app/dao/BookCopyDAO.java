@@ -6,12 +6,19 @@ import org.example.bookstore_app.model.BookCopy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.*;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.sql.SQLException;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
 public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
+    //для работы бд с экземплярами книг
     private static final Logger logger = LoggerFactory.getLogger(BookCopyDAO.class);
     private final DBConnect connect;
 
@@ -22,6 +29,7 @@ public class BookCopyDAO implements GenericDAO<BookCopy, Integer> {
     }
 
     private Connection getConnection() throws Exception {
+        //проверка соединения
         if (connect == null) {
             logger.error("DBConnect не инициализирован!");
         }

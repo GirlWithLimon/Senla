@@ -30,5 +30,4 @@ public class BookCopy implements Serializable {
     public void setId(int id){this.id = id;}
     public void setSale(boolean sale){this.sale=sale;}
 
-
 }
