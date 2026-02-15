@@ -1,13 +1,12 @@
 package org.example.bookstore_app.dao;
 
+import java.io.Serializable;
 import java.util.List;
 
-public interface GenericDAO<T, ID> {
-
-    T findById(ID id);
-    List<T> findAll();
-    T save(T entity);
+public interface GenericDAO<T, PK extends Serializable> {
+    PK save(T entity);
     void update(T entity);
-    void deleteById(ID id);
-
+    void delete(PK id);
+    List<T> findAll();
+    T find(PK id);
 }

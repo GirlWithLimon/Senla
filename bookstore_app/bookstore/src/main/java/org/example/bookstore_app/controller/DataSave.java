@@ -176,7 +176,7 @@ public class DataSave {
                 bookDAO = context.getBean(BookDAO.class);
                 if (bookDAO == null) {
                     logger.error("BookDAO не найден в DI контейнере");
-                    bookDAO = new BookDAO(dbConnect);
+                    bookDAO = new BookDAO();
                     injectDBConnect(bookDAO);
                     context.registerBean(BookDAO.class, bookDAO);
                 }
@@ -187,7 +187,7 @@ public class DataSave {
                 bookCopyDAO = context.getBean(BookCopyDAO.class);
                 if (bookCopyDAO == null) {
                     logger.error("BookCopyDAO не найден в DI контейнере");
-                    bookCopyDAO = new BookCopyDAO(dbConnect);
+                    bookCopyDAO = new BookCopyDAO();
                     injectDBConnect(bookCopyDAO);
                     context.registerBean(BookCopyDAO.class, bookCopyDAO);
                 }
@@ -198,7 +198,7 @@ public class DataSave {
                 bookOrderDAO = context.getBean(BookOrderDAO.class);
                 if (bookOrderDAO == null) {
                     System.err.println("BookOrderDAO не найден в DI контейнере");
-                    bookOrderDAO = new BookOrderDAO(dbConnect);
+                    bookOrderDAO = new BookOrderDAO();
                     injectDBConnect(bookOrderDAO);
                     context.registerBean(BookOrderDAO.class, bookOrderDAO);
                 }
@@ -209,7 +209,7 @@ public class DataSave {
                 bookOrderItemDAO = context.getBean(BookOrderItemDAO.class);
                 if (bookOrderItemDAO == null) {
                     System.err.println("BookOrderItemDAO не найден в DI контейнере");
-                    bookOrderItemDAO = new BookOrderItemDAO(dbConnect);
+                    bookOrderItemDAO = new BookOrderItemDAO();
                     injectDBConnect(bookOrderItemDAO);
                     context.registerBean(BookOrderItemDAO.class, bookOrderItemDAO);
                 }

@@ -57,7 +57,7 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests {
     public void showRequestsByCount() {
         Map<Book, Long> requestCount = stockService.getRequests().stream()
                 .collect(Collectors.groupingBy(
-                        request -> stockService.getBooksById(stockService.getBookOrderItemByID(request.getIdOrderItem()).getIdBook()),
+                        request -> request.getOrderItem().getBook(),
                         Collectors.counting()
                 ))
                 .entrySet().stream()
@@ -68,7 +68,8 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests {
                 ));
 
         requestCount.entrySet().stream()
-                .sorted((e1, e2) -> Long.compare(e2.getValue(), e1.getValue()))
+                .sorted((e1, e2) -> Long.compare(e2.getValue(),
+                                                                      e1.getValue()))
                 .forEach(item ->
                         System.out.println(" - " + item.getKey().getName() +
                                 " - " + item.getValue() + " запросов"));
@@ -79,8 +80,8 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests {
         Map<Book, Long> requestedBooks = stockService.getRequests().stream()
                 .collect(Collectors.groupingBy(
                         request -> {
-                            BookOrderItem orderItem = stockService.getBookOrderItemByID(request.getIdOrderItem());
-                            return orderItem != null ? stockService.getBooksById(orderItem.getIdBook())  : null;
+                            BookOrderItem orderItem = request.getOrderItem();
+                            return orderItem != null ? orderItem.getBook()  : null;
                         },
                         Collectors.counting()
                 ))
@@ -131,9 +132,9 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests {
         System.out.println("Книги в заказе:");
 
         stockService.getBookOrderItemByidOrder(order.getId()).forEach(item ->
-                System.out.println(" - " + stockService.getBooksById(item.getIdBook()).getName() +
+                System.out.println(" - " + item.getBook().getName() +
                         " | " + item.getStatus() + " | " +
-                        stockService.getBooksById(item.getIdBook()) + " руб."));
+                        item.getBook().getPrice() + " руб."));
     }
 
     @Override

@@ -5,26 +5,33 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c1c63246-89cf-46e4-b94b-3f1918de080f" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/GenericServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/HibernateAbstractDao.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/util/HibernateUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/resources/hibernate.cfg.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataBase/Create table/Create book.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DataBase/Create table/Create book.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataBase/Create table/Create bookCopy.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DataBase/Create table/Create bookCopy.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataBase/Create table/Create orderItem.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DataBase/Create table/Create orderItem.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataBase/Create table/Create orders.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DataBase/Create table/Create orders.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataBase/Create table/Create request.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DataBase/Create table/Create request.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataBase/Insert/Insert book.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DataBase/Insert/Insert book.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataBase/Insert/Insert bookCopy.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DataBase/Insert/Insert bookCopy.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/BookCSVService.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/BookCSVService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/BooksController.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/BooksController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/IBookStok.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/IBookStok.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/DataSave.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/DataSave.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/IOrderOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/IOrderOperation.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/OperationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/OperationController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/OrdersController.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/OrdersController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/ShowBook.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/ShowBook.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/ShowOrdersAndRequests.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/ShowOrdersAndRequests.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/BookCopyDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/BookCopyDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/BookDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/BookDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/BookOrderDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/BookOrderDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/BookOrderItemDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/BookOrderItemDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/GenericDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/GenericDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/RequestDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/RequestDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/view/MenuBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/view/MenuBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/StockService.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/StockService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/model/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/model/Book.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/model/BookCopy.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/model/BookCopy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/model/BookOrder.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/model/BookOrder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/model/BookOrderItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/model/BookOrderItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/model/Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/model/Request.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/resources/logback.xml" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/resources/logback.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,17 +53,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;task-11&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/GitHubRepositories/Senla&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "task-13",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/GitHubRepositories/Senla"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\GitHubRepositories\Senla\Допполнительная папочка" />

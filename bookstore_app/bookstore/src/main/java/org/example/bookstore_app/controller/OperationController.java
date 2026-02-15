@@ -110,7 +110,7 @@ public class OperationController {
             return;
         }
 
-        BookCopy bookCopy = new BookCopy(id, book.getId(), date);
+        BookCopy bookCopy = new BookCopy(id, book, date);
         bookInStok.addBookCopyToStock(bookCopy, date);
         return;
     }

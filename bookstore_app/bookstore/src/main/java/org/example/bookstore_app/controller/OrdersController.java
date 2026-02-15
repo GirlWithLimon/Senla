@@ -4,12 +4,17 @@ import org.example.annotation.Component;
 import org.example.annotation.Inject;
 import org.example.bookstore_app.dao.StockService;
 import org.example.bookstore_app.model.*;
+import org.example.bookstore_app.util.HibernateUtil;
+import org.hibernate.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Component
 public class OrdersController implements IOrderOperation{
+    private static final Logger logger = LoggerFactory.getLogger(OrdersController.class);
     @Inject
     StockService stockService;
     
@@ -23,7 +28,10 @@ public class OrdersController implements IOrderOperation{
     }
 
     @Override
-    public BookOrder createOrder(int id, List<Book> bookList, String customerName, String customerContact) {
+    public BookOrder createOrder(int id,
+                                 List<Book> bookList,
+                                 String customerName,
+                                 String customerContact) {
         BookOrder order = new BookOrder(id, customerName, customerContact);
         stockService.addOrder(order);
         System.out.println("Выведен из БД заказ #" + order.getId() +
@@ -31,28 +39,32 @@ public class OrdersController implements IOrderOperation{
         return order;
     }
 
-    public BookOrder createNewOrder( List<Book> bookList, String customerName, String customerContact) {
+    public BookOrder createNewOrder( List<Book> bookList,
+                                     String customerName,
+                                     String customerContact) {
         BookOrder order = new BookOrder(0, customerName, customerContact);
         order.setOrderDate(LocalDate.now());
         order.setTotalPrice(0);
         stockService.addOrder(order);
         for(Book book:bookList){
-            createNewOrderItem( order.getId(),book);
+            createNewOrderItem( order,book);
         }
         updateOrderStatus(order);
         calculateTotalPrice(order);
-        System.out.println("Создан заказ #" + order.getId() +
-                " на " + bookList.size() + " книг(и) с итоговой ценой: " + order.getTotalPrice());
+        System.out.println("Создан заказ #" + order.getId()
+                +" на " + bookList.size() + " книг(и) с итоговой ценой: "
+                + order.getTotalPrice());
         return order;
     }
     @Override
-    public BookOrderItem createOrderItem(int id, int idOrder,Book book) {//если вставка со стороны пользователя, то ид изначально 0
+    public BookOrderItem createOrderItem(int id,BookOrder order,Book book) {
+        //если вставка со стороны пользователя, то ид изначально 0
         BookCopy bookCopy = findBook(book);
-        BookOrderItem orderItem = new BookOrderItem(id, book.getId(),idOrder);
+        BookOrderItem orderItem = new BookOrderItem(id, book,order);
         orderItem = stockService.addBookOrderItem(orderItem);
 
         if (bookCopy != null) {
-            orderItem.setIdBookCopy(bookCopy.getId());
+            orderItem.setBookCopy(bookCopy);
             orderItem.setStatus(OrderItemStatus.COMPLETED);
             System.out.println("Продан экземпляр книги: " + bookCopy);
             bookCopy.setSale(true);
@@ -63,7 +75,7 @@ public class OrdersController implements IOrderOperation{
             stockService.addBookOrderItem(orderItem);
             stockService.addBooksCopy(bookCopy);
         } else {
-            Request request = new Request(0, orderItem.getId());
+            Request request = new Request(0, orderItem);
             request = stockService.addRequest(request);
             orderItem.setStatus(OrderItemStatus.PENDING);
             System.out.println("Книга отсутствует. Создан запрос: " + book.getName());
@@ -73,15 +85,16 @@ public class OrdersController implements IOrderOperation{
         return orderItem;
     }
 
-    private BookOrderItem createNewOrderItem(int idOrder,Book book) {//если вставка со стороны пользователя, то ид изначально 0
+    private void createNewOrderItem(BookOrder order, Book book) {
+        //если вставка со стороны пользователя, то ид изначально 0
         BookCopy bookCopy = findBook(book);
-        BookOrderItem orderItem = new BookOrderItem(0, book.getId(),idOrder);
+        BookOrderItem orderItem = new BookOrderItem(0, book,order);
         orderItem = stockService.addBookOrderItem(orderItem);
 
         if (bookCopy != null) {
-            orderItem.setIdBookCopy(bookCopy.getId());
+            orderItem.setBookCopy(bookCopy);
             orderItem.setStatus(OrderItemStatus.COMPLETED);
-            System.out.println("Продан экземпляр книги: " + bookCopy);
+            System.out.println("Продан экземпляр книги: " + bookCopy.getBook());
             bookCopy.setSale(true);
             if (findBook(book) == null) {
                 book.setStatusNo();
@@ -90,52 +103,78 @@ public class OrdersController implements IOrderOperation{
             stockService.addBookOrderItem(orderItem);
             stockService.addBooksCopy(bookCopy);
         } else {
-            Request request = new Request(0, orderItem.getId());
+            Request request = new Request(0, orderItem);
             request = stockService.addRequest(request);
             orderItem.setStatus(OrderItemStatus.PENDING);
             System.out.println("Книга отсутствует. Создан запрос: " + book.getName());
             stockService.addBookOrderItem(orderItem);
         }
-        return orderItem;
     }
-    
+
     @Override
     public void cancelOrder(int idOrder) {
         BookOrder order = stockService.getOrderByID(idOrder);
+        if (order == null) {
+            System.out.println("Заказ с ID " + idOrder + " не найден!");
+            return;
+        }
+
         List<BookOrderItem> orderItems = stockService.getBookOrderItemByidOrder(order.getId());
-        for(BookOrderItem item : orderItems){
+
+        for (BookOrderItem item : orderItems) {
+            // 1. Сначала находим request
             Request request = stockService.getRequestsByidOrderItem(item.getId());
-            if(request != null){
-                 stockService.removeRequest(request);
-            }
-            BookCopy bookCopy =  stockService.getBooksCopyByID(item.getIdBookCopy());
-            if(bookCopy != null){
+
+            // 2. Обновляем статус книги, если есть копия
+            BookCopy bookCopy = item.getBookCopy();
+            if (bookCopy != null) {
                 bookCopy.setSale(false);
-                stockService.addBooksCopy(bookCopy);
+                stockService.updateBooksCopy(bookCopy);
+
+                Book book = item.getBook();
+                if (book != null) {
+                    // Проверяем, есть ли еще другие копии
+                    if (stockService.findCountByIdBook(book.getId()) > 0) {
+                        book.setStatusStok();
+                    } else {
+                        book.setStatusNo();
+                    }
+                    stockService.updateBook(book);
+                }
             }
+
+            // 3. Удаляем request (если есть)
+            if (request != null) {
+                stockService.removeRequest(request);
+            }
+
+            // 4. ТЕПЕРЬ можно удалить orderItem (уже нет ссылок на него)
             stockService.removeOrderItem(item);
         }
+
+        // 5. В последнюю очередь удаляем сам order
         stockService.removeOrder(order);
-        order.setStatus(OrderStatus.CANCELLED);
+
+        System.out.println("Заказ #" + idOrder + " успешно отменен!");
+        stockService.refreshCache();
     }
     
     @Override
     public void cancelOrderItem(BookOrder order, Book book) {
         BookOrderItem item = stockService.getBookOrderItemByidOrder(order.getId()).stream()
-                             .filter(item1 -> item1.getIdBook()== book.getId()).findFirst().orElse(null);
+                             .filter(item1 -> item1.getBook().getId()== book.getId()).findFirst().orElse(null);
         if (item != null){
             Request request = stockService.getRequestsByidOrderItem(item.getId());
             if (request != null) {
                 stockService.removeRequest(request);
             }
-            BookCopy bookCopy = stockService.getBooksCopyByID(item.getIdBookCopy());
+            BookCopy bookCopy = item.getBookCopy();
             if (bookCopy != null) {
                 bookCopy.setSale(false);
-                stockService.addBooksCopy(bookCopy);
             }
             stockService.removeOrderItem(item);
-            calculateTotalPrice(stockService.getOrderByID(item.getIdOrder()));
-            updateOrderStatus(stockService.getOrderByID(item.getIdOrder()));
+            calculateTotalPrice(item.getOrder());
+            updateOrderStatus(item.getOrder());
         }
     }
     
@@ -164,9 +203,10 @@ public class OrdersController implements IOrderOperation{
         List<BookOrderItem> orderItems = stockService.getBookOrderItemByidOrder(order.getId());
         double price=0;
         for(BookOrderItem item:orderItems){
-            price += stockService.getBooksById(item.getIdBook()).getPrice();
+            price += item.getBook().getPrice();
         }
         order.setTotalPrice(price);
     }
+
 
 }

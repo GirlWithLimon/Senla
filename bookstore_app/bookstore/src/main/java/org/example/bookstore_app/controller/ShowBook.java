@@ -37,7 +37,7 @@ public class ShowBook implements IShowBook {
         LocalDate thresholdDate = LocalDate.now().minusMonths(config.getMonthsForOldBook());
         return stockService.getBooksCopy().stream()
                 .filter(copy -> copy.getArrivalDate().isBefore(thresholdDate))
-                .sorted(Comparator.comparing(copy -> stockService.getBooksById(copy.getIdBook()).getPrice()))
+                .sorted(Comparator.comparing(copy -> copy.getBook().getPrice()))
                 .collect(Collectors.toList());
     }
 
@@ -50,9 +50,9 @@ public class ShowBook implements IShowBook {
             System.out.println(" - Нет залежавшихся книг");
         } else {
             oldBooks.forEach(copy ->
-                    System.out.println(" - " + copy.getIdBook() + " | Поступление: " +
+                    System.out.println(" - " + copy.getBook().getId() + " | Поступление: " +
                             copy.getArrivalDate() + " | Цена: " +
-                            stockService.getBooksById(copy.getIdBook()).getPrice() + " руб."));
+                            copy.getBook().getPrice() + " руб."));
         }
     }
 
@@ -65,9 +65,9 @@ public class ShowBook implements IShowBook {
             System.out.println(" - Нет залежавшихся книг");
         } else {
             oldBooks.forEach(copy ->
-                    System.out.println(" - " + copy.getIdBook() + " | Поступление: " +
-                            copy.getArrivalDate() + " | Цена: " +
-                            stockService.getBooksById(copy.getIdBook()).getPrice() + " руб."));
+                    System.out.println(" - " + copy.getBook().getId() + " | Поступление: "
+                            + copy.getArrivalDate() + " | Цена: "
+                            + copy.getBook().getPrice() + " руб."));
         }
     }
 
@@ -137,24 +137,24 @@ public class ShowBook implements IShowBook {
             System.out.println("Каталог книг пуст");
             return;
         }
-
-        Map<Integer, Long> bookCount = stockService.getBooksCopy().stream()
+        Map<Book, Long> bookCount = stockService.getBooksCopy().stream()
+                .filter(bookCopy -> !bookCopy.getSale())
                 .collect(Collectors.groupingBy(
-                        BookCopy::getIdBook,
+                        BookCopy::getBook,  // Ключ - сам объект Book
                         Collectors.counting()
                 ));
 
         List<Book> sortedBooks = stockService.getBooks().stream()
                 .sorted((b1, b2) -> {
-                    long count1 = bookCount.getOrDefault(b1.getId(), 0L);
-                    long count2 = bookCount.getOrDefault(b2.getId(), 0L);
+                    long count1 = bookCount.getOrDefault(b1, 0L);
+                    long count2 = bookCount.getOrDefault(b2, 0L);
                     return Long.compare(count2, count1);
                 })
                 .toList();
 
         System.out.println("Книги по количеству экземпляров:");
         sortedBooks.forEach(book -> {
-            long count = bookCount.getOrDefault(book.getId(), 0L);
+            long count = bookCount.getOrDefault(book, 0L);
             System.out.println(" - " + book.getName() + " - " + count + " шт.");
         });
     }

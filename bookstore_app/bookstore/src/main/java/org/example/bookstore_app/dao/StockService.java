@@ -3,6 +3,10 @@ package org.example.bookstore_app.dao;
 import org.example.annotation.Component;
 import org.example.annotation.Inject;
 import org.example.bookstore_app.model.*;
+import org.example.bookstore_app.util.HibernateUtil;
+import org.hibernate.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,6 +14,7 @@ import java.util.List;
 
 @Component
 public class StockService implements Serializable {
+    private static final Logger logger = LoggerFactory.getLogger(StockService.class);
     @Inject
     BookDAO bookDAO;
     @Inject
@@ -44,18 +49,18 @@ public class StockService implements Serializable {
         return new ArrayList<>(requestDAO.findAll());
     }
     //получение по своим ид
-    public Book getBooksById(Integer id) { return bookDAO.findById(id); }
+    public Book getBooksById(Integer id) { return bookDAO.find(id); }
     public BookCopy getBooksCopyByID(Integer id) {
-        return bookCopyDAO.findById(id);
+        return bookCopyDAO.find(id);
     }
     public BookOrder getOrderByID(Integer id) {
-        return bookOrderDAO.findById(id);
+        return bookOrderDAO.find(id);
     }
     public BookOrderItem getBookOrderItemByID(Integer id) {
-        return bookOrderItemDAO.findById(id);
+        return bookOrderItemDAO.find(id);
     }
     public Request getRequestsById(Integer id) {
-        return requestDAO.findById(id);
+        return requestDAO.find(id);
     }
     //получение по каким-то другим ид
     public List<BookCopy> getBookCopyByBookId(Integer idBook){return bookCopyDAO.findByBookId(idBook);}
@@ -71,40 +76,57 @@ public class StockService implements Serializable {
 
 
     //Добавление новых значений (если такое уже было, то изменение)
-    public Book addBook(Book book){return bookDAO.save(book);    }
-    public BookCopy addBooksCopy(BookCopy copy){
-        return bookCopyDAO.save(copy);
+    public void addBook(Book book){
+        bookDAO.save(book);
     }
-    public BookOrder addOrder(BookOrder order){
-        return bookOrderDAO.save(order);
+    public void addBooksCopy(BookCopy copy){
+        bookCopyDAO.save(copy);
+    }
+    public void addOrder(BookOrder order){
+        bookOrderDAO.save(order);
     }
     public BookOrderItem addBookOrderItem(BookOrderItem orderItem) {
-        return bookOrderItemDAO.save(orderItem);
+        return bookOrderItemDAO.find(bookOrderItemDAO.save(orderItem));
     }
     public Request addRequest(Request request){
-        return requestDAO.save(request);
+        return requestDAO.find(requestDAO.save(request));
     }
 
 
     //удаление полей по ид
     public void removeBook(Book book){
-        bookDAO.deleteById(book.getId());
+        bookDAO.delete(book.getId());
     }
     public void removeBooksCopy(BookCopy copy){
-        bookCopyDAO.deleteById(copy.getId());
+        bookCopyDAO.delete(copy.getId());
     }
     public void removeOrder(BookOrder order){
-        bookOrderDAO.deleteById(order.getId());
+        bookOrderDAO.delete(order.getId());
     }
     public void removeOrderItem(BookOrderItem orderItem){
-        bookOrderItemDAO.deleteById(orderItem.getId());
+        bookOrderItemDAO.delete(orderItem.getId());
     }
     public void removeRequest(Request request){
-        requestDAO.deleteById(request.getId());
+        requestDAO.delete(request.getId());
     }
 
 
     //изменения полей
-
-
+    public void updateBook(Book book){
+        bookDAO.update(book);
+    }
+    public void updateBooksCopy(BookCopy copy){
+        bookCopyDAO.update(copy);
+    }
+    public void updateOrder(BookOrder order){
+        bookOrderDAO.update(order);
+    }
+    public void updateBookOrderItem(BookOrderItem orderItem) {
+        bookOrderItemDAO.update(orderItem);
+    }
+    public void refreshCache() {
+        Session session = HibernateUtil.getCurrentSession();
+        session.clear(); // Очищает кэш первого уровня
+        logger.debug("Кэш Hibernate очищен");
+    }
 }

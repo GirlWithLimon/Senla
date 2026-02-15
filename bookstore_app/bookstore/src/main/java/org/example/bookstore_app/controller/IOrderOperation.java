@@ -9,7 +9,7 @@ import java.util.List;
 public interface IOrderOperation {
     BookOrder createOrder(int id, List<Book> books, String customerName, String customerContact);
     BookOrder createNewOrder( List<Book> bookList, String customerName, String customerContact);
-    BookOrderItem createOrderItem(int id, int idOrder,Book book);
+    BookOrderItem createOrderItem(int id,BookOrder order,Book book);
     void cancelOrder(int idOrder);
     void cancelOrderItem(BookOrder order, Book book);
    

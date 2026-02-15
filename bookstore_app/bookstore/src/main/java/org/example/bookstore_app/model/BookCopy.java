@@ -1,33 +1,47 @@
 package org.example.bookstore_app.model;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "bookCopy")
 public class BookCopy implements Serializable {
-    private  int id;
-    private  int idBook;
-    private  LocalDate arrivalDate;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idBook", nullable = false)
+    private Book book;
+
+    @Column(name = "arrivalDate", nullable = false)
+    private LocalDate arrivalDate;
+
+    @Column(name = "sale", nullable = false)
     private boolean sale;
 
-    public BookCopy(int  id, int idBook, LocalDate date) {
+    public BookCopy() {}
+
+    public BookCopy(int id, Book book, LocalDate date) {
         this.id = id;
-        this.idBook = idBook;
+        this.book=book;
         this.arrivalDate = date;
         this.sale = false;
     }
-    
-    public int getId(){
-        return this.id;
-    }
-    public int getIdBook() {
-        return this.idBook;
-    }
-    public LocalDate getArrivalDate() {
-        return arrivalDate;
-    }
-    public boolean getSale(){return  sale;}
 
-    public void setId(int id){this.id = id;}
-    public void setSale(boolean sale){this.sale=sale;}
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
+    public Book getBook() { return book; }
+    public void setBook(Book book) {
+        this.book = book;
+    }
+
+    public LocalDate getArrivalDate() { return arrivalDate; }
+    public void setArrivalDate(LocalDate arrivalDate) { this.arrivalDate = arrivalDate; }
+
+    public boolean getSale() { return sale; }
+    public void setSale(boolean sale) { this.sale = sale; }
 }
