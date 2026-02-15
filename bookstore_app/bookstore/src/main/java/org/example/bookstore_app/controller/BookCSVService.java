@@ -5,7 +5,7 @@ import org.example.annotation.Inject;
 import org.example.bookstore_app.model.Book;
 import org.example.bookstore_app.model.BookCopy;
 import org.example.bookstore_app.model.BookStatus;
-import org.example.bookstore_app.dao.StockService;
+import org.example.bookstore_app.service.StockService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

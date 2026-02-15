@@ -42,6 +42,18 @@ public class BookOrderItemDAO extends HibernateAbstractDao<BookOrderItem, Intege
         query.setParameter("idOrder", idOrder);
         return query.getResultList();
     }
+
+    public List<BookOrderItem> findByOrderIdWithBooks(Integer idOrder) {
+        logger.debug("Поиск подзапросов с книгами по idOrder: {}", idOrder);
+        Session session = HibernateUtil.getCurrentSession();
+
+        String hql = "SELECT oi FROM BookOrderItem oi " +
+                "JOIN FETCH oi.book " +
+                "WHERE oi.order.id = :idOrder";
+        Query<BookOrderItem> query = session.createQuery(hql, BookOrderItem.class);
+        query.setParameter("idOrder", idOrder);
+        return query.getResultList();
+    }
     @Override
     public List<BookOrderItem> findAll() {
         logger.debug("Вывод всех подзапросов");

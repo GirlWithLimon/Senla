@@ -2,10 +2,8 @@ package org.example.bookstore_app.controller;
 
 import org.example.annotation.Component;
 import org.example.annotation.Inject;
-import org.example.bookstore_app.dao.StockService;
 import org.example.bookstore_app.model.*;
-import org.example.bookstore_app.util.HibernateUtil;
-import org.hibernate.Session;
+import org.example.bookstore_app.service.StockService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -200,12 +198,15 @@ public class OrdersController implements IOrderOperation{
         }
     }
     private void calculateTotalPrice(BookOrder order) {
-        List<BookOrderItem> orderItems = stockService.getBookOrderItemByidOrder(order.getId());
-        double price=0;
-        for(BookOrderItem item:orderItems){
-            price += item.getBook().getPrice();
+       List<BookOrderItem> orderItems = stockService.getBookOrderItemByidOrderWithBooks(order.getId());
+        double price = 0;
+        for(BookOrderItem item : orderItems) {
+            if (item.getBook() != null) {
+                price += item.getBook().getPrice();
+            }
         }
         order.setTotalPrice(price);
+        stockService.updateOrder(order);
     }
 
 

@@ -6,7 +6,7 @@ import org.example.bookstore_app.dao.DBConnect;
 import org.example.bookstore_app.model.Book;
 import org.example.bookstore_app.model.BookCopy;
 import org.example.bookstore_app.model.BookOrder;
-import org.example.bookstore_app.dao.StockService;
+import org.example.bookstore_app.service.StockService;
 
 import java.io.IOException;
 import java.sql.Connection;

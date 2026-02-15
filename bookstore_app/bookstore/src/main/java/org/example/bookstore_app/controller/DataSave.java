@@ -6,7 +6,7 @@ import org.example.bookstore_app.config.ApplicationContext;
 import org.example.bookstore_app.dao.*;
 import org.example.bookstore_app.model.Book;
 import org.example.bookstore_app.model.BookCopy;
-import org.example.bookstore_app.dao.StockService;
+import org.example.bookstore_app.service.StockService;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
@@ -220,7 +220,7 @@ public class DataSave {
                 requestDAO = context.getBean(RequestDAO.class);
                 if (requestDAO == null) {
                     System.err.println("RequestDAO не найден в DI контейнере");
-                    requestDAO = new RequestDAO(dbConnect);
+                    requestDAO = new RequestDAO();
                     injectDBConnect(requestDAO);
                     context.registerBean(RequestDAO.class, requestDAO);
                 }

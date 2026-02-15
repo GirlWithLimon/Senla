@@ -1,4 +1,4 @@
-package org.example.bookstore_app.dao;
+package org.example.bookstore_app.service;
 
 import org.example.annotation.Component;
 import org.example.annotation.Inject;
@@ -16,15 +16,15 @@ import java.util.List;
 public class StockService implements Serializable {
     private static final Logger logger = LoggerFactory.getLogger(StockService.class);
     @Inject
-    BookDAO bookDAO;
+    BookServiceSQL bookService;
     @Inject
-    BookCopyDAO bookCopyDAO;
+    BookCopyServiceSQL bookCopyService;
     @Inject
-    BookOrderDAO bookOrderDAO;
+    OrderServiceSQL bookOrderDAO;
     @Inject
-    BookOrderItemDAO bookOrderItemDAO;
+    OrderItemServiceSQL bookOrderItemService;
     @Inject
-    RequestDAO requestDAO;
+    RequestServiceSQL requestServiceSQL;
     private static StockService instance;
 
     public static StockService getInstance() {
@@ -35,94 +35,97 @@ public class StockService implements Serializable {
     }
 
     //получение данных из таблиц полностью
-    public List<Book> getBooks() { return new ArrayList<>(bookDAO.findAll()); }
+    public List<Book> getBooks() { return new ArrayList<>(bookService.findAll()); }
     public List<BookCopy> getBooksCopy() {
-        return new ArrayList<>(bookCopyDAO.findAll());
+        return new ArrayList<>(bookCopyService.findAll());
     }
     public List<BookOrder> getOrders() {
         return new ArrayList<>(bookOrderDAO.findAll());
     }
     public List<BookOrderItem> getBookOrderItem() {
-        return new ArrayList<>(bookOrderItemDAO.findAll());
+        return new ArrayList<>(bookOrderItemService.findAll());
     }
     public List<Request> getRequests() {
-        return new ArrayList<>(requestDAO.findAll());
+        return new ArrayList<>(requestServiceSQL.findAll());
     }
     //получение по своим ид
-    public Book getBooksById(Integer id) { return bookDAO.find(id); }
+    public Book getBooksById(Integer id) { return bookService.find(id); }
     public BookCopy getBooksCopyByID(Integer id) {
-        return bookCopyDAO.find(id);
+        return bookCopyService.find(id);
     }
     public BookOrder getOrderByID(Integer id) {
         return bookOrderDAO.find(id);
     }
     public BookOrderItem getBookOrderItemByID(Integer id) {
-        return bookOrderItemDAO.find(id);
+        return bookOrderItemService.find(id);
     }
     public Request getRequestsById(Integer id) {
-        return requestDAO.find(id);
+        return requestServiceSQL.find(id);
     }
     //получение по каким-то другим ид
-    public List<BookCopy> getBookCopyByBookId(Integer idBook){return bookCopyDAO.findByBookId(idBook);}
+    public List<BookCopy> getBookCopyByBookId(Integer idBook){return bookCopyService.findByBookId(idBook);}
     public List<BookOrderItem> getBookOrderItemByidOrder(Integer idOrder) {
-        return new ArrayList<>(bookOrderItemDAO.findByOrderId(idOrder));
+        return new ArrayList<>(bookOrderItemService.findByOrderId(idOrder));
     }
     public Request getRequestsByidOrderItem(Integer idOrderItem) {
-        return requestDAO.findByIdOrderItem(idOrderItem);
+        return requestServiceSQL.findByIdOrderItem(idOrderItem);
     }
     public int findCountByIdBook(Integer idBook){
-        return  bookCopyDAO.findCountByIdBook(idBook);
+        return  bookCopyService.findCountByIdBook(idBook);
+    }
+    public List<BookCopy> findWithBookId(){return bookCopyService.findWithBookId();}
+    public List<BookOrderItem> getBookOrderItemByidOrderWithBooks(Integer idOrder) {
+        return new ArrayList<>(bookOrderItemService.findByOrderIdWithBooks(idOrder));
     }
 
-
-    //Добавление новых значений (если такое уже было, то изменение)
+    //Добавление новых значений
     public void addBook(Book book){
-        bookDAO.save(book);
+        bookService.save(book);
     }
     public void addBooksCopy(BookCopy copy){
-        bookCopyDAO.save(copy);
+        bookCopyService.save(copy);
     }
     public void addOrder(BookOrder order){
         bookOrderDAO.save(order);
     }
     public BookOrderItem addBookOrderItem(BookOrderItem orderItem) {
-        return bookOrderItemDAO.find(bookOrderItemDAO.save(orderItem));
+        return bookOrderItemService.find(bookOrderItemService.save(orderItem));
     }
     public Request addRequest(Request request){
-        return requestDAO.find(requestDAO.save(request));
+        return requestServiceSQL.find(requestServiceSQL.save(request));
     }
 
 
     //удаление полей по ид
     public void removeBook(Book book){
-        bookDAO.delete(book.getId());
+        bookService.delete(book.getId());
     }
     public void removeBooksCopy(BookCopy copy){
-        bookCopyDAO.delete(copy.getId());
+        bookCopyService.delete(copy.getId());
     }
     public void removeOrder(BookOrder order){
         bookOrderDAO.delete(order.getId());
     }
     public void removeOrderItem(BookOrderItem orderItem){
-        bookOrderItemDAO.delete(orderItem.getId());
+        bookOrderItemService.delete(orderItem.getId());
     }
     public void removeRequest(Request request){
-        requestDAO.delete(request.getId());
+        requestServiceSQL.delete(request.getId());
     }
 
 
     //изменения полей
     public void updateBook(Book book){
-        bookDAO.update(book);
+        bookService.update(book);
     }
     public void updateBooksCopy(BookCopy copy){
-        bookCopyDAO.update(copy);
+        bookCopyService.update(copy);
     }
     public void updateOrder(BookOrder order){
         bookOrderDAO.update(order);
     }
     public void updateBookOrderItem(BookOrderItem orderItem) {
-        bookOrderItemDAO.update(orderItem);
+        bookOrderItemService.update(orderItem);
     }
     public void refreshCache() {
         Session session = HibernateUtil.getCurrentSession();

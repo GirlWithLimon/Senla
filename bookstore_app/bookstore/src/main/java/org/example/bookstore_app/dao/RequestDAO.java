@@ -18,9 +18,9 @@ public class RequestDAO extends HibernateAbstractDao<Request, Integer> {
     private static final Logger logger = LoggerFactory.getLogger(RequestDAO.class);
 
     @Inject
-    public RequestDAO(DBConnect connect) {
+    public RequestDAO() {
         super(Request.class);
-        System.out.println("BookDAO created with connect = " + connect);
+        System.out.println("BookDAO created with connect" );
     }
 
 
@@ -50,6 +50,7 @@ public class RequestDAO extends HibernateAbstractDao<Request, Integer> {
         logger.debug("Поиск запроса по orderItemId: {}", orderItemId);
         Session session = HibernateUtil.getCurrentSession();
 
+        // ИСПРАВЛЕНО: используем правильный путь через связанный объект
         String hql = "FROM Request r WHERE r.orderItem.id = :orderItemId";
         Query<Request> query = session.createQuery(hql, Request.class);
         query.setParameter("orderItemId", orderItemId);
@@ -57,9 +58,8 @@ public class RequestDAO extends HibernateAbstractDao<Request, Integer> {
         try {
             return query.getSingleResult();
         } catch (NoResultException e) {
-            // Это нормальная ситуация - запрос может отсутствовать
             logger.debug("Запрос не найден для orderItemId: {}", orderItemId);
-            return null;  // Возвращаем null, если запрос не найден
+            return null;
         } catch (Exception e) {
             logger.error("Ошибка при поиске запроса по orderItemId: {}", orderItemId, e);
             throw new RuntimeException("Ошибка поиска запроса по orderItemId: " + orderItemId, e);

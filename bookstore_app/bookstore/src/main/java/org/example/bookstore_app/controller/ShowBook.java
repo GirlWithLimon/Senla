@@ -5,7 +5,7 @@ import org.example.annotation.Component;
 import org.example.annotation.Inject;
 import org.example.bookstore_app.model.Book;
 import org.example.bookstore_app.model.BookCopy;
-import org.example.bookstore_app.dao.StockService;
+import org.example.bookstore_app.service.StockService;
 
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -137,14 +137,19 @@ public class ShowBook implements IShowBook {
             System.out.println("Каталог книг пуст");
             return;
         }
-        Map<Book, Long> bookCount = stockService.getBooksCopy().stream()
-                .filter(bookCopy -> !bookCopy.getSale())
+
+        List<BookCopy> allCopies = stockService.findWithBookId();
+
+        Map<Book, Long> bookCount = allCopies.stream()
+                .filter(copy -> !copy.getSale())
                 .collect(Collectors.groupingBy(
-                        BookCopy::getBook,  // Ключ - сам объект Book
+                        BookCopy::getBook,
                         Collectors.counting()
                 ));
 
-        List<Book> sortedBooks = stockService.getBooks().stream()
+        List<Book> allBooks = stockService.getBooks();
+
+        List<Book> sortedBooks = allBooks.stream()
                 .sorted((b1, b2) -> {
                     long count1 = bookCount.getOrDefault(b1, 0L);
                     long count2 = bookCount.getOrDefault(b2, 0L);

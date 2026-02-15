@@ -32,6 +32,14 @@ public class BookCopyDAO extends HibernateAbstractDao<BookCopy, Integer> {
         query.setParameter("bookId", bookId);
         return query.getResultList();
     }
+    public List<BookCopy> findWithBookId() {
+        logger.debug("Поиск всех копий с bookId");
+        Session session = HibernateUtil.getCurrentSession();
+        String hql = "SELECT bc FROM BookCopy bc " +
+                "JOIN FETCH bc.book" ;
+        Query<BookCopy> query = session.createQuery(hql, BookCopy.class);
+        return query.getResultList();
+    }
     public int findCountByIdBook(Integer idBook) {
         logger.debug("Количество копий с bookId: {}", idBook);
         Session session = HibernateUtil.getCurrentSession();

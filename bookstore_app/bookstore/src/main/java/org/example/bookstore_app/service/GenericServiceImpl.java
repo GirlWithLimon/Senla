@@ -1,13 +1,14 @@
-package org.example.bookstore_app.dao;
+package org.example.bookstore_app.service;
 
 import org.example.bookstore_app.dao.GenericDAO;
 import org.example.bookstore_app.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import java.io.Serializable;
+import java.util.List;
 
 public abstract class GenericServiceImpl<T, PK extends Serializable, R extends GenericDAO<T, PK>>
-        implements GenericDAO<T, PK> {
+        implements GenericService<T, PK> {
 
     protected R defaultRepository;
 
@@ -84,6 +85,24 @@ public abstract class GenericServiceImpl<T, PK extends Serializable, R extends G
                 transaction.rollback();
             }
             throw new RuntimeException("Ошибка при поиске", e);
+        } finally {
+            HibernateUtil.closeSession();
+        }
+    }
+    @Override
+    public List<T> findAll() {
+        Session session = HibernateUtil.getCurrentSession();
+        Transaction transaction = session.getTransaction();
+        try {
+            transaction.begin();
+            List<T> entitys = defaultRepository.findAll();
+            transaction.commit();
+            return entitys;
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw new RuntimeException("Ошибка при поиске всех", e);
         } finally {
             HibernateUtil.closeSession();
         }

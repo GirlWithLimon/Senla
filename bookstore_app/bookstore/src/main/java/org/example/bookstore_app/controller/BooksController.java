@@ -3,8 +3,8 @@ package org.example.bookstore_app.controller;
 import org.example.bookstore_app.config.BookstoreConfig;
 import org.example.annotation.Component;
 import org.example.annotation.Inject;
-import org.example.bookstore_app.dao.StockService;
 import org.example.bookstore_app.model.*;
+import org.example.bookstore_app.service.StockService;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 

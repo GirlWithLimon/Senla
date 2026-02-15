@@ -1,10 +1,9 @@
 package org.example.bookstore_app.controller;
 
-
 import org.example.annotation.Component;
 import org.example.annotation.Inject;
-import org.example.bookstore_app.dao.StockService;
 import org.example.bookstore_app.model.*;
+import org.example.bookstore_app.service.StockService;
 
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -57,7 +56,10 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests {
     public void showRequestsByCount() {
         Map<Book, Long> requestCount = stockService.getRequests().stream()
                 .collect(Collectors.groupingBy(
-                        request -> request.getOrderItem().getBook(),
+                        request -> {
+                            BookOrderItem orderItem = request.getOrderItem();
+                            return orderItem != null ? orderItem.getBook() : null;
+                        },
                         Collectors.counting()
                 ))
                 .entrySet().stream()
@@ -68,8 +70,7 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests {
                 ));
 
         requestCount.entrySet().stream()
-                .sorted((e1, e2) -> Long.compare(e2.getValue(),
-                                                                      e1.getValue()))
+                .sorted((e1, e2) -> Long.compare(e2.getValue(), e1.getValue()))
                 .forEach(item ->
                         System.out.println(" - " + item.getKey().getName() +
                                 " - " + item.getValue() + " запросов"));
@@ -81,7 +82,7 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests {
                 .collect(Collectors.groupingBy(
                         request -> {
                             BookOrderItem orderItem = request.getOrderItem();
-                            return orderItem != null ? orderItem.getBook()  : null;
+                            return orderItem != null ? orderItem.getBook() : null;
                         },
                         Collectors.counting()
                 ))
@@ -123,18 +124,37 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests {
 
     @Override
     public void showOrderDetails(BookOrder order) {
+        if (order == null) {
+            System.out.println("Заказ не найден!");
+            return;
+        }
+
         System.out.println("=== Детали заказа #" + order.getId() + " ===");
         System.out.println("Клиент: " + order.getCustomerName());
         System.out.println("Контакт: " + order.getCustomerContact());
         System.out.println("Дата: " + order.getOrderDate());
         System.out.println("Статус: " + order.getStatus());
-        System.out.println("Общая стоимость: " + order.getTotalPrice() + " руб.");
+
+        // ИСПРАВЛЕНО: используем новый метод с загруженными книгами
+        List<BookOrderItem> orderItems = stockService.getBookOrderItemByidOrderWithBooks(order.getId());
+
+        double totalPrice = 0;
         System.out.println("Книги в заказе:");
 
-        stockService.getBookOrderItemByidOrder(order.getId()).forEach(item ->
-                System.out.println(" - " + item.getBook().getName() +
-                        " | " + item.getStatus() + " | " +
-                        item.getBook().getPrice() + " руб."));
+        for (BookOrderItem item : orderItems) {
+            Book book = item.getBook();
+            if (book != null) {
+                double price = book.getPrice();
+                totalPrice += price;
+                System.out.println(" - " + book.getName() +
+                        " | " + item.getStatus() +
+                        " | " + price + " руб.");
+            } else {
+                System.out.println(" - Книга не найдена (ID: " + item.getId() + ")");
+            }
+        }
+
+        System.out.println("Общая стоимость: " + totalPrice + " руб.");
     }
 
     @Override
@@ -143,5 +163,4 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests {
                 .sorted(Comparator.comparing(BookOrder::getOrderDate))
                 .collect(Collectors.toList());
     }
-
 }
