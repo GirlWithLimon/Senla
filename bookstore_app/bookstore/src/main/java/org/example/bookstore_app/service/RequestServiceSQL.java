@@ -41,6 +41,7 @@ public class RequestServiceSQL extends GenericServiceImpl<Request, Integer, Requ
             return List.of(); // Возвращаем пустой список при ошибке
         }
     }
+
     @Override
     public Request find(Integer id) {
         logger.debug("Поиск заявки с id: {}",id);
@@ -68,5 +69,21 @@ public class RequestServiceSQL extends GenericServiceImpl<Request, Integer, Requ
             HibernateUtil.closeSession();
         }
     }
-
+    public List<Request> findByRequestIdWithBook(Integer idBook) {
+        Session session = HibernateUtil.getCurrentSession();
+        Transaction transaction = session.getTransaction();
+        try {
+            transaction.begin();
+            List<Request> entitys = defaultRepository.findByRequestIdWithBook(idBook);
+            transaction.commit();
+            return entitys;
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw new RuntimeException("Ошибка при поиске заявок на книги с id: "+idBook, e);
+        } finally {
+            HibernateUtil.closeSession();
+        }
+    }
 }

@@ -40,7 +40,14 @@ public class Book implements Serializable {
 
     // Конструкторы
     public Book() {}
-
+    public Book(String name, String author, Double price, LocalDate date) {
+        this.name = name;
+        this.author = author;
+        this.price = price;
+        this.information = "Автор: " + author + ". Название книги: " + name;
+        this.publicationDate = date;
+        this.status = BookStatus.OUT_OF_STOCK;
+    }
     public Book(int id, String name, String author, Double price, LocalDate date) {
         this.id = id;
         this.name = name;

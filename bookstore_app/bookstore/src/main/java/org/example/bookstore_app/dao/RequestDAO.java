@@ -2,6 +2,7 @@ package org.example.bookstore_app.dao;
 
 import org.example.annotation.Component;
 import org.example.annotation.Inject;
+import org.example.bookstore_app.model.BookOrderItem;
 import org.example.bookstore_app.model.Request;
 import org.example.bookstore_app.util.HibernateUtil;
 import org.hibernate.Session;
@@ -65,7 +66,27 @@ public class RequestDAO extends HibernateAbstractDao<Request, Integer> {
             throw new RuntimeException("Ошибка поиска запроса по orderItemId: " + orderItemId, e);
         }
     }
+    public List<Request> findByRequestIdWithBook(Integer idBook) {
+        logger.debug("Поиск заяввок со всеми данными по idBook: {}", idBook);
+        Session session = HibernateUtil.getCurrentSession();
 
+        String hql = "SELECT DISTINCT r FROM Request r "
+                + "LEFT JOIN FETCH r.orderItem oi "  // ← загружаем OrderItem
+                + "LEFT JOIN FETCH oi.book "  // ← загружаем book
+                + "LEFT JOIN FETCH oi.bookCopy " // ← загружаем bookCopy
+                + "LEFT JOIN FETCH oi.order "
+                + "WHERE oi.book.id = :idBook ORDER BY oi.order.orderDate DESC";
+
+        Query<Request> query = session.createQuery(hql, Request.class);
+        query.setParameter("idBook", idBook);
+        query.setMaxResults(1);
+        try {
+            return query.getResultList();
+        } catch (NoResultException e) {
+            logger.debug("Запросы не найдены для книги id: {}", idBook);
+            return null;
+        }
+    }
 
     @Override
     public Integer save(Request request) {

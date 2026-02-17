@@ -20,6 +20,14 @@ public class BookServiceSQL extends GenericServiceImpl<Book, Integer, BookDAO> {
     }
 
     @Override
+    public Integer save(Book book) {
+        logger.debug("Сохранение книги: name={}, id before save={}", book.getName(), book.getId());
+        Integer id = super.save(book);
+        logger.debug("Книга сохранена, id after save={}", id);
+        return id;
+    }
+
+    @Override
     public List<Book> findAll() {
         logger.debug("Поиск всех книг");
         return  super.findAll();

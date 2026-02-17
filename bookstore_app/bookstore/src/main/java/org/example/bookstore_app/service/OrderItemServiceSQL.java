@@ -74,5 +74,43 @@ public class OrderItemServiceSQL extends GenericServiceImpl<BookOrderItem, Integ
             HibernateUtil.closeSession();
         }
     }
+    public double findSumByIdOrder(Integer idOrder) {
+        logger.debug("Поиск суммы заказа по idOrder: {}", idOrder);
+        Session session = HibernateUtil.getCurrentSession();
+        Transaction transaction = session.getTransaction();
+        try {
+            transaction.begin();
+            double item = defaultRepository.findSumByIdOrder(idOrder);
+            transaction.commit();
+            return item;
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            logger.error("Ошибка при поиске суммы заказа", e);
+            throw new RuntimeException("Ошибка при поиске суммы заказа", e);
+        } finally {
+            HibernateUtil.closeSession();
+        }
+    }
+    public List<BookOrderItem> findByOrderIdWithAllData(Integer idOrder) {
+        logger.debug("Поиск позиций заказа со всеми данными по idOrder: {}", idOrder);
+        Session session = HibernateUtil.getCurrentSession();
+        Transaction transaction = session.getTransaction();
+        try {
+            transaction.begin();
+            List<BookOrderItem> items = defaultRepository.findByOrderIdWithAllData(idOrder);
+            transaction.commit();
+            return items;
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            logger.error("Ошибка при поиске позиций заказа со всеми данными", e);
+            throw new RuntimeException("Ошибка при поиске позиций заказа", e);
+        } finally {
+            HibernateUtil.closeSession();
+        }
+    }
 
 }

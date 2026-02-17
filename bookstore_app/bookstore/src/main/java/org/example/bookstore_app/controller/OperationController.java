@@ -88,15 +88,10 @@ public class OperationController {
         }
     }
 
-    public static Book addBookToStock(int id, String name, String author, Double price, LocalDate datePublication, LocalDate date) {
-        Book book = new Book(id, name, author, price, datePublication);
-        bookInStok.addBookToStock(book);
-        return book;
-    }
+
 
     public Book addBookToStock(String name, String author, Double price, LocalDate datePublication, LocalDate date) {
-        int id = 0;
-        Book book = new Book(id, name, author, price, datePublication);
+        Book book = new Book(name, author, price, datePublication);
         bookInStok.addBookToStock(book);
         return book;
     }
@@ -159,12 +154,9 @@ public class OperationController {
         return showOrdersAndRequests.sortOrderByDate();
     }
 
-    public BookOrder createOrder(int id, List<Book> books, String customerName, String customerContact) {
-        return orderOperation.createOrder(id, books, customerName, customerContact);
-    }
 
     public BookOrder createOrder(List<Book> books, String customerName, String customerContact) {
-        return orderOperation.createNewOrder(books, customerName, customerContact);
+        return orderOperation.createOrder(books, customerName, customerContact);
     }
 
     public void cancelOrder(int idOrder) {

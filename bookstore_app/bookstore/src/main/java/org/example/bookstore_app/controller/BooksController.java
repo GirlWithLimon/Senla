@@ -52,10 +52,7 @@ public class BooksController implements IBookStok {
                 " | Книг в каталоге: " + stockService.getBooks().size());
 
          if (config.isAutoCompleteRequests()) {
-            List<Request> requestsToRemove = stockService.getRequests().stream()
-                    .filter(request -> request.getOrderItem()
-                            .getBook().getId()==bookCopy.getBook().getId())
-                    .toList();
+            List<Request> requestsToRemove = stockService.findByRequestIdWithBook(bookCopy.getBook().getId());
 
             Set<BookOrder> ordersToUpdate = requestsToRemove.stream()
                     .map(this::findOrderByRequest)
@@ -80,6 +77,7 @@ public class BooksController implements IBookStok {
                 System.out.println("Выполнено запросов: " + requestsToRemove.size() +
                         " для книги: " + bookCopy.getBook().getName());
             }
+            stockService.updateBook(bookCopy.getBook());
         } else {
             logger.info("Автоматическое выполнение запросов отключено в настройках");
         }

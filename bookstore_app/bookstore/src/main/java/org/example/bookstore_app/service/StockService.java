@@ -20,7 +20,7 @@ public class StockService implements Serializable {
     @Inject
     BookCopyServiceSQL bookCopyService;
     @Inject
-    OrderServiceSQL bookOrderDAO;
+    OrderServiceSQL bookOrderService;
     @Inject
     OrderItemServiceSQL bookOrderItemService;
     @Inject
@@ -40,7 +40,7 @@ public class StockService implements Serializable {
         return new ArrayList<>(bookCopyService.findAll());
     }
     public List<BookOrder> getOrders() {
-        return new ArrayList<>(bookOrderDAO.findAll());
+        return new ArrayList<>(bookOrderService.findAll());
     }
     public List<BookOrderItem> getBookOrderItem() {
         return new ArrayList<>(bookOrderItemService.findAll());
@@ -54,7 +54,7 @@ public class StockService implements Serializable {
         return bookCopyService.find(id);
     }
     public BookOrder getOrderByID(Integer id) {
-        return bookOrderDAO.find(id);
+        return bookOrderService.find(id);
     }
     public BookOrderItem getBookOrderItemByID(Integer id) {
         return bookOrderItemService.find(id);
@@ -77,6 +77,9 @@ public class StockService implements Serializable {
     public List<BookOrderItem> getBookOrderItemByidOrderWithBooks(Integer idOrder) {
         return new ArrayList<>(bookOrderItemService.findByOrderIdWithBooks(idOrder));
     }
+    public double findSumByIdOrder(Integer idOrder) {return bookOrderItemService.findSumByIdOrder(idOrder);}
+    public List<BookOrderItem> findByOrderIdWithAllData(Integer idOrder) {return bookOrderItemService.findByOrderIdWithAllData(idOrder);}
+    public List<Request> findByRequestIdWithBook(Integer idBook) {return requestServiceSQL.findByRequestIdWithBook(idBook);}
 
     //Добавление новых значений
     public void addBook(Book book){
@@ -85,8 +88,8 @@ public class StockService implements Serializable {
     public void addBooksCopy(BookCopy copy){
         bookCopyService.save(copy);
     }
-    public void addOrder(BookOrder order){
-        bookOrderDAO.save(order);
+    public BookOrder addOrder(BookOrder order){
+       return bookOrderService.find(bookOrderService.save(order));
     }
     public BookOrderItem addBookOrderItem(BookOrderItem orderItem) {
         return bookOrderItemService.find(bookOrderItemService.save(orderItem));
@@ -104,7 +107,7 @@ public class StockService implements Serializable {
         bookCopyService.delete(copy.getId());
     }
     public void removeOrder(BookOrder order){
-        bookOrderDAO.delete(order.getId());
+        bookOrderService.delete(order.getId());
     }
     public void removeOrderItem(BookOrderItem orderItem){
         bookOrderItemService.delete(orderItem.getId());
@@ -122,7 +125,7 @@ public class StockService implements Serializable {
         bookCopyService.update(copy);
     }
     public void updateOrder(BookOrder order){
-        bookOrderDAO.update(order);
+        bookOrderService.update(order);
     }
     public void updateBookOrderItem(BookOrderItem orderItem) {
         bookOrderItemService.update(orderItem);

@@ -19,6 +19,11 @@ public class OrderServiceSQL extends GenericServiceImpl<BookOrder, Integer, Book
     }
 
     @Override
+    public Integer save(BookOrder order) {
+        logger.debug("Сохранение заказа");
+        return  super.save(order);
+    }
+    @Override
     public List<BookOrder> findAll() {
         logger.debug("Поиск всех заказов");
         return  super.findAll();

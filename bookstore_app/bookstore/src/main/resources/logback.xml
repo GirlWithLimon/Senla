@@ -11,12 +11,13 @@
             <pattern>%d{HH:mm:ss.SS} [%thread] %-5level %logger{36}-%msg%n</pattern>
         </encoder>
     </appender>
-    <root level = "debug">
+    <root level = "debug" additivity="false">
         <appender-ref ref="FILE"/>
     </root>
-    <root level = "warn">
+    <root level = "warn" additivity="false">
         <appender-ref ref = "STDOUT"/>
     </root>
+
     <logger name = "org.example.bookstore_app.view.MenuController" level="info" additivity="false">
         <appender-ref ref = "STDOUT"/>
         <appender-ref ref="FILE"/>

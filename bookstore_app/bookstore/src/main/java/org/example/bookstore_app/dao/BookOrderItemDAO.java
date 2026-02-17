@@ -54,6 +54,31 @@ public class BookOrderItemDAO extends HibernateAbstractDao<BookOrderItem, Intege
         query.setParameter("idOrder", idOrder);
         return query.getResultList();
     }
+    public double findSumByIdOrder(Integer idOrder) {
+        logger.debug("Поиск суммы заказа по idOrder: {}", idOrder);
+        Session session = HibernateUtil.getCurrentSession();
+
+        String hql = "SELECT SUM(oi.book.price) FROM BookOrderItem oi " +
+                "JOIN oi.book " +
+                "WHERE oi.order.id = :idOrder";
+        Query<Double> query = session.createQuery(hql, Double.class);
+        query.setParameter("idOrder", idOrder);
+        return query.getSingleResult();
+    }
+    public List<BookOrderItem> findByOrderIdWithAllData(Integer idOrder) {
+        logger.debug("Поиск подзапросов со всеми данными по idOrder: {}", idOrder);
+        Session session = HibernateUtil.getCurrentSession();
+
+        String hql = "SELECT DISTINCT oi FROM BookOrderItem oi " +
+                "LEFT JOIN FETCH oi.bookCopy " +  // ← загружаем bookCopy
+                "LEFT JOIN FETCH oi.book " +      // ← загружаем book
+                "LEFT JOIN FETCH oi.request " +    // ← загружаем request
+                "WHERE oi.order.id = :idOrder";
+
+        Query<BookOrderItem> query = session.createQuery(hql, BookOrderItem.class);
+        query.setParameter("idOrder", idOrder);
+        return query.getResultList();
+    }
     @Override
     public List<BookOrderItem> findAll() {
         logger.debug("Вывод всех подзапросов");
