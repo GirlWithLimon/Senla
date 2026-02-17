@@ -90,3 +90,18 @@ antlr.NoViableAltException: unexpected token: LIMIT
 23:25:01.05 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 3
 23:25:26.62 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 0
 23:25:29.93 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 0
+23:26:20.84 [main] WARN  o.hibernate.orm.connections.pooling-HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+23:26:25.11 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 1
+23:26:26.22 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 2
+23:26:31.36 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 0
+23:26:33.33 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 2
+23:26:34.73 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 1
+23:26:59.77 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 0
+23:27:01.26 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 4
+23:27:02.11 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 4
+23:27:06.34 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 0
+23:27:08.21 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 1
+23:27:09.48 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 2
+23:27:45.82 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 1
+23:28:06.37 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 3
+23:28:15.45 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 3
