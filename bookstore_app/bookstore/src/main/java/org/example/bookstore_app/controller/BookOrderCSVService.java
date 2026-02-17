@@ -4,7 +4,7 @@ import org.example.annotation.Component;
 import org.example.annotation.Inject;
 import org.example.bookstore_app.model.BookOrder;
 import org.example.bookstore_app.model.OrderStatus;
-import org.example.bookstore_app.dao.StockService;
+import org.example.bookstore_app.service.StockService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

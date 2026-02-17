@@ -5,7 +5,7 @@ import org.example.annotation.Inject;
 import org.example.bookstore_app.model.Book;
 import org.example.bookstore_app.model.BookCopy;
 import org.example.bookstore_app.model.BookStatus;
-import org.example.bookstore_app.dao.StockService;
+import org.example.bookstore_app.service.StockService;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -112,7 +112,7 @@ public class BookCSVService implements ICSVImportExport<Book> {
         List<BookCopy> currentCopies = stockService.getBooksCopy();
         
         for (BookCopy copy : currentCopies) {
-            int bookId = copy.getIdBook();
+            int bookId = copy.getBook().getId();
             if (!importedBooksMap.containsKey(bookId)) {
                 copiesToRemove.add(copy);
             }
@@ -122,7 +122,7 @@ public class BookCSVService implements ICSVImportExport<Book> {
         
        for (BookCopy copy : currentCopies) {
             if (!copiesToRemove.contains(copy)) {
-                Book updatedBook = importedBooksMap.get(copy.getIdBook());
+                Book updatedBook = importedBooksMap.get(copy.getBook().getId());
                 if (updatedBook != null) {
                     if (hasBookCopies(updatedBook.getId())) {
                         updatedBook.setStatusStok();
@@ -148,7 +148,7 @@ public class BookCSVService implements ICSVImportExport<Book> {
     
     private boolean hasBookCopies(int bookId) {
         return stockService.getBooksCopy().stream()
-            .anyMatch(copy -> copy.getIdBook()==bookId);
+            .anyMatch(copy -> copy.getBook().getId()==bookId);
     }
     
     private String escape(String field) {

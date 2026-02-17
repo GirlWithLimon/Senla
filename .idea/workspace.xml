@@ -7,24 +7,23 @@
     <list default="true" id="c1c63246-89cf-46e4-b94b-3f1918de080f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DataBase/Create table/Create book.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DataBase/Create table/Create book.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataBase/Create table/Create bookCopy.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DataBase/Create table/Create bookCopy.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DataBase/Create table/Create orderItem.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DataBase/Create table/Create orderItem.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DataBase/Create table/Create orders.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DataBase/Create table/Create orders.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataBase/Create table/Create request.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DataBase/Create table/Create request.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataBase/Insert/Insert book.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DataBase/Insert/Insert book.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataBase/Insert/Insert bookCopy.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DataBase/Insert/Insert bookCopy.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DataBase/Create table/Create status.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DataBase/Create table/Create status.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/BooksController.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/BooksController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/IBookStok.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/IBookStok.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/IOrderOperation.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/IOrderOperation.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/OperationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/OperationController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/OrdersController.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/OrdersController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/ShowBook.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/controller/ShowBook.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/BookCopyDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/BookCopyDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/BookDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/BookDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/BookOrderDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/BookOrderDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/BookOrderItemDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/BookOrderItemDAO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/RequestDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/dao/RequestDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/view/MenuBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/view/MenuBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/model/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/model/Book.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/service/BookServiceSQL.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/service/BookServiceSQL.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/service/OrderItemServiceSQL.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/service/OrderItemServiceSQL.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/service/OrderServiceSQL.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/service/OrderServiceSQL.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/service/RequestServiceSQL.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/service/RequestServiceSQL.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/service/StockService.java" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/java/org/example/bookstore_app/service/StockService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/resources/logback.xml" beforeDir="false" afterPath="$PROJECT_DIR$/bookstore_app/bookstore/src/main/resources/logback.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bookstore_app/logs/bookstore.log" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,7 +51,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;task-11&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;task-13&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;D:/GitHubRepositories/Senla&quot;
   }

@@ -3,8 +3,8 @@ package org.example.bookstore_app.controller;
 import org.example.bookstore_app.config.BookstoreConfig;
 import org.example.annotation.Component;
 import org.example.annotation.Inject;
-import org.example.bookstore_app.dao.StockService;
 import org.example.bookstore_app.model.*;
+import org.example.bookstore_app.service.StockService;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
@@ -33,9 +33,10 @@ public class BooksController implements IBookStok {
     public void addBookToStock(Book book) {
         try {
             stockService.addBook(book);
-            logger.info("\"Книга добавлена в каталог: \" + book.getName() +\n" +
-                    "                    \" | ID: \" + book.getId() +\n" +
-                    "                    \" | Всего в каталоге: \" + stockService.getBooks().size()");
+            logger.info("Книга добавлена в каталог: {} | ID: {} | Всего в каталоге: {}",
+                    book.getName(),
+                    book.getId(),
+                    stockService.getBooks().size());
         } catch (Exception e) {
             logger.error("Ошибка при добавлении книги {}", e.getMessage());
         }
@@ -44,16 +45,14 @@ public class BooksController implements IBookStok {
 
     public void addBookCopyToStock(BookCopy bookCopy, LocalDate date) {
         stockService.addBooksCopy(bookCopy);
-        stockService.getBooksById(bookCopy.getIdBook()).setStatusStok();
+        bookCopy.getBook().setStatusStok();
 
-        logger.info("Добавлена книга на склад: " + stockService.getBooksById(bookCopy.getIdBook()).getName() +
-                " | Копий: " + stockService.findCountByIdBook(bookCopy.getIdBook()) +
+        System.out.println("Добавлена книга на склад: " + bookCopy.getBook().getName() +
+                " | Копий: " + stockService.findCountByIdBook(bookCopy.getBook().getId()) +
                 " | Книг в каталоге: " + stockService.getBooks().size());
 
          if (config.isAutoCompleteRequests()) {
-            List<Request> requestsToRemove = stockService.getRequests().stream()
-                    .filter(request -> stockService.getBookOrderItemByID(request.getIdOrderItem()).getIdBook()==bookCopy.getIdBook())
-                    .toList();
+            List<Request> requestsToRemove = stockService.findByRequestIdWithBook(bookCopy.getBook().getId());
 
             Set<BookOrder> ordersToUpdate = requestsToRemove.stream()
                     .map(this::findOrderByRequest)
@@ -61,7 +60,7 @@ public class BooksController implements IBookStok {
                     .collect(Collectors.toSet());
 
             requestsToRemove.forEach(request -> {
-                ContinueRequest(stockService.getBookOrderItemByID(request.getIdOrderItem()), bookCopy);
+                ContinueRequest(request.getOrderItem(), bookCopy);
                 removeBookCopyfromstock(bookCopy);
             });
 
@@ -69,33 +68,35 @@ public class BooksController implements IBookStok {
 
             ordersToUpdate.forEach(order -> {
                 updateOrderStatus(order);
+                stockService.updateOrder(order);
                 System.out.println("Обновлен статус заказа #" + order.getId() +
                         " на: " + order.getStatus());
             });
 
             if (!requestsToRemove.isEmpty()) {
                 System.out.println("Выполнено запросов: " + requestsToRemove.size() +
-                        " для книги: " + stockService.getBooksById(bookCopy.getIdBook()).getName());
+                        " для книги: " + bookCopy.getBook().getName());
             }
+            stockService.updateBook(bookCopy.getBook());
         } else {
             logger.info("Автоматическое выполнение запросов отключено в настройках");
         }
     }
     public void ContinueRequest(BookOrderItem orderItem, BookCopy bookCopy) {
-        orderItem.setIdBookCopy(bookCopy.getId());
+        orderItem.setBookCopy(bookCopy);
         orderItem.setStatus(OrderItemStatus.COMPLETED);
-        stockService.addBookOrderItem(orderItem);
+        stockService.updateBookOrderItem(orderItem);
     }
 
     private BookOrder findOrderByRequest(Request request) {
-        return stockService.getOrderByID(stockService.getBookOrderItemByID(request.getIdOrderItem()).getIdOrder());
+        return request.getOrderItem().getOrder();
     }
 
 
     @Override
     public void removeBookCopyfromstock(BookCopy bookCopy) {
       bookCopy.setSale(true);
-      stockService.addBooksCopy(bookCopy);
+      stockService.updateBooksCopy(bookCopy);
     }
 
     private void updateOrderStatus(BookOrder order) {

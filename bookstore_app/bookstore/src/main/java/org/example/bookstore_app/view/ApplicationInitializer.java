@@ -7,7 +7,7 @@ import org.example.bookstore_app.controller.DataSave;
 import org.example.bookstore_app.controller.OperationController;
 import org.example.bookstore_app.dao.DBConfig;
 import org.example.bookstore_app.dao.DBConnect;
-import org.example.bookstore_app.dao.StockService;
+import org.example.bookstore_app.service.StockService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,13 +22,13 @@ public class ApplicationInitializer {
       BookstoreConfig config = loadConfiguration(BookstoreConfig.class);
       context.registerBean(BookstoreConfig.class, config);
       logger.debug("Конфигурация зарегистрирована");
-      DBConfig dbConfig = loadConfiguration(DBConfig.class);
-      context.registerBean(DBConfig.class, dbConfig);
-      logger.debug("Конфигурация зарегистрирована");
-
-      DBConnect conn =  DBConnect.getInstance();
-      context.registerBean(DBConnect.class, conn);
-      logger.debug("DBConnect загружен");
+//      DBConfig dbConfig = loadConfiguration(DBConfig.class);
+//      context.registerBean(DBConfig.class, dbConfig);
+//      logger.debug("Конфигурация зарегистрирована");
+//
+//      DBConnect conn =  DBConnect.getInstance();
+//      context.registerBean(DBConnect.class, conn);
+//      logger.debug("DBConnect загружен");
 
       StockService stock = StockService.getInstance();
       context.registerBean(StockService.class, stock);

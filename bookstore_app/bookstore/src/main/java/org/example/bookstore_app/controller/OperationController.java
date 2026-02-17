@@ -6,7 +6,7 @@ import org.example.bookstore_app.dao.DBConnect;
 import org.example.bookstore_app.model.Book;
 import org.example.bookstore_app.model.BookCopy;
 import org.example.bookstore_app.model.BookOrder;
-import org.example.bookstore_app.dao.StockService;
+import org.example.bookstore_app.service.StockService;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -88,15 +88,10 @@ public class OperationController {
         }
     }
 
-    public static Book addBookToStock(int id, String name, String author, Double price, LocalDate datePublication, LocalDate date) {
-        Book book = new Book(id, name, author, price, datePublication);
-        bookInStok.addBookToStock(book);
-        return book;
-    }
+
 
     public Book addBookToStock(String name, String author, Double price, LocalDate datePublication, LocalDate date) {
-        int id = 0;
-        Book book = new Book(id, name, author, price, datePublication);
+        Book book = new Book(name, author, price, datePublication);
         bookInStok.addBookToStock(book);
         return book;
     }
@@ -110,7 +105,7 @@ public class OperationController {
             return;
         }
 
-        BookCopy bookCopy = new BookCopy(id, book.getId(), date);
+        BookCopy bookCopy = new BookCopy(id, book, date);
         bookInStok.addBookCopyToStock(bookCopy, date);
         return;
     }
@@ -159,12 +154,9 @@ public class OperationController {
         return showOrdersAndRequests.sortOrderByDate();
     }
 
-    public BookOrder createOrder(int id, List<Book> books, String customerName, String customerContact) {
-        return orderOperation.createOrder(id, books, customerName, customerContact);
-    }
 
     public BookOrder createOrder(List<Book> books, String customerName, String customerContact) {
-        return orderOperation.createNewOrder(books, customerName, customerContact);
+        return orderOperation.createOrder(books, customerName, customerContact);
     }
 
     public void cancelOrder(int idOrder) {

@@ -5,7 +5,7 @@ import org.example.annotation.Component;
 import org.example.annotation.Inject;
 import org.example.bookstore_app.model.Book;
 import org.example.bookstore_app.model.BookCopy;
-import org.example.bookstore_app.dao.StockService;
+import org.example.bookstore_app.service.StockService;
 
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -37,7 +37,7 @@ public class ShowBook implements IShowBook {
         LocalDate thresholdDate = LocalDate.now().minusMonths(config.getMonthsForOldBook());
         return stockService.getBooksCopy().stream()
                 .filter(copy -> copy.getArrivalDate().isBefore(thresholdDate))
-                .sorted(Comparator.comparing(copy -> stockService.getBooksById(copy.getIdBook()).getPrice()))
+                .sorted(Comparator.comparing(copy -> copy.getBook().getPrice()))
                 .collect(Collectors.toList());
     }
 
@@ -50,9 +50,9 @@ public class ShowBook implements IShowBook {
             System.out.println(" - Нет залежавшихся книг");
         } else {
             oldBooks.forEach(copy ->
-                    System.out.println(" - " + copy.getIdBook() + " | Поступление: " +
+                    System.out.println(" - " + copy.getBook().getId() + " | Поступление: " +
                             copy.getArrivalDate() + " | Цена: " +
-                            stockService.getBooksById(copy.getIdBook()).getPrice() + " руб."));
+                            copy.getBook().getPrice() + " руб."));
         }
     }
 
@@ -65,9 +65,9 @@ public class ShowBook implements IShowBook {
             System.out.println(" - Нет залежавшихся книг");
         } else {
             oldBooks.forEach(copy ->
-                    System.out.println(" - " + copy.getIdBook() + " | Поступление: " +
-                            copy.getArrivalDate() + " | Цена: " +
-                            stockService.getBooksById(copy.getIdBook()).getPrice() + " руб."));
+                    System.out.println(" - " + copy.getBook().getId() + " | Поступление: "
+                            + copy.getArrivalDate() + " | Цена: "
+                            + copy.getBook().getPrice() + " руб."));
         }
     }
 
@@ -138,23 +138,28 @@ public class ShowBook implements IShowBook {
             return;
         }
 
-        Map<Integer, Long> bookCount = stockService.getBooksCopy().stream()
+        List<BookCopy> allCopies = stockService.findWithBookId();
+
+        Map<Book, Long> bookCount = allCopies.stream()
+                .filter(copy -> !copy.getSale())
                 .collect(Collectors.groupingBy(
-                        BookCopy::getIdBook,
+                        BookCopy::getBook,
                         Collectors.counting()
                 ));
 
-        List<Book> sortedBooks = stockService.getBooks().stream()
+        List<Book> allBooks = stockService.getBooks();
+
+        List<Book> sortedBooks = allBooks.stream()
                 .sorted((b1, b2) -> {
-                    long count1 = bookCount.getOrDefault(b1.getId(), 0L);
-                    long count2 = bookCount.getOrDefault(b2.getId(), 0L);
+                    long count1 = bookCount.getOrDefault(b1, 0L);
+                    long count2 = bookCount.getOrDefault(b2, 0L);
                     return Long.compare(count2, count1);
                 })
                 .toList();
 
         System.out.println("Книги по количеству экземпляров:");
         sortedBooks.forEach(book -> {
-            long count = bookCount.getOrDefault(book.getId(), 0L);
+            long count = bookCount.getOrDefault(book, 0L);
             System.out.println(" - " + book.getName() + " - " + count + " шт.");
         });
     }

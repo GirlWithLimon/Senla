@@ -4,219 +4,113 @@ import org.example.annotation.Component;
 import org.example.annotation.Inject;
 import org.example.bookstore_app.model.BookOrderItem;
 import org.example.bookstore_app.model.Request;
+import org.example.bookstore_app.util.HibernateUtil;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.persistence.NoResultException;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class RequestDAO implements GenericDAO<Request, Integer> {
+public class RequestDAO extends HibernateAbstractDao<Request, Integer> {
     private static final Logger logger = LoggerFactory.getLogger(RequestDAO.class);
-    private final DBConnect connect;
 
     @Inject
-    public RequestDAO(DBConnect connect) {
-        this.connect = connect;
-        System.out.println("BookDAO created with connect = " + connect);
+    public RequestDAO() {
+        super(Request.class);
+        System.out.println("BookDAO created with connect" );
     }
-
-    private Connection getConnection() throws Exception {
-        if (connect == null) {
-            throw new IllegalStateException("DBConnect is not injected!");
-        }
-        return connect.getConnection();
-    }
-
-    private static final String TABLE_NAME = "request";
-    private static final String COLUMN_ID = "id";
-    private static final String COLUMN_ID_ORDER_ITEM = "idOrderItem";
-
-    private static final String SQL_SELECT_BY_ID =
-            "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = ?";
-    private static final String SQL_SELECT_ALL =
-            "SELECT * FROM " + TABLE_NAME;
-    private static final String SQL_SELECT_BY_BOOK_ID =
-            "SELECT r.* FROM " + TABLE_NAME + " r " +
-                    "JOIN orderItem oi ON r." + COLUMN_ID_ORDER_ITEM + " = oi.id " +
-                    "WHERE oi.book = ?";
-    private static final String SQL_SELECT_BY_ORDER_ITEM_ID =
-            "SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_ID_ORDER_ITEM + " = ?";
-    private static final String SQL_INSERT =
-            "INSERT INTO " + TABLE_NAME + " (" + COLUMN_ID_ORDER_ITEM + ") VALUES (?)";
-    private static final String SQL_DELETE =
-            "DELETE FROM " + TABLE_NAME + " WHERE " + COLUMN_ID + " = ?";
-
-
 
 
     @Override
-    public Request findById(Integer id) {
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(SQL_SELECT_BY_ID)) {
-
-            stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return mapResultSetToRequest(rs);
-            }
-            return null;
+    public Request find(Integer id) {
+        try{
+            logger.debug("Поиск запроса с id = {}", id);
+            return super.find(id);
 
         } catch (Exception e) {
-            throw new RuntimeException("Error finding request with id: " + id, e);
+            throw new RuntimeException("Ошибка поиска запросов с id: " + id, e);
         }
     }
 
     @Override
     public List<Request> findAll() {
-        List<Request> requests = new ArrayList<>();
-
-        try (Connection conn = getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(SQL_SELECT_ALL)) {
-
-            while (rs.next()) {
-                requests.add(mapResultSetToRequest(rs));
-            }
-            return requests;
-
-        } catch (Exception e) {
-            throw new RuntimeException("Error finding all requests", e);
-        }
-    }
-    public List<Request> findByBookId(Integer bookId) {
-        List<Request> requests = new ArrayList<>();
-
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(SQL_SELECT_BY_BOOK_ID)) {
-
-            stmt.setInt(1, bookId);
-            ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                requests.add(mapResultSetToRequest(rs));
-            }
-            return requests;
-
-        } catch (Exception e) {
-            throw new RuntimeException("Error finding requests for book id: " + bookId, e);
-        }
-    }
-    public Request findByIdOrderItem(int idOrderItem) {
-
-        try (Connection conn = getConnection();
-            PreparedStatement stmt = conn.prepareStatement(SQL_SELECT_BY_ORDER_ITEM_ID)) {
-
-            stmt.setInt(1, idOrderItem);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return mapResultSetToRequest(rs);
-            }
-            return null;
-
-        } catch (Exception e) {
-            throw new RuntimeException("Error finding requests for orderItem id: " + idOrderItem, e);
-        }
-    }
-
-
-    @Override
-    public Request save(Request request) {
-        if (request.getId() == 0) {
-            return insertRequest(request);
-        } else if (findById(request.getId())==null) {
-            return insertRequest(request);
-        }else {
-            throw new UnsupportedOperationException("Request cannot be updated, only created or deleted");
-        }
-    }
-
-    private Request insertRequest(Request request) {
         try {
-            syncSequence();
+            logger.debug("Поиск всех запросов.");
+            return super.findAll();
+
         } catch (Exception e) {
-            System.out.println("Warning: Could not sync sequence: " + e.getMessage());
+            throw new RuntimeException("Ошибка при поиске всех запросов ", e);
         }
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setInt(1, request.getIdOrderItem());
-            stmt.executeUpdate();
+    }
 
-            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    request.setId(generatedKeys.getInt(1));
-                }
-            }
-            return request;
+    public Request findByIdOrderItem(int orderItemId) {
+        logger.debug("Поиск запроса по orderItemId: {}", orderItemId);
+        Session session = HibernateUtil.getCurrentSession();
 
+        // ИСПРАВЛЕНО: используем правильный путь через связанный объект
+        String hql = "FROM Request r WHERE r.orderItem.id = :orderItemId";
+        Query<Request> query = session.createQuery(hql, Request.class);
+        query.setParameter("orderItemId", orderItemId);
+
+        try {
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            logger.debug("Запрос не найден для orderItemId: {}", orderItemId);
+            return null;
         } catch (Exception e) {
-            throw new RuntimeException("Error inserting request", e);
+            logger.error("Ошибка при поиске запроса по orderItemId: {}", orderItemId, e);
+            throw new RuntimeException("Ошибка поиска запроса по orderItemId: " + orderItemId, e);
+        }
+    }
+    public List<Request> findByRequestIdWithBook(Integer idBook) {
+        logger.debug("Поиск заяввок со всеми данными по idBook: {}", idBook);
+        Session session = HibernateUtil.getCurrentSession();
+
+        String hql = "SELECT DISTINCT r FROM Request r "
+                + "LEFT JOIN FETCH r.orderItem oi "  // ← загружаем OrderItem
+                + "LEFT JOIN FETCH oi.book "  // ← загружаем book
+                + "LEFT JOIN FETCH oi.bookCopy " // ← загружаем bookCopy
+                + "LEFT JOIN FETCH oi.order "
+                + "WHERE oi.book.id = :idBook ORDER BY oi.order.orderDate DESC";
+
+        Query<Request> query = session.createQuery(hql, Request.class);
+        query.setParameter("idBook", idBook);
+        query.setMaxResults(1);
+        try {
+            return query.getResultList();
+        } catch (NoResultException e) {
+            logger.debug("Запросы не найдены для книги id: {}", idBook);
+            return null;
         }
     }
 
     @Override
-    public void update(Request entity) {
-        throw new UnsupportedOperationException("Request cannot be updated, only created or deleted");
-    }
-
-    @Override
-    public void deleteById(Integer id) {
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(SQL_DELETE)) {
-            stmt.setInt(1, id);
-            stmt.executeUpdate();
-
-        } catch (Exception e) {
-            throw new RuntimeException("Error deleting request: " + id, e);
-        }
-    }
-
-    private Request mapResultSetToRequest(ResultSet rs) throws SQLException {
-        try{
-            Request request = new Request(
-                    rs.getInt(COLUMN_ID),
-                    rs.getInt(COLUMN_ID_ORDER_ITEM)
+    public Integer save(Request request) {
+        try {
+            logger.debug("охранение запроса с id = {}",request.getId());
+            return super.save(request);
+        } catch (Exception e){
+            logger.debug("Ошибка сохранения запроса с id ={}", request.getId());
+            throw new UnsupportedOperationException(
+                    "Ошибка сохранения запроса с id ="
+                    +request.getId(), e
             );
-
-            return request;
-        }catch (Exception e){
-            throw new SQLException("OrderItem not found with rs: " + rs);
         }
     }
 
-
-//может понадобиться, а может и нет
-    public int countByBookId(Integer bookId) {
-        String sql = "SELECT COUNT(*) FROM " + TABLE_NAME + " r " +
-                "JOIN orderItem oi ON r." + COLUMN_ID_ORDER_ITEM + " = oi.id " +
-                "WHERE oi.book = ?";
-
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, bookId);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return rs.getInt(1);
-            }
-            return 0;
-
+    @Override
+    public void delete(Integer id) {
+        try {
+            logger.debug("Удаление запроса с id = {}", id);
+            super.delete(id);
         } catch (Exception e) {
-            throw new RuntimeException("Error counting requests for book id: " + bookId, e);
+            logger.debug("Ошибка при удалении запроса с id = {}", id);
+            throw new RuntimeException("Ошибка удаления запроса: " + id, e);
         }
     }
-    public void syncSequence() {
-        String sql = "SELECT setval(pg_get_serial_sequence('request', 'id'), COALESCE((SELECT MAX(id) FROM request), 0) + 1, false)";
 
-        try (Connection conn = getConnection();
-             Statement stmt = conn.createStatement()) {
-            stmt.execute(sql);
-        } catch (Exception e) {
-            System.out.println("Error syncing sequence: " + e.getMessage());
-        }
-    }
 }

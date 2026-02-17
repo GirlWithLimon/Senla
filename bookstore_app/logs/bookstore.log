@@ -1,0 +1,107 @@
+22:53:50.04 [main] WARN  o.hibernate.orm.connections.pooling-HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+22:54:13.92 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 1
+22:54:15.36 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 2
+22:54:17.54 [main] ERROR o.e.b.view.MenuController-Произошла ошибка при выполнении команды: RuntimeException Сообщение: Ошибка при поиске заявок на книги с id: 4
+23:01:06.47 [main] WARN  o.hibernate.orm.connections.pooling-HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+23:01:11.67 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 1
+23:01:12.87 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 2
+23:01:38.51 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 0
+23:02:13.35 [main] WARN  o.hibernate.orm.connections.pooling-HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+23:02:21.59 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 2
+23:02:24.57 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 3
+23:02:34.28 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 2
+23:02:48.15 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 1
+23:02:57.95 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 1
+23:03:08.60 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 0
+23:03:11.32 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 1
+23:03:12.43 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 2
+23:03:20.54 [main] ERROR o.h.hql.internal.ast.ErrorTracker-line 1:234: unexpected token: LIMIT
+23:03:20.54 [main] ERROR o.h.hql.internal.ast.ErrorTracker-line 1:234: unexpected token: LIMIT
+antlr.NoViableAltException: unexpected token: LIMIT
+	at org.hibernate.hql.internal.antlr.HqlBaseParser.orderElement(HqlBaseParser.java:2423)
+	at org.hibernate.hql.internal.antlr.HqlBaseParser.orderByClause(HqlBaseParser.java:1297)
+	at org.hibernate.hql.internal.antlr.HqlBaseParser.queryRule(HqlBaseParser.java:872)
+	at org.hibernate.hql.internal.antlr.HqlBaseParser.selectStatement(HqlBaseParser.java:336)
+	at org.hibernate.hql.internal.antlr.HqlBaseParser.statement(HqlBaseParser.java:200)
+	at org.hibernate.hql.internal.ast.QueryTranslatorImpl.parse(QueryTranslatorImpl.java:294)
+	at org.hibernate.hql.internal.ast.QueryTranslatorImpl.doCompile(QueryTranslatorImpl.java:189)
+	at org.hibernate.hql.internal.ast.QueryTranslatorImpl.compile(QueryTranslatorImpl.java:144)
+	at org.hibernate.engine.query.spi.HQLQueryPlan.<init>(HQLQueryPlan.java:112)
+	at org.hibernate.engine.query.spi.HQLQueryPlan.<init>(HQLQueryPlan.java:73)
+	at org.hibernate.engine.query.spi.QueryPlanCache.getHQLQueryPlan(QueryPlanCache.java:162)
+	at org.hibernate.internal.AbstractSharedSessionContract.getQueryPlan(AbstractSharedSessionContract.java:636)
+	at org.hibernate.internal.AbstractSharedSessionContract.createQuery(AbstractSharedSessionContract.java:748)
+	at org.hibernate.internal.AbstractSharedSessionContract.createQuery(AbstractSharedSessionContract.java:848)
+	at org.hibernate.internal.AbstractSharedSessionContract.createQuery(AbstractSharedSessionContract.java:114)
+	at org.example.bookstore_app.dao.RequestDAO.findByRequestIdWithBook(RequestDAO.java:80)
+	at org.example.bookstore_app.service.RequestServiceSQL.findByRequestIdWithBook(RequestServiceSQL.java:77)
+	at org.example.bookstore_app.service.StockService.findByRequestIdWithBook(StockService.java:82)
+	at org.example.bookstore_app.controller.BooksController.addBookCopyToStock(BooksController.java:55)
+	at org.example.bookstore_app.controller.OperationController.addBookCopyToStock(OperationController.java:114)
+	at org.example.bookstore_app.view.MenuBuilder.lambda$createStockMenu$1(MenuBuilder.java:128)
+	at org.example.bookstore_app.view.MenuItem.doAction(MenuItem.java:20)
+	at org.example.bookstore_app.view.Navigator.navigate(Navigator.java:70)
+	at org.example.bookstore_app.view.MenuController.run(MenuController.java:50)
+	at org.example.bookstore_app.test.StartTest.main(StartTest.java:58)
+23:03:20.55 [main] ERROR o.e.b.view.MenuController-Произошла ошибка при выполнении команды: RuntimeException Сообщение: Ошибка при поиске заявок на книги с id: 1
+23:05:25.21 [main] WARN  o.hibernate.orm.connections.pooling-HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+23:05:32.96 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 1
+23:05:34.03 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 2
+23:05:45.83 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 1
+23:06:06.76 [main] WARN  o.h.e.jdbc.spi.SqlExceptionHelper-SQL Error: 0, SQLState: 23505
+23:06:06.76 [main] ERROR o.h.e.jdbc.spi.SqlExceptionHelper-ОШИБКА: повторяющееся значение ключа нарушает ограничение уникальности "book_pkey"
+  Подробности: Ключ "(id)=(1)" уже существует.
+23:06:06.76 [main] ERROR o.e.b.controller.BooksController-Ошибка при добавлении книги Ошибка при сохранении
+23:06:26.74 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 2
+23:06:35.55 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 0
+23:06:44.98 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 2
+23:06:49.94 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 3
+23:07:12.83 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 2
+23:07:21.73 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 2
+23:07:28.18 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 2
+23:07:33.47 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 2
+23:07:42.15 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 0
+23:07:47.09 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 4
+23:07:50.35 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 4
+23:08:49.97 [main] WARN  o.hibernate.orm.connections.pooling-HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+23:08:54.83 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 1
+23:08:55.94 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 1
+23:09:13.34 [main] WARN  o.h.e.jdbc.spi.SqlExceptionHelper-SQL Error: 0, SQLState: 23505
+23:09:13.34 [main] ERROR o.h.e.jdbc.spi.SqlExceptionHelper-ОШИБКА: повторяющееся значение ключа нарушает ограничение уникальности "book_pkey"
+  Подробности: Ключ "(id)=(2)" уже существует.
+23:09:13.35 [main] ERROR o.e.b.controller.BooksController-Ошибка при добавлении книги Ошибка при сохранении
+23:11:17.80 [main] WARN  o.hibernate.orm.connections.pooling-HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+23:11:27.29 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 1
+23:11:28.52 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 1
+23:11:40.68 [main] WARN  o.h.e.jdbc.spi.SqlExceptionHelper-SQL Error: 0, SQLState: 23505
+23:11:40.68 [main] ERROR o.h.e.jdbc.spi.SqlExceptionHelper-ОШИБКА: повторяющееся значение ключа нарушает ограничение уникальности "book_pkey"
+  Подробности: Ключ "(id)=(3)" уже существует.
+23:11:40.72 [main] ERROR o.e.b.controller.BooksController-Ошибка при добавлении книги Ошибка при сохранении
+23:19:55.84 [main] WARN  o.hibernate.orm.connections.pooling-HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+23:20:01.88 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 1
+23:20:08.52 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 1
+23:20:20.91 [main] WARN  o.h.e.jdbc.spi.SqlExceptionHelper-SQL Error: 0, SQLState: 23505
+23:20:20.91 [main] ERROR o.h.e.jdbc.spi.SqlExceptionHelper-ОШИБКА: повторяющееся значение ключа нарушает ограничение уникальности "book_pkey"
+  Подробности: Ключ "(id)=(4)" уже существует.
+23:20:20.91 [main] ERROR o.e.b.controller.BooksController-Ошибка при добавлении книги Ошибка при сохранении
+23:24:29.55 [main] WARN  o.hibernate.orm.connections.pooling-HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+23:24:35.10 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 1
+23:24:36.51 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 1
+23:25:01.05 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 3
+23:25:26.62 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 0
+23:25:29.93 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 0
+23:26:20.84 [main] WARN  o.hibernate.orm.connections.pooling-HHH10001002: Using Hibernate built-in connection pool (not for production use!)
+23:26:25.11 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 1
+23:26:26.22 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 2
+23:26:31.36 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 0
+23:26:33.33 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 2
+23:26:34.73 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 1
+23:26:59.77 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 0
+23:27:01.26 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 4
+23:27:02.11 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 4
+23:27:06.34 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 0
+23:27:08.21 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 1
+23:27:09.48 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 2
+23:27:45.82 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 1
+23:28:06.37 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 3
+23:28:15.45 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 3

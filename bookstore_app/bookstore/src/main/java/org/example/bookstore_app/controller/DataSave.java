@@ -6,7 +6,7 @@ import org.example.bookstore_app.config.ApplicationContext;
 import org.example.bookstore_app.dao.*;
 import org.example.bookstore_app.model.Book;
 import org.example.bookstore_app.model.BookCopy;
-import org.example.bookstore_app.dao.StockService;
+import org.example.bookstore_app.service.StockService;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
@@ -176,7 +176,7 @@ public class DataSave {
                 bookDAO = context.getBean(BookDAO.class);
                 if (bookDAO == null) {
                     logger.error("BookDAO не найден в DI контейнере");
-                    bookDAO = new BookDAO(dbConnect);
+                    bookDAO = new BookDAO();
                     injectDBConnect(bookDAO);
                     context.registerBean(BookDAO.class, bookDAO);
                 }
@@ -187,7 +187,7 @@ public class DataSave {
                 bookCopyDAO = context.getBean(BookCopyDAO.class);
                 if (bookCopyDAO == null) {
                     logger.error("BookCopyDAO не найден в DI контейнере");
-                    bookCopyDAO = new BookCopyDAO(dbConnect);
+                    bookCopyDAO = new BookCopyDAO();
                     injectDBConnect(bookCopyDAO);
                     context.registerBean(BookCopyDAO.class, bookCopyDAO);
                 }
@@ -198,7 +198,7 @@ public class DataSave {
                 bookOrderDAO = context.getBean(BookOrderDAO.class);
                 if (bookOrderDAO == null) {
                     System.err.println("BookOrderDAO не найден в DI контейнере");
-                    bookOrderDAO = new BookOrderDAO(dbConnect);
+                    bookOrderDAO = new BookOrderDAO();
                     injectDBConnect(bookOrderDAO);
                     context.registerBean(BookOrderDAO.class, bookOrderDAO);
                 }
@@ -209,7 +209,7 @@ public class DataSave {
                 bookOrderItemDAO = context.getBean(BookOrderItemDAO.class);
                 if (bookOrderItemDAO == null) {
                     System.err.println("BookOrderItemDAO не найден в DI контейнере");
-                    bookOrderItemDAO = new BookOrderItemDAO(dbConnect);
+                    bookOrderItemDAO = new BookOrderItemDAO();
                     injectDBConnect(bookOrderItemDAO);
                     context.registerBean(BookOrderItemDAO.class, bookOrderItemDAO);
                 }
@@ -220,7 +220,7 @@ public class DataSave {
                 requestDAO = context.getBean(RequestDAO.class);
                 if (requestDAO == null) {
                     System.err.println("RequestDAO не найден в DI контейнере");
-                    requestDAO = new RequestDAO(dbConnect);
+                    requestDAO = new RequestDAO();
                     injectDBConnect(requestDAO);
                     context.registerBean(RequestDAO.class, requestDAO);
                 }
