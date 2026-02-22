@@ -1,50 +1,52 @@
 package org.example.bookstore_app.dao;
 
-import org.example.bookstore_app.util.HibernateUtil;
 import org.hibernate.Session;
-import org.hibernate.query.Query;
-
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import java.io.Serializable;
 import java.util.List;
 
-public abstract class HibernateAbstractDao <T, PK extends Serializable>
-                                    implements GenericDAO<T,PK>{
-    private Class <T> type;
+public abstract class HibernateAbstractDao<T, PK extends Serializable>
+        implements GenericDAO<T, PK> {
+
+    private Class<T> type;
+
+    @Autowired
+    private SessionFactory sessionFactory;
 
     public HibernateAbstractDao(Class<T> type) {
-        this.type=type;
+        this.type = type;
+    }
+
+    protected Session getCurrentSession() {
+        return sessionFactory.getCurrentSession();
     }
 
     @Override
     public PK save(T entity) {
-        Session session = HibernateUtil.getCurrentSession();
-        return (PK) session.save(entity);
+        return (PK) getCurrentSession().save(entity);
     }
 
     @Override
     public void update(T entity) {
-        Session session = HibernateUtil.getCurrentSession();
-        session.update(entity);
+        getCurrentSession().update(entity);
     }
 
     @Override
     public void delete(PK id) {
-        Session session = HibernateUtil.getCurrentSession();
-        T entity = session.load(type, id);
-        session.delete(entity);
+        T entity = getCurrentSession().load(type, id);
+        getCurrentSession().delete(entity);
     }
 
     @Override
     public List<T> findAll() {
-        Session session = HibernateUtil.getCurrentSession();
-        String hql = "FROM " + type.getSimpleName();
-        Query<T> query = session.createQuery(hql, type);
-        return query.getResultList();
+        return getCurrentSession()
+                .createQuery("FROM " + type.getSimpleName(), type)
+                .getResultList();
     }
 
     @Override
     public T find(PK id) {
-        Session session = HibernateUtil.getCurrentSession();
-        return session.get(type, id);
+        return getCurrentSession().get(type, id);
     }
 }

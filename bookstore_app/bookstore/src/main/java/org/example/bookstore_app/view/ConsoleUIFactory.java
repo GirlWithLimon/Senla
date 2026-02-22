@@ -1,6 +1,6 @@
 package org.example.bookstore_app.view;
 
-import org.example.annotation.Component;
+import org.springframework.stereotype.Component;
 
 @Component
 public class ConsoleUIFactory implements IUIFactory {

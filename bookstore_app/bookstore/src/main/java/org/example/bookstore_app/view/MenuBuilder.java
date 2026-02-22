@@ -1,12 +1,11 @@
 package org.example.bookstore_app.view;
 
-import org.example.annotation.Component;
-import org.example.annotation.Inject;
-import org.example.bookstore_app.config.ApplicationContext;
+import org.springframework.stereotype.Component;
 import org.example.bookstore_app.config.BookstoreConfig;
 import org.example.bookstore_app.controller.OperationController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 import java.util.Scanner;
@@ -20,7 +19,7 @@ public final class MenuBuilder {
     private final Scanner scanner;
     private final Object lock = new Object();
 
-    @Inject
+    @Autowired
     public MenuBuilder(BookstoreConfig config, OperationController controller) {
         this.config = config;
         this.controller = controller;
@@ -36,16 +35,7 @@ public final class MenuBuilder {
                     logger.debug("Меню работает!")));
         }
 
-        Navigator navigator = new Navigator(rootMenu);
-
-        try {
-            ApplicationContext context = ApplicationContext.getInstance();
-            context.registerBean(Navigator.class, navigator);
-        } catch (Exception e) {
-            logger.warn("Не удалось зарегистрировать Navigator в DI: {}", e.getMessage());
-        }
-
-        return navigator;
+        return new Navigator(rootMenu);
     }
 
     private void buildMenu() {

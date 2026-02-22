@@ -1,22 +1,23 @@
 package org.example.bookstore_app.service;
 
-import org.example.annotation.Component;
-import org.example.annotation.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 import org.example.bookstore_app.dao.RequestDAO;
 import org.example.bookstore_app.model.Request;
-import org.example.bookstore_app.util.HibernateUtil;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 @Component
-public class RequestServiceSQL extends GenericServiceImpl<Request, Integer, RequestDAO> {
+@Qualifier("requestServiceSQL")
+public class RequestServiceSQL extends GenericServiceImpl<Request, Integer, RequestDAO>
+implements IRequestService{
     private static final Logger logger = LoggerFactory.getLogger(RequestServiceSQL.class);
 
-    @Inject
+    @Autowired
     public RequestServiceSQL(RequestDAO requestDAO) {
         super(requestDAO);
     }
@@ -53,37 +54,11 @@ public class RequestServiceSQL extends GenericServiceImpl<Request, Integer, Requ
         super.delete(id);
     }
     public Request findByIdOrderItem(int orderItemId){
-        Session session = HibernateUtil.getCurrentSession();
-        Transaction transaction = session.getTransaction();
-        try {
-            transaction.begin();
-            Request entitys = defaultRepository.findByIdOrderItem(orderItemId);
-            transaction.commit();
-            return entitys;
-        } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            throw new RuntimeException("Ошибка при поиске заявки с id заказа: "+orderItemId, e);
-        } finally {
-            HibernateUtil.closeSession();
-        }
+       logger.debug("Поиск заявки по idOrderItem: {}",orderItemId);
+       return defaultRepository.findByIdOrderItem(orderItemId);
     }
     public List<Request> findByRequestIdWithBook(Integer idBook) {
-        Session session = HibernateUtil.getCurrentSession();
-        Transaction transaction = session.getTransaction();
-        try {
-            transaction.begin();
-            List<Request> entitys = defaultRepository.findByRequestIdWithBook(idBook);
-            transaction.commit();
-            return entitys;
-        } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            throw new RuntimeException("Ошибка при поиске заявок на книги с id: "+idBook, e);
-        } finally {
-            HibernateUtil.closeSession();
-        }
+        logger.debug("Поиск заявок по книге idBook: {}", idBook);
+        return defaultRepository.findByRequestIdWithBook(idBook);
     }
 }

@@ -1,30 +1,36 @@
 package org.example.bookstore_app.service;
 
-import org.example.annotation.Component;
-import org.example.annotation.Inject;
 import org.example.bookstore_app.model.*;
-import org.example.bookstore_app.util.HibernateUtil;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Service
+@Transactional
 public class StockService implements Serializable {
     private static final Logger logger = LoggerFactory.getLogger(StockService.class);
-    @Inject
-    BookServiceSQL bookService;
-    @Inject
-    BookCopyServiceSQL bookCopyService;
-    @Inject
-    OrderServiceSQL bookOrderService;
-    @Inject
-    OrderItemServiceSQL bookOrderItemService;
-    @Inject
-    RequestServiceSQL requestServiceSQL;
+    @Autowired
+    private IBookService bookService;  // Используем интерфейс
+
+    @Autowired
+    private IBookCopyService bookCopyService;  // Используем интерфейс
+
+    @Autowired
+    private IOrderService bookOrderService;  // Используем интерфейс
+
+    @Autowired
+    private IOrderItemService bookOrderItemService;  // Используем интерфейс
+
+    @Autowired
+    private IRequestService requestServiceSQL;
     private static StockService instance;
 
     public static StockService getInstance() {
@@ -130,9 +136,5 @@ public class StockService implements Serializable {
     public void updateBookOrderItem(BookOrderItem orderItem) {
         bookOrderItemService.update(orderItem);
     }
-    public void refreshCache() {
-        Session session = HibernateUtil.getCurrentSession();
-        session.clear(); // Очищает кэш первого уровня
-        logger.debug("Кэш Hibernate очищен");
-    }
+
 }

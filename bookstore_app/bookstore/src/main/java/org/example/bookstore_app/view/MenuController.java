@@ -1,9 +1,9 @@
 package org.example.bookstore_app.view;
 
-import org.example.annotation.Inject;
-import org.example.annotation.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -18,7 +18,7 @@ public class MenuController {
     }
     private static final Logger logger = LoggerFactory.getLogger(MenuController.class);
 
-    @Inject
+    @Autowired
     public MenuController(Navigator navigator) {
         this.navigator = navigator;
         this.scanner = new Scanner(System.in);

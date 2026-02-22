@@ -1,10 +1,10 @@
 package org.example.bookstore_app.controller;
 
-import org.example.annotation.Component;
-import org.example.annotation.Inject;
 import org.example.bookstore_app.model.BookOrder;
 import org.example.bookstore_app.model.OrderStatus;
 import org.example.bookstore_app.service.StockService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 @Component
 public class BookOrderCSVService implements ICSVImportExport<BookOrder> {
-    @Inject
+    @Autowired
     private StockService stockService;
 
     

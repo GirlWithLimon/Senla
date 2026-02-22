@@ -1,24 +1,24 @@
 package org.example.bookstore_app.service;
 
-import org.example.annotation.Component;
-import org.example.annotation.Inject;
-import org.example.bookstore_app.dao.BookCopyDAO;
+
 import org.example.bookstore_app.dao.BookOrderItemDAO;
-import org.example.bookstore_app.model.BookCopy;
 import org.example.bookstore_app.model.BookOrderItem;
-import org.example.bookstore_app.util.HibernateUtil;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
-public class OrderItemServiceSQL extends GenericServiceImpl<BookOrderItem, Integer, BookOrderItemDAO> {
+@Qualifier("orderItemServiceSQL")
+public class OrderItemServiceSQL extends GenericServiceImpl<BookOrderItem, Integer, BookOrderItemDAO>
+implements IOrderItemService{
     private static final Logger logger = LoggerFactory.getLogger(OrderItemServiceSQL.class);
 
-    @Inject
+    @Autowired
     public OrderItemServiceSQL(BookOrderItemDAO bookOrderItem) {
         super(bookOrderItem);
     }
@@ -39,78 +39,20 @@ public class OrderItemServiceSQL extends GenericServiceImpl<BookOrderItem, Integ
         super.delete(id);
     }
     public List<BookOrderItem> findByOrderId(Integer idOrder){
-        Session session = HibernateUtil.getCurrentSession();
-        Transaction transaction = session.getTransaction();
-        try {
-            transaction.begin();
-            List<BookOrderItem> entitys = defaultRepository.findByOrderId(idOrder);
-            transaction.commit();
-            return entitys;
-        } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            throw new RuntimeException("Ошибка при поиске всех экземпляров книги", e);
-        } finally {
-            HibernateUtil.closeSession();
-        }
+        logger.debug("Поиск подзаказов по idOrder: {}", idOrder);
+       return defaultRepository.findByOrderId(idOrder);
     }
     public List<BookOrderItem> findByOrderIdWithBooks(Integer idOrder){
         logger.debug("Поиск позиций заказа с книгами по idOrder: {}", idOrder);
-        Session session = HibernateUtil.getCurrentSession();
-        Transaction transaction = session.getTransaction();
-        try {
-            transaction.begin();
-            List<BookOrderItem> items = defaultRepository.findByOrderIdWithBooks(idOrder);
-            transaction.commit();
-            return items;
-        } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            logger.error("Ошибка при поиске позиций заказа с книгами", e);
-            throw new RuntimeException("Ошибка при поиске позиций заказа", e);
-        } finally {
-            HibernateUtil.closeSession();
-        }
+        return defaultRepository.findByOrderIdWithBooks(idOrder);
     }
     public double findSumByIdOrder(Integer idOrder) {
         logger.debug("Поиск суммы заказа по idOrder: {}", idOrder);
-        Session session = HibernateUtil.getCurrentSession();
-        Transaction transaction = session.getTransaction();
-        try {
-            transaction.begin();
-            double item = defaultRepository.findSumByIdOrder(idOrder);
-            transaction.commit();
-            return item;
-        } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            logger.error("Ошибка при поиске суммы заказа", e);
-            throw new RuntimeException("Ошибка при поиске суммы заказа", e);
-        } finally {
-            HibernateUtil.closeSession();
-        }
+        return defaultRepository.findSumByIdOrder(idOrder);
     }
     public List<BookOrderItem> findByOrderIdWithAllData(Integer idOrder) {
         logger.debug("Поиск позиций заказа со всеми данными по idOrder: {}", idOrder);
-        Session session = HibernateUtil.getCurrentSession();
-        Transaction transaction = session.getTransaction();
-        try {
-            transaction.begin();
-            List<BookOrderItem> items = defaultRepository.findByOrderIdWithAllData(idOrder);
-            transaction.commit();
-            return items;
-        } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            logger.error("Ошибка при поиске позиций заказа со всеми данными", e);
-            throw new RuntimeException("Ошибка при поиске позиций заказа", e);
-        } finally {
-            HibernateUtil.closeSession();
-        }
+       return defaultRepository.findByOrderIdWithAllData(idOrder);
     }
 
 }

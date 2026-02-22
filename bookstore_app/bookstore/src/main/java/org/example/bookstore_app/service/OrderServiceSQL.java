@@ -1,19 +1,22 @@
 package org.example.bookstore_app.service;
 
-import org.example.annotation.Component;
-import org.example.annotation.Inject;
 import org.example.bookstore_app.dao.BookOrderDAO;
 import org.example.bookstore_app.model.BookOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
-public class OrderServiceSQL extends GenericServiceImpl<BookOrder, Integer, BookOrderDAO> {
+@Qualifier("orderServiceSQL")
+public class OrderServiceSQL extends GenericServiceImpl<BookOrder, Integer, BookOrderDAO>
+implements IOrderService{
     private static final Logger logger = LoggerFactory.getLogger(OrderServiceSQL.class);
 
-    @Inject
+    @Autowired
     public OrderServiceSQL(BookOrderDAO bookOrderDAO) {
         super(bookOrderDAO);
     }

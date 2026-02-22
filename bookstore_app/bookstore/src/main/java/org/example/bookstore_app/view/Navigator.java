@@ -1,9 +1,10 @@
 package org.example.bookstore_app.view;
 
-import org.example.annotation.Component;
-import org.example.annotation.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class Navigator {
@@ -11,7 +12,7 @@ public class Navigator {
     private Menu currentMenu;
     private Menu rootMenu;
 
-    @Inject
+    @Autowired
     public Navigator() { }
 
     public Navigator(Menu rootMenu) {
