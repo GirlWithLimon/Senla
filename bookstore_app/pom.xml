@@ -9,7 +9,6 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>annotation-module</module>
         <module>bookstore</module>
     </modules>
     <name>bookstore</name>

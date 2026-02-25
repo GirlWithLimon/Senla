@@ -1,15 +1,13 @@
 package org.example.bookstore_app.controller;
 
-import org.example.annotation.Component;
-import org.example.annotation.Inject;
-import org.example.bookstore_app.dao.DBConnect;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.example.bookstore_app.model.Book;
 import org.example.bookstore_app.model.BookCopy;
 import org.example.bookstore_app.model.BookOrder;
 import org.example.bookstore_app.service.StockService;
 
 import java.io.IOException;
-import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -18,48 +16,24 @@ import java.util.stream.Collectors;
 
 @Component
 public class OperationController {
-    @Inject
+    @Autowired
     private StockService stockService;
-    @Inject
-    private static IBookStok bookInStok;
-    @Inject
+    @Autowired
+    private IBookStok bookInStok;
+    @Autowired
     private IShowBook showBook;
-    @Inject
+    @Autowired
     private IShowOrdersAndRequests showOrdersAndRequests;
-    @Inject
+    @Autowired
     private IOrderOperation orderOperation;
-    @Inject
+    @Autowired
     private ImportExportService importExportService;
-    @Inject
-    private DataSave dataSave;
-    @Inject
-    DBConnect dbConnect;
+
+    @Autowired
+    DataSave dataSave;
 
     public OperationController() { }
-    public void loadDate(){
-        DataSave load = DataSave.getInstance();
-        if (load.initialize()) {
-            System.out.println("Выполнено подключение к базе данных");
-        }
-        else setupShutdownHook();
-    }
-    private void setupShutdownHook() {
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            System.out.println("\nСохранение состояния программы...");
-            if (dataSave != null && stockService != null) {
-                try {
-                    Connection conn = dbConnect.getConnection();
-                    dataSave.saveState(stockService,conn);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-                System.out.println("Состояние успешно сохранено.");
-            } else {
-                System.err.println("Ошибка: DataSave или Stok не инициализированы!");
-            }
-        }));
-    }
 
     public void initializeTestData() {
         if (!stockService.getBooks().isEmpty() || !stockService.getOrders().isEmpty()) {

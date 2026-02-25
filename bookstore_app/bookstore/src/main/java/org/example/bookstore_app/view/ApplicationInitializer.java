@@ -1,66 +1,38 @@
 package org.example.bookstore_app.view;
 
-import org.example.bookstore_app.config.ApplicationContext;
-import org.example.bookstore_app.config.BookstoreConfig;
-import org.example.bookstore_app.config.ConfigurationLoader;
-import org.example.bookstore_app.controller.DataSave;
+import org.example.bookstore_app.config.SpringConfig;
 import org.example.bookstore_app.controller.OperationController;
-import org.example.bookstore_app.dao.DBConfig;
-import org.example.bookstore_app.dao.DBConnect;
-import org.example.bookstore_app.service.StockService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class ApplicationInitializer {
-   private static final Logger logger = LoggerFactory
-                                        .getLogger(ApplicationInitializer.class);
-   public static ApplicationContext initialize() {
-      logger.debug("Инициализация приложения...");
-      ApplicationContext context = ApplicationContext.getInstance();
+    private static final Logger logger = LoggerFactory.getLogger(ApplicationInitializer.class);
+    private static ApplicationContext springContext;
 
-      BookstoreConfig config = loadConfiguration(BookstoreConfig.class);
-      context.registerBean(BookstoreConfig.class, config);
-      logger.debug("Конфигурация зарегистрирована");
-//      DBConfig dbConfig = loadConfiguration(DBConfig.class);
-//      context.registerBean(DBConfig.class, dbConfig);
-//      logger.debug("Конфигурация зарегистрирована");
-//
-//      DBConnect conn =  DBConnect.getInstance();
-//      context.registerBean(DBConnect.class, conn);
-//      logger.debug("DBConnect загружен");
+    public static ApplicationContext initialize() {
+        logger.debug("Инициализация Spring контекста...");
 
-      StockService stock = StockService.getInstance();
-      context.registerBean(StockService.class, stock);
-      logger.debug("Stok загружен");
+        // Создаем Spring контекст на основе Java конфигурации
+        springContext = new AnnotationConfigApplicationContext(SpringConfig.class);
 
-      DataSave dataSave = DataSave.getInstance();
-      context.registerBean(DataSave.class, dataSave);
-      logger.debug("DataSave зарегистрирован");
+        logger.debug("Spring контекст инициализирован");
 
+        // Получаем и инициализируем контроллер
+        OperationController controller = springContext.getBean(OperationController.class);
+        if (controller != null) {
+            logger.debug("OperationController получен, инициализируем тестовые данные");
+            controller.initializeTestData();
+        } else {
+            logger.error("Ошибка: не удалось получить OperationController");
+        }
 
-      context.initialize();
-
-      OperationController controller = context.getBean(OperationController.class);
-      if (controller != null) {
-         logger.debug("OperationController получен, инициализируем тестовые данные");
-         controller.initializeTestData();
-      } else {
-         logger.error("Ошибка: не удалось получить OperationController");
-         context.printRegisteredBeans();
-      }
-
-      logger.debug("Инициализация завершена");
-      return context;
+        logger.debug("Инициализация завершена");
+        return springContext;
     }
 
-   private static <T> T loadConfiguration(Class <T> configClass) {
-      try {
-         return ConfigurationLoader.loadConfiguration(configClass);
-      } catch (Exception e) {
-         logger.warn("Ошибка загрузки конфигурации: {}" +
-                    "Используются значения по умолчанию", e.getMessage());
-         return null;
-        }
+    public static ApplicationContext getSpringContext() {
+        return springContext;
     }
 }

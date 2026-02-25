@@ -4,7 +4,7 @@
  * Этот пакет содержит:
  * </p>
  * <ul>
- *   <li>{@link org.example.bookstore_app.config.ApplicationContext} - DI контейнер</li>
+ *   <li>{@link org.example.bookstore_app.config.SpringConfig} - Spring</li>
  *   <li>{@link org.example.bookstore_app.config.BookstoreConfig} - конфигурация приложения</li>
  * </ul>
  *

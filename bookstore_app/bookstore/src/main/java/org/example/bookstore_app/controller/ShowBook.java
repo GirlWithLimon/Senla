@@ -1,24 +1,22 @@
 package org.example.bookstore_app.controller;
 
 import org.example.bookstore_app.config.BookstoreConfig;
-import org.example.annotation.Component;
-import org.example.annotation.Inject;
 import org.example.bookstore_app.model.Book;
 import org.example.bookstore_app.model.BookCopy;
 import org.example.bookstore_app.service.StockService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Component
 public class ShowBook implements IShowBook {
-    @Inject
+    @Autowired
     private StockService stockService;
-    @Inject
+    @Autowired
     private BookstoreConfig config;
     Logger logger = Logger.getLogger(getClass().getName());
     public ShowBook(){}
@@ -139,29 +137,42 @@ public class ShowBook implements IShowBook {
         }
 
         List<BookCopy> allCopies = stockService.findWithBookId();
+        Map<Book, Long> availableCount = new HashMap<>();
+        Map<Book, Long> soldCount = new HashMap<>();
+        Set<Book> uniqueBooks = new HashSet<>();
 
-        Map<Book, Long> bookCount = allCopies.stream()
-                .filter(copy -> !copy.getSale())
-                .collect(Collectors.groupingBy(
-                        BookCopy::getBook,
-                        Collectors.counting()
-                ));
+        for (BookCopy copy : allCopies) {
+            Book book = copy.getBook();
+            uniqueBooks.add(book);
 
-        List<Book> allBooks = stockService.getBooks();
+            if (!copy.getSale()) {
+                availableCount.put(book, availableCount.getOrDefault(book, 0L) + 1);
+            } else {
+                soldCount.put(book, soldCount.getOrDefault(book, 0L) + 1);
+            }
+        }
 
-        List<Book> sortedBooks = allBooks.stream()
-                .sorted((b1, b2) -> {
-                    long count1 = bookCount.getOrDefault(b1, 0L);
-                    long count2 = bookCount.getOrDefault(b2, 0L);
+        System.out.println("\n=== КНИГИ В НАЛИЧИИ (по убыванию) ===");
+
+        // Сортируем уникальные книги по количеству в наличии
+        uniqueBooks.stream().sorted((b1, b2) -> {
+                    long count1 = availableCount.getOrDefault(b1, 0L);
+                    long count2 = availableCount.getOrDefault(b2, 0L);
                     return Long.compare(count2, count1);
                 })
-                .toList();
+                .forEach(book -> {
+                    long available = availableCount.getOrDefault(book, 0L);
+                    long sold = soldCount.getOrDefault(book, 0L);
+                    long total = available + sold;
 
-        System.out.println("Книги по количеству экземпляров:");
-        sortedBooks.forEach(book -> {
-            long count = bookCount.getOrDefault(book, 0L);
-            System.out.println(" - " + book.getName() + " - " + count + " шт.");
-        });
+                    if (available > 0) {
+                        System.out.printf("%s (ID: %d) - %d шт. в наличии (всего: %d, продано: %d)%n",
+                                book.getName(), book.getId(), available, total, sold);
+                    } else {
+                        System.out.printf("%s (ID: %d) - нет в наличии (всего: %d, продано: %d)%n",
+                                book.getName(), book.getId(), total, sold);
+                    }
+                });
     }
 
     @Override

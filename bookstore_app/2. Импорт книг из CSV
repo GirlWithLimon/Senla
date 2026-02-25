@@ -1,0 +1,7 @@
+ID,Name,Author,Price,PublicationDate,Information,Status
+"3","Sun","Lui Steff",250.0,2026-02-17,"No information",OUT_OF_STOCK
+"1","Last day of summer","dr.Braun",250.0,2026-02-17,"No information",IN_STOCK
+"6","а","авап",2134.0,1999-09-23,"Автор: авап. Название книги: а",OUT_OF_STOCK
+"2","Last day of winter","dr.Braun",250.0,2026-02-17,"No information",IN_STOCK
+"5","а","ав",234.0,2000-10-21,"Автор: ав. Название книги: а",IN_STOCK
+"4","Flower","Lui Steff",450.0,2026-02-17,"No information",IN_STOCK

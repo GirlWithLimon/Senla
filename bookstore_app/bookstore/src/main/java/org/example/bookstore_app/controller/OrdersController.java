@@ -1,11 +1,12 @@
 package org.example.bookstore_app.controller;
 
-import org.example.annotation.Component;
-import org.example.annotation.Inject;
+
 import org.example.bookstore_app.model.*;
 import org.example.bookstore_app.service.StockService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
 @Component
 public class OrdersController implements IOrderOperation{
     private static final Logger logger = LoggerFactory.getLogger(OrdersController.class);
-    @Inject
+    @Autowired
     StockService stockService;
     
     public OrdersController() {  }
@@ -116,7 +117,6 @@ public class OrdersController implements IOrderOperation{
 
         stockService.removeOrder(order);
         System.out.println("Заказ #" + idOrder + " успешно отменен!");
-        stockService.refreshCache();
     }
     
     @Override

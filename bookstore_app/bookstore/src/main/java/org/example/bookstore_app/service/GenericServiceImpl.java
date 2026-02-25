@@ -1,12 +1,12 @@
 package org.example.bookstore_app.service;
 
 import org.example.bookstore_app.dao.GenericDAO;
-import org.example.bookstore_app.util.HibernateUtil;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.io.Serializable;
 import java.util.List;
 
+@Transactional
 public abstract class GenericServiceImpl<T, PK extends Serializable, R extends GenericDAO<T, PK>>
         implements GenericService<T, PK> {
 
@@ -17,94 +17,32 @@ public abstract class GenericServiceImpl<T, PK extends Serializable, R extends G
     }
 
     @Override
+    @Transactional
     public PK save(T entity) {
-        Session session = HibernateUtil.getCurrentSession();
-        Transaction transaction = session.getTransaction();
-        try {
-            transaction.begin();
-            PK id = defaultRepository.save(entity);
-            transaction.commit();
-            return id;
-        } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            throw new RuntimeException("Ошибка при сохранении", e);
-        } finally {
-            HibernateUtil.closeSession();
-        }
+        return defaultRepository.save(entity);
     }
 
     @Override
+    @Transactional
     public void update(T entity) {
-        Session session = HibernateUtil.getCurrentSession();
-        Transaction transaction = session.getTransaction();
-        try {
-            transaction.begin();
-            defaultRepository.update(entity);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            throw new RuntimeException("Ошибка при обновлении", e);
-        } finally {
-            HibernateUtil.closeSession();
-        }
+        defaultRepository.update(entity);
     }
 
     @Override
+    @Transactional
     public void delete(PK id) {
-        Session session = HibernateUtil.getCurrentSession();
-        Transaction transaction = session.getTransaction();
-        try {
-            transaction.begin();
-            defaultRepository.delete(id);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            throw new RuntimeException("Ошибка при удалении", e);
-        } finally {
-            HibernateUtil.closeSession();
-        }
+        defaultRepository.delete(id);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public T find(PK id) {
-        Session session = HibernateUtil.getCurrentSession();
-        Transaction transaction = session.getTransaction();
-        try {
-            transaction.begin();
-            T entity = defaultRepository.find(id);
-            transaction.commit();
-            return entity;
-        } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            throw new RuntimeException("Ошибка при поиске", e);
-        } finally {
-            HibernateUtil.closeSession();
-        }
+        return defaultRepository.find(id);
     }
+
     @Override
+    @Transactional(readOnly = true)
     public List<T> findAll() {
-        Session session = HibernateUtil.getCurrentSession();
-        Transaction transaction = session.getTransaction();
-        try {
-            transaction.begin();
-            List<T> entitys = defaultRepository.findAll();
-            transaction.commit();
-            return entitys;
-        } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            throw new RuntimeException("Ошибка при поиске всех", e);
-        } finally {
-            HibernateUtil.closeSession();
-        }
+        return defaultRepository.findAll();
     }
 }
