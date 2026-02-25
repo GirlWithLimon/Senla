@@ -981,3 +981,5 @@ Caused by: org.hibernate.service.UnknownUnwrapTypeException: Cannot unwrap to re
 17:01:44.32 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 2
 21:52:37.41 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 4
 21:52:38.54 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 4
+13:50:55.88 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 4
+13:50:56.95 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 4

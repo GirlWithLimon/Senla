@@ -58,7 +58,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
-            <version>5.3.30</version> <!-- Используйте вашу версию Spring -->
+            <version>5.3.30</version>
         </dependency>
         <dependency>
             <groupId>cglib</groupId>
@@ -94,6 +94,7 @@
                     </execution>
                 </executions>
             </plugin>
+
         </plugins>
         <resources>
             <resource>

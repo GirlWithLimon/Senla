@@ -20,7 +20,7 @@ public class ImportExportService {
         this.services = new HashMap<>();
     }
 
-    @PostConstruct  // Инициализируем после внедрения зависимостей
+    @PostConstruct
     private void initializeServices() {
         services.put("books", bookCSVService);
         services.put("orders", bookOrderCSVService);
