@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "orderItem")
+@Table(name = "orderitem")
 public class BookOrderItem implements Serializable {
 
     @Id
@@ -12,18 +12,18 @@ public class BookOrderItem implements Serializable {
     private int id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idBook", nullable = false)
+    @JoinColumn(name = "idbook", nullable = false)
     private Book book;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idBookCopy")
+    @JoinColumn(name = "idbookcopy")
     private BookCopy bookCopy;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idOrders", nullable = false)
+    @JoinColumn(name = "idorders", nullable = false)
     private BookOrder order;
 
-    @OneToOne(mappedBy = "orderItem", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "orderitem", cascade = CascadeType.ALL, orphanRemoval = true)
     private Request request;
 
     @Enumerated(EnumType.STRING)

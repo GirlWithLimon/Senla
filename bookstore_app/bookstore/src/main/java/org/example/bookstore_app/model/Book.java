@@ -26,7 +26,7 @@ public class Book implements Serializable {
     @Column(name = "price", nullable = false)
     private double price;
 
-    @Column(name = "publicationDate", nullable = false)
+    @Column(name = "publicationdate", nullable = false)
     private LocalDate publicationDate;
 
     @Column(name = "information", length = 1000)

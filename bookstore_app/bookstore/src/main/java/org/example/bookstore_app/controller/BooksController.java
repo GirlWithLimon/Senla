@@ -60,7 +60,7 @@ public class BooksController implements IBookStok {
                     .collect(Collectors.toSet());
 
             requestsToRemove.forEach(request -> {
-                ContinueRequest(request.getOrderItem(), bookCopy);
+                ContinueRequest(request.getOrderitem(), bookCopy);
                 removeBookCopyfromstock(bookCopy);
             });
 
@@ -89,7 +89,7 @@ public class BooksController implements IBookStok {
     }
 
     private BookOrder findOrderByRequest(Request request) {
-        return request.getOrderItem().getOrder();
+        return request.getOrderitem().getOrder();
     }
 
 

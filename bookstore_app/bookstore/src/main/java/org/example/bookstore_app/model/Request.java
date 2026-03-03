@@ -12,21 +12,21 @@ public class Request implements Serializable {
     private int id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idOrderItem", nullable = false, unique = true)
-    private BookOrderItem orderItem;
+    @JoinColumn(name = "idorderitem", nullable = false, unique = true)
+    private BookOrderItem orderitem;
 
     public Request() {}
 
-    public Request(int id, BookOrderItem orderItem) {
+    public Request(int id, BookOrderItem orderitem) {
         this.id = id;
-        this.orderItem = orderItem;
+        this.orderitem = orderitem;
     }
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
-    public BookOrderItem getOrderItem() { return orderItem; }
-    public void setOrderItem(BookOrderItem orderItem) {
-        this.orderItem = orderItem;
+    public BookOrderItem getOrderitem() { return orderitem; }
+    public void setOrderitem(BookOrderItem orderitem) {
+        this.orderitem = orderitem;
     }
 }
