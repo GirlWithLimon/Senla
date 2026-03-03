@@ -107,7 +107,7 @@ public class OperationController {
                 .map(indexStr -> {
                     try {
                         int index = Integer.parseInt(indexStr);
-                        return index > 0 && index <= showBook.sortABCBook().size() ? showBook.sortABCBook().get(index - 1) : null;
+                        return index > 0 ? stockService.getBooksById(index) : null;
                     } catch (NumberFormatException e) {
                         System.out.println("Некорректный номер: " + indexStr);
                         return null;

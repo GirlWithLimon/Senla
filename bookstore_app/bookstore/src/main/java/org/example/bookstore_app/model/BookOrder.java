@@ -17,16 +17,16 @@ public class BookOrder implements Serializable {
     @Column(name = "status", nullable = false)
     private OrderStatus status;
 
-    @Column(name = "orderDate", nullable = false)
+    @Column(name = "orderdate", nullable = false)
     private LocalDate orderDate;
 
-    @Column(name = "customerName", nullable = false)
+    @Column(name = "customername", nullable = false)
     private String customerName;
 
-    @Column(name = "customerContact", nullable = false)
+    @Column(name = "customercontact", nullable = false)
     private String customerContact;
 
-    @Column(name = "totalPrice", nullable = false)
+    @Column(name = "totalprice", nullable = false)
     private double totalPrice;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

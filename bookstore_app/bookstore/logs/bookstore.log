@@ -1,0 +1,1355 @@
+15:06:48.59 [main] WARN  o.s.c.a.AnnotationConfigApplicationContext-Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/example/bookstore_app/config/SLiquibaseConfig.class]: liquibase.exception.ChangeLogParseException: ERROR: The file 'classpath:resources/liquibase/db/db.changelog-master.xml' was not found.
+The file property cannot be configured with a fully qualified path, but must be a relative path on the property,
+and any local or remote base of the path set on the search path.
+15:06:48.60 [main] ERROR o.e.bookstore_app.test.StartTest-Ошибка при запуске приложения: Error creating bean with name 'liquibase' defined in class path resource [org/example/bookstore_app/config/SLiquibaseConfig.class]: liquibase.exception.ChangeLogParseException: ERROR: The file 'classpath:resources/liquibase/db/db.changelog-master.xml' was not found.
+The file property cannot be configured with a fully qualified path, but must be a relative path on the property,
+and any local or remote base of the path set on the search path.
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/example/bookstore_app/config/SLiquibaseConfig.class]: liquibase.exception.ChangeLogParseException: ERROR: The file 'classpath:resources/liquibase/db/db.changelog-master.xml' was not found.
+The file property cannot be configured with a fully qualified path, but must be a relative path on the property,
+and any local or remote base of the path set on the search path.
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1826)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:607)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1222)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1188)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1123)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:987)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627)
+	at org.springframework.context.annotation.AnnotationConfigApplicationContext.<init>(AnnotationConfigApplicationContext.java:93)
+	at org.example.bookstore_app.view.ApplicationInitializer.initialize(ApplicationInitializer.java:18)
+	at org.example.bookstore_app.test.StartTest.main(StartTest.java:24)
+Caused by: liquibase.exception.CommandExecutionException: liquibase.exception.ChangeLogParseException: ERROR: The file 'classpath:resources/liquibase/db/db.changelog-master.xml' was not found.
+The file property cannot be configured with a fully qualified path, but must be a relative path on the property,
+and any local or remote base of the path set on the search path.
+	at liquibase.command.CommandScope.execute(CommandScope.java:237)
+	at liquibase.Liquibase.lambda$update$0(Liquibase.java:222)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.Liquibase.runInScope(Liquibase.java:1371)
+	at liquibase.Liquibase.update(Liquibase.java:211)
+	at liquibase.Liquibase.update(Liquibase.java:193)
+	at liquibase.integration.spring.SpringLiquibase.performUpdate(SpringLiquibase.java:331)
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:286)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1873)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1822)
+	... 14 common frames omitted
+Caused by: liquibase.exception.ChangeLogParseException: ERROR: The file 'classpath:resources/liquibase/db/db.changelog-master.xml' was not found.
+The file property cannot be configured with a fully qualified path, but must be a relative path on the property,
+and any local or remote base of the path set on the search path.
+	at liquibase.parser.core.xml.XMLChangeLogSAXParser.parseToNode(XMLChangeLogSAXParser.java:114)
+	at liquibase.parser.core.xml.AbstractChangeLogParser.parse(AbstractChangeLogParser.java:15)
+	at liquibase.command.core.helpers.DatabaseChangelogCommandStep.lambda$getDatabaseChangeLog$0(DatabaseChangelogCommandStep.java:129)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:169)
+	at liquibase.command.core.helpers.DatabaseChangelogCommandStep.getDatabaseChangeLog(DatabaseChangelogCommandStep.java:128)
+	at liquibase.command.core.helpers.DatabaseChangelogCommandStep.run(DatabaseChangelogCommandStep.java:87)
+	at liquibase.command.CommandScope.execute(CommandScope.java:214)
+	... 26 common frames omitted
+15:07:58.30 [main] WARN  o.s.c.a.AnnotationConfigApplicationContext-Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/example/bookstore_app/config/SLiquibaseConfig.class]: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-book-table::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: relation "book" already exists [Failed SQL: (0) CREATE TABLE public.book (id INTEGER GENERATED BY DEFAULT AS IDENTITY NOT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, status VARCHAR(50) NOT NULL, price DECIMAL(10, 2) NOT NULL, "publicationDate" date NOT NULL, information VARCHAR(1000), CONSTRAINT book_pkey PRIMARY KEY (id))]
+15:07:58.30 [main] ERROR o.e.bookstore_app.test.StartTest-Ошибка при запуске приложения: Error creating bean with name 'liquibase' defined in class path resource [org/example/bookstore_app/config/SLiquibaseConfig.class]: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-book-table::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: relation "book" already exists [Failed SQL: (0) CREATE TABLE public.book (id INTEGER GENERATED BY DEFAULT AS IDENTITY NOT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, status VARCHAR(50) NOT NULL, price DECIMAL(10, 2) NOT NULL, "publicationDate" date NOT NULL, information VARCHAR(1000), CONSTRAINT book_pkey PRIMARY KEY (id))]
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/example/bookstore_app/config/SLiquibaseConfig.class]: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-book-table::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: relation "book" already exists [Failed SQL: (0) CREATE TABLE public.book (id INTEGER GENERATED BY DEFAULT AS IDENTITY NOT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, status VARCHAR(50) NOT NULL, price DECIMAL(10, 2) NOT NULL, "publicationDate" date NOT NULL, information VARCHAR(1000), CONSTRAINT book_pkey PRIMARY KEY (id))]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1826)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:607)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1222)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1188)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1123)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:987)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627)
+	at org.springframework.context.annotation.AnnotationConfigApplicationContext.<init>(AnnotationConfigApplicationContext.java:93)
+	at org.example.bookstore_app.view.ApplicationInitializer.initialize(ApplicationInitializer.java:18)
+	at org.example.bookstore_app.test.StartTest.main(StartTest.java:24)
+Caused by: liquibase.exception.CommandExecutionException: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-book-table::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: relation "book" already exists [Failed SQL: (0) CREATE TABLE public.book (id INTEGER GENERATED BY DEFAULT AS IDENTITY NOT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, status VARCHAR(50) NOT NULL, price DECIMAL(10, 2) NOT NULL, "publicationDate" date NOT NULL, information VARCHAR(1000), CONSTRAINT book_pkey PRIMARY KEY (id))]
+	at liquibase.command.CommandScope.execute(CommandScope.java:237)
+	at liquibase.Liquibase.lambda$update$0(Liquibase.java:222)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.Liquibase.runInScope(Liquibase.java:1371)
+	at liquibase.Liquibase.update(Liquibase.java:211)
+	at liquibase.Liquibase.update(Liquibase.java:193)
+	at liquibase.integration.spring.SpringLiquibase.performUpdate(SpringLiquibase.java:331)
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:286)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1873)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1822)
+	... 14 common frames omitted
+Caused by: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-book-table::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: relation "book" already exists [Failed SQL: (0) CREATE TABLE public.book (id INTEGER GENERATED BY DEFAULT AS IDENTITY NOT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, status VARCHAR(50) NOT NULL, price DECIMAL(10, 2) NOT NULL, "publicationDate" date NOT NULL, information VARCHAR(1000), CONSTRAINT book_pkey PRIMARY KEY (id))]
+	at liquibase.changelog.ChangeLogIterator.run(ChangeLogIterator.java:122)
+	at liquibase.command.core.AbstractUpdateCommandStep.lambda$doRun$1(AbstractUpdateCommandStep.java:105)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.command.core.AbstractUpdateCommandStep.doRun(AbstractUpdateCommandStep.java:104)
+	at liquibase.command.core.AbstractUpdateCommandStep.lambda$run$0(AbstractUpdateCommandStep.java:63)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.command.core.AbstractUpdateCommandStep.run(AbstractUpdateCommandStep.java:62)
+	at liquibase.command.core.UpdateCommandStep.run(UpdateCommandStep.java:106)
+	at liquibase.command.CommandScope.execute(CommandScope.java:214)
+	... 26 common frames omitted
+Caused by: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-book-table::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: relation "book" already exists [Failed SQL: (0) CREATE TABLE public.book (id INTEGER GENERATED BY DEFAULT AS IDENTITY NOT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, status VARCHAR(50) NOT NULL, price DECIMAL(10, 2) NOT NULL, "publicationDate" date NOT NULL, information VARCHAR(1000), CONSTRAINT book_pkey PRIMARY KEY (id))]
+	at liquibase.changelog.ChangeSet.execute(ChangeSet.java:785)
+	at liquibase.changelog.visitor.UpdateVisitor.executeAcceptedChange(UpdateVisitor.java:118)
+	at liquibase.changelog.visitor.UpdateVisitor.visit(UpdateVisitor.java:68)
+	at liquibase.changelog.ChangeLogIterator$2.lambda$run$0(ChangeLogIterator.java:110)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.Scope.child(Scope.java:250)
+	at liquibase.changelog.ChangeLogIterator$2.run(ChangeLogIterator.java:100)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.Scope.child(Scope.java:250)
+	at liquibase.Scope.child(Scope.java:254)
+	at liquibase.changelog.ChangeLogIterator.run(ChangeLogIterator.java:74)
+	... 40 common frames omitted
+Caused by: liquibase.exception.DatabaseException: ОШИБКА: relation "book" already exists [Failed SQL: (0) CREATE TABLE public.book (id INTEGER GENERATED BY DEFAULT AS IDENTITY NOT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, status VARCHAR(50) NOT NULL, price DECIMAL(10, 2) NOT NULL, "publicationDate" date NOT NULL, information VARCHAR(1000), CONSTRAINT book_pkey PRIMARY KEY (id))]
+	at liquibase.executor.jvm.JdbcExecutor$ExecuteStatementCallback.doInStatement(JdbcExecutor.java:468)
+	at liquibase.executor.jvm.JdbcExecutor.execute(JdbcExecutor.java:77)
+	at liquibase.executor.jvm.JdbcExecutor.execute(JdbcExecutor.java:177)
+	at liquibase.database.AbstractJdbcDatabase.execute(AbstractJdbcDatabase.java:1291)
+	at liquibase.database.AbstractJdbcDatabase.executeStatements(AbstractJdbcDatabase.java:1273)
+	at liquibase.changelog.ChangeSet.execute(ChangeSet.java:744)
+	... 56 common frames omitted
+Caused by: org.postgresql.util.PSQLException: ОШИБКА: relation "book" already exists
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2734)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2421)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:372)
+	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:518)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:435)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:357)
+	at org.postgresql.jdbc.PgStatement.executeCachedSql(PgStatement.java:342)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:318)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:313)
+	at liquibase.executor.jvm.JdbcExecutor$ExecuteStatementCallback.doInStatement(JdbcExecutor.java:462)
+	... 61 common frames omitted
+15:17:46.07 [main] WARN  o.s.c.a.AnnotationConfigApplicationContext-Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/example/bookstore_app/config/SLiquibaseConfig.class]: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-book-table::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: отношение "book" уже существует [Failed SQL: (0) CREATE TABLE public.book (id INTEGER GENERATED BY DEFAULT AS IDENTITY NOT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, status VARCHAR(50) NOT NULL, price DECIMAL(10, 2) NOT NULL, "publicationDate" date NOT NULL, information VARCHAR(1000), CONSTRAINT book_pkey PRIMARY KEY (id))]
+15:17:46.08 [main] ERROR o.e.bookstore_app.test.StartTest-Ошибка при запуске приложения: Error creating bean with name 'liquibase' defined in class path resource [org/example/bookstore_app/config/SLiquibaseConfig.class]: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-book-table::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: отношение "book" уже существует [Failed SQL: (0) CREATE TABLE public.book (id INTEGER GENERATED BY DEFAULT AS IDENTITY NOT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, status VARCHAR(50) NOT NULL, price DECIMAL(10, 2) NOT NULL, "publicationDate" date NOT NULL, information VARCHAR(1000), CONSTRAINT book_pkey PRIMARY KEY (id))]
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/example/bookstore_app/config/SLiquibaseConfig.class]: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-book-table::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: отношение "book" уже существует [Failed SQL: (0) CREATE TABLE public.book (id INTEGER GENERATED BY DEFAULT AS IDENTITY NOT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, status VARCHAR(50) NOT NULL, price DECIMAL(10, 2) NOT NULL, "publicationDate" date NOT NULL, information VARCHAR(1000), CONSTRAINT book_pkey PRIMARY KEY (id))]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1826)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:607)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1222)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1188)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1123)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:987)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627)
+	at org.springframework.context.annotation.AnnotationConfigApplicationContext.<init>(AnnotationConfigApplicationContext.java:93)
+	at org.example.bookstore_app.view.ApplicationInitializer.initialize(ApplicationInitializer.java:18)
+	at org.example.bookstore_app.test.StartTest.main(StartTest.java:24)
+Caused by: liquibase.exception.CommandExecutionException: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-book-table::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: отношение "book" уже существует [Failed SQL: (0) CREATE TABLE public.book (id INTEGER GENERATED BY DEFAULT AS IDENTITY NOT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, status VARCHAR(50) NOT NULL, price DECIMAL(10, 2) NOT NULL, "publicationDate" date NOT NULL, information VARCHAR(1000), CONSTRAINT book_pkey PRIMARY KEY (id))]
+	at liquibase.command.CommandScope.execute(CommandScope.java:237)
+	at liquibase.Liquibase.lambda$update$0(Liquibase.java:222)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.Liquibase.runInScope(Liquibase.java:1371)
+	at liquibase.Liquibase.update(Liquibase.java:211)
+	at liquibase.Liquibase.update(Liquibase.java:193)
+	at liquibase.integration.spring.SpringLiquibase.performUpdate(SpringLiquibase.java:331)
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:286)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1873)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1822)
+	... 14 common frames omitted
+Caused by: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-book-table::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: отношение "book" уже существует [Failed SQL: (0) CREATE TABLE public.book (id INTEGER GENERATED BY DEFAULT AS IDENTITY NOT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, status VARCHAR(50) NOT NULL, price DECIMAL(10, 2) NOT NULL, "publicationDate" date NOT NULL, information VARCHAR(1000), CONSTRAINT book_pkey PRIMARY KEY (id))]
+	at liquibase.changelog.ChangeLogIterator.run(ChangeLogIterator.java:122)
+	at liquibase.command.core.AbstractUpdateCommandStep.lambda$doRun$1(AbstractUpdateCommandStep.java:105)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.command.core.AbstractUpdateCommandStep.doRun(AbstractUpdateCommandStep.java:104)
+	at liquibase.command.core.AbstractUpdateCommandStep.lambda$run$0(AbstractUpdateCommandStep.java:63)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.command.core.AbstractUpdateCommandStep.run(AbstractUpdateCommandStep.java:62)
+	at liquibase.command.core.UpdateCommandStep.run(UpdateCommandStep.java:106)
+	at liquibase.command.CommandScope.execute(CommandScope.java:214)
+	... 26 common frames omitted
+Caused by: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-book-table::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: отношение "book" уже существует [Failed SQL: (0) CREATE TABLE public.book (id INTEGER GENERATED BY DEFAULT AS IDENTITY NOT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, status VARCHAR(50) NOT NULL, price DECIMAL(10, 2) NOT NULL, "publicationDate" date NOT NULL, information VARCHAR(1000), CONSTRAINT book_pkey PRIMARY KEY (id))]
+	at liquibase.changelog.ChangeSet.execute(ChangeSet.java:785)
+	at liquibase.changelog.visitor.UpdateVisitor.executeAcceptedChange(UpdateVisitor.java:118)
+	at liquibase.changelog.visitor.UpdateVisitor.visit(UpdateVisitor.java:68)
+	at liquibase.changelog.ChangeLogIterator$2.lambda$run$0(ChangeLogIterator.java:110)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.Scope.child(Scope.java:250)
+	at liquibase.changelog.ChangeLogIterator$2.run(ChangeLogIterator.java:100)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.Scope.child(Scope.java:250)
+	at liquibase.Scope.child(Scope.java:254)
+	at liquibase.changelog.ChangeLogIterator.run(ChangeLogIterator.java:74)
+	... 40 common frames omitted
+Caused by: liquibase.exception.DatabaseException: ОШИБКА: отношение "book" уже существует [Failed SQL: (0) CREATE TABLE public.book (id INTEGER GENERATED BY DEFAULT AS IDENTITY NOT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, status VARCHAR(50) NOT NULL, price DECIMAL(10, 2) NOT NULL, "publicationDate" date NOT NULL, information VARCHAR(1000), CONSTRAINT book_pkey PRIMARY KEY (id))]
+	at liquibase.executor.jvm.JdbcExecutor$ExecuteStatementCallback.doInStatement(JdbcExecutor.java:468)
+	at liquibase.executor.jvm.JdbcExecutor.execute(JdbcExecutor.java:77)
+	at liquibase.executor.jvm.JdbcExecutor.execute(JdbcExecutor.java:177)
+	at liquibase.database.AbstractJdbcDatabase.execute(AbstractJdbcDatabase.java:1291)
+	at liquibase.database.AbstractJdbcDatabase.executeStatements(AbstractJdbcDatabase.java:1273)
+	at liquibase.changelog.ChangeSet.execute(ChangeSet.java:744)
+	... 56 common frames omitted
+Caused by: org.postgresql.util.PSQLException: ОШИБКА: отношение "book" уже существует
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2734)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2421)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:372)
+	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:518)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:435)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:357)
+	at org.postgresql.jdbc.PgStatement.executeCachedSql(PgStatement.java:342)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:318)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:313)
+	at liquibase.executor.jvm.JdbcExecutor$ExecuteStatementCallback.doInStatement(JdbcExecutor.java:462)
+	... 61 common frames omitted
+15:18:50.11 [main] WARN  o.s.c.a.AnnotationConfigApplicationContext-Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/example/bookstore_app/config/SLiquibaseConfig.class]: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-book-table::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: relation "book" already exists [Failed SQL: (0) CREATE TABLE public.book (id INTEGER GENERATED BY DEFAULT AS IDENTITY NOT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, status VARCHAR(50) NOT NULL, price DECIMAL(10, 2) NOT NULL, "publicationDate" date NOT NULL, information VARCHAR(1000), CONSTRAINT book_pkey PRIMARY KEY (id))]
+15:18:50.12 [main] ERROR o.e.bookstore_app.test.StartTest-Ошибка при запуске приложения: Error creating bean with name 'liquibase' defined in class path resource [org/example/bookstore_app/config/SLiquibaseConfig.class]: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-book-table::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: relation "book" already exists [Failed SQL: (0) CREATE TABLE public.book (id INTEGER GENERATED BY DEFAULT AS IDENTITY NOT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, status VARCHAR(50) NOT NULL, price DECIMAL(10, 2) NOT NULL, "publicationDate" date NOT NULL, information VARCHAR(1000), CONSTRAINT book_pkey PRIMARY KEY (id))]
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/example/bookstore_app/config/SLiquibaseConfig.class]: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-book-table::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: relation "book" already exists [Failed SQL: (0) CREATE TABLE public.book (id INTEGER GENERATED BY DEFAULT AS IDENTITY NOT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, status VARCHAR(50) NOT NULL, price DECIMAL(10, 2) NOT NULL, "publicationDate" date NOT NULL, information VARCHAR(1000), CONSTRAINT book_pkey PRIMARY KEY (id))]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1826)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:607)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1222)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1188)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1123)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:987)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627)
+	at org.springframework.context.annotation.AnnotationConfigApplicationContext.<init>(AnnotationConfigApplicationContext.java:93)
+	at org.example.bookstore_app.view.ApplicationInitializer.initialize(ApplicationInitializer.java:18)
+	at org.example.bookstore_app.test.StartTest.main(StartTest.java:24)
+Caused by: liquibase.exception.CommandExecutionException: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-book-table::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: relation "book" already exists [Failed SQL: (0) CREATE TABLE public.book (id INTEGER GENERATED BY DEFAULT AS IDENTITY NOT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, status VARCHAR(50) NOT NULL, price DECIMAL(10, 2) NOT NULL, "publicationDate" date NOT NULL, information VARCHAR(1000), CONSTRAINT book_pkey PRIMARY KEY (id))]
+	at liquibase.command.CommandScope.execute(CommandScope.java:237)
+	at liquibase.Liquibase.lambda$update$0(Liquibase.java:222)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.Liquibase.runInScope(Liquibase.java:1371)
+	at liquibase.Liquibase.update(Liquibase.java:211)
+	at liquibase.Liquibase.update(Liquibase.java:193)
+	at liquibase.integration.spring.SpringLiquibase.performUpdate(SpringLiquibase.java:331)
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:286)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1873)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1822)
+	... 14 common frames omitted
+Caused by: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-book-table::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: relation "book" already exists [Failed SQL: (0) CREATE TABLE public.book (id INTEGER GENERATED BY DEFAULT AS IDENTITY NOT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, status VARCHAR(50) NOT NULL, price DECIMAL(10, 2) NOT NULL, "publicationDate" date NOT NULL, information VARCHAR(1000), CONSTRAINT book_pkey PRIMARY KEY (id))]
+	at liquibase.changelog.ChangeLogIterator.run(ChangeLogIterator.java:122)
+	at liquibase.command.core.AbstractUpdateCommandStep.lambda$doRun$1(AbstractUpdateCommandStep.java:105)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.command.core.AbstractUpdateCommandStep.doRun(AbstractUpdateCommandStep.java:104)
+	at liquibase.command.core.AbstractUpdateCommandStep.lambda$run$0(AbstractUpdateCommandStep.java:63)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.command.core.AbstractUpdateCommandStep.run(AbstractUpdateCommandStep.java:62)
+	at liquibase.command.core.UpdateCommandStep.run(UpdateCommandStep.java:106)
+	at liquibase.command.CommandScope.execute(CommandScope.java:214)
+	... 26 common frames omitted
+Caused by: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-book-table::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: relation "book" already exists [Failed SQL: (0) CREATE TABLE public.book (id INTEGER GENERATED BY DEFAULT AS IDENTITY NOT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, status VARCHAR(50) NOT NULL, price DECIMAL(10, 2) NOT NULL, "publicationDate" date NOT NULL, information VARCHAR(1000), CONSTRAINT book_pkey PRIMARY KEY (id))]
+	at liquibase.changelog.ChangeSet.execute(ChangeSet.java:785)
+	at liquibase.changelog.visitor.UpdateVisitor.executeAcceptedChange(UpdateVisitor.java:118)
+	at liquibase.changelog.visitor.UpdateVisitor.visit(UpdateVisitor.java:68)
+	at liquibase.changelog.ChangeLogIterator$2.lambda$run$0(ChangeLogIterator.java:110)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.Scope.child(Scope.java:250)
+	at liquibase.changelog.ChangeLogIterator$2.run(ChangeLogIterator.java:100)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.Scope.child(Scope.java:250)
+	at liquibase.Scope.child(Scope.java:254)
+	at liquibase.changelog.ChangeLogIterator.run(ChangeLogIterator.java:74)
+	... 40 common frames omitted
+Caused by: liquibase.exception.DatabaseException: ОШИБКА: relation "book" already exists [Failed SQL: (0) CREATE TABLE public.book (id INTEGER GENERATED BY DEFAULT AS IDENTITY NOT NULL, name VARCHAR(255) NOT NULL, author VARCHAR(255) NOT NULL, status VARCHAR(50) NOT NULL, price DECIMAL(10, 2) NOT NULL, "publicationDate" date NOT NULL, information VARCHAR(1000), CONSTRAINT book_pkey PRIMARY KEY (id))]
+	at liquibase.executor.jvm.JdbcExecutor$ExecuteStatementCallback.doInStatement(JdbcExecutor.java:468)
+	at liquibase.executor.jvm.JdbcExecutor.execute(JdbcExecutor.java:77)
+	at liquibase.executor.jvm.JdbcExecutor.execute(JdbcExecutor.java:177)
+	at liquibase.database.AbstractJdbcDatabase.execute(AbstractJdbcDatabase.java:1291)
+	at liquibase.database.AbstractJdbcDatabase.executeStatements(AbstractJdbcDatabase.java:1273)
+	at liquibase.changelog.ChangeSet.execute(ChangeSet.java:744)
+	... 56 common frames omitted
+Caused by: org.postgresql.util.PSQLException: ОШИБКА: relation "book" already exists
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2734)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2421)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:372)
+	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:518)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:435)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:357)
+	at org.postgresql.jdbc.PgStatement.executeCachedSql(PgStatement.java:342)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:318)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:313)
+	at liquibase.executor.jvm.JdbcExecutor$ExecuteStatementCallback.doInStatement(JdbcExecutor.java:462)
+	... 61 common frames omitted
+15:21:22.32 [main] WARN  o.s.c.a.AnnotationConfigApplicationContext-Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/example/bookstore_app/config/SLiquibaseConfig.class]: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-orderitem-table::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: отношение "public.bookcopy" не существует [Failed SQL: (0) CREATE TABLE public."orderItem" (id INTEGER GENERATED BY DEFAULT AS IDENTITY NOT NULL, "idBook" INTEGER NOT NULL, "idBookCopy" INTEGER, "idOrders" INTEGER NOT NULL, status VARCHAR(50) NOT NULL, CONSTRAINT "orderItem_pkey" PRIMARY KEY (id), CONSTRAINT fk_orderitem_order FOREIGN KEY ("idOrders") REFERENCES public.orders(id), CONSTRAINT fk_orderitem_book FOREIGN KEY ("idBook") REFERENCES public.book(id), CONSTRAINT fk_orderitem_bookcopy FOREIGN KEY ("idBookCopy") REFERENCES public.bookCopy(id))]
+15:21:22.32 [main] ERROR o.e.bookstore_app.test.StartTest-Ошибка при запуске приложения: Error creating bean with name 'liquibase' defined in class path resource [org/example/bookstore_app/config/SLiquibaseConfig.class]: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-orderitem-table::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: отношение "public.bookcopy" не существует [Failed SQL: (0) CREATE TABLE public."orderItem" (id INTEGER GENERATED BY DEFAULT AS IDENTITY NOT NULL, "idBook" INTEGER NOT NULL, "idBookCopy" INTEGER, "idOrders" INTEGER NOT NULL, status VARCHAR(50) NOT NULL, CONSTRAINT "orderItem_pkey" PRIMARY KEY (id), CONSTRAINT fk_orderitem_order FOREIGN KEY ("idOrders") REFERENCES public.orders(id), CONSTRAINT fk_orderitem_book FOREIGN KEY ("idBook") REFERENCES public.book(id), CONSTRAINT fk_orderitem_bookcopy FOREIGN KEY ("idBookCopy") REFERENCES public.bookCopy(id))]
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/example/bookstore_app/config/SLiquibaseConfig.class]: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-orderitem-table::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: отношение "public.bookcopy" не существует [Failed SQL: (0) CREATE TABLE public."orderItem" (id INTEGER GENERATED BY DEFAULT AS IDENTITY NOT NULL, "idBook" INTEGER NOT NULL, "idBookCopy" INTEGER, "idOrders" INTEGER NOT NULL, status VARCHAR(50) NOT NULL, CONSTRAINT "orderItem_pkey" PRIMARY KEY (id), CONSTRAINT fk_orderitem_order FOREIGN KEY ("idOrders") REFERENCES public.orders(id), CONSTRAINT fk_orderitem_book FOREIGN KEY ("idBook") REFERENCES public.book(id), CONSTRAINT fk_orderitem_bookcopy FOREIGN KEY ("idBookCopy") REFERENCES public.bookCopy(id))]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1826)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:607)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1222)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1188)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1123)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:987)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627)
+	at org.springframework.context.annotation.AnnotationConfigApplicationContext.<init>(AnnotationConfigApplicationContext.java:93)
+	at org.example.bookstore_app.view.ApplicationInitializer.initialize(ApplicationInitializer.java:18)
+	at org.example.bookstore_app.test.StartTest.main(StartTest.java:24)
+Caused by: liquibase.exception.CommandExecutionException: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-orderitem-table::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: отношение "public.bookcopy" не существует [Failed SQL: (0) CREATE TABLE public."orderItem" (id INTEGER GENERATED BY DEFAULT AS IDENTITY NOT NULL, "idBook" INTEGER NOT NULL, "idBookCopy" INTEGER, "idOrders" INTEGER NOT NULL, status VARCHAR(50) NOT NULL, CONSTRAINT "orderItem_pkey" PRIMARY KEY (id), CONSTRAINT fk_orderitem_order FOREIGN KEY ("idOrders") REFERENCES public.orders(id), CONSTRAINT fk_orderitem_book FOREIGN KEY ("idBook") REFERENCES public.book(id), CONSTRAINT fk_orderitem_bookcopy FOREIGN KEY ("idBookCopy") REFERENCES public.bookCopy(id))]
+	at liquibase.command.CommandScope.execute(CommandScope.java:237)
+	at liquibase.Liquibase.lambda$update$0(Liquibase.java:222)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.Liquibase.runInScope(Liquibase.java:1371)
+	at liquibase.Liquibase.update(Liquibase.java:211)
+	at liquibase.Liquibase.update(Liquibase.java:193)
+	at liquibase.integration.spring.SpringLiquibase.performUpdate(SpringLiquibase.java:331)
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:286)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1873)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1822)
+	... 14 common frames omitted
+Caused by: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-orderitem-table::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: отношение "public.bookcopy" не существует [Failed SQL: (0) CREATE TABLE public."orderItem" (id INTEGER GENERATED BY DEFAULT AS IDENTITY NOT NULL, "idBook" INTEGER NOT NULL, "idBookCopy" INTEGER, "idOrders" INTEGER NOT NULL, status VARCHAR(50) NOT NULL, CONSTRAINT "orderItem_pkey" PRIMARY KEY (id), CONSTRAINT fk_orderitem_order FOREIGN KEY ("idOrders") REFERENCES public.orders(id), CONSTRAINT fk_orderitem_book FOREIGN KEY ("idBook") REFERENCES public.book(id), CONSTRAINT fk_orderitem_bookcopy FOREIGN KEY ("idBookCopy") REFERENCES public.bookCopy(id))]
+	at liquibase.changelog.ChangeLogIterator.run(ChangeLogIterator.java:122)
+	at liquibase.command.core.AbstractUpdateCommandStep.lambda$doRun$1(AbstractUpdateCommandStep.java:105)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.command.core.AbstractUpdateCommandStep.doRun(AbstractUpdateCommandStep.java:104)
+	at liquibase.command.core.AbstractUpdateCommandStep.lambda$run$0(AbstractUpdateCommandStep.java:63)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.command.core.AbstractUpdateCommandStep.run(AbstractUpdateCommandStep.java:62)
+	at liquibase.command.core.UpdateCommandStep.run(UpdateCommandStep.java:106)
+	at liquibase.command.CommandScope.execute(CommandScope.java:214)
+	... 26 common frames omitted
+Caused by: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-orderitem-table::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: отношение "public.bookcopy" не существует [Failed SQL: (0) CREATE TABLE public."orderItem" (id INTEGER GENERATED BY DEFAULT AS IDENTITY NOT NULL, "idBook" INTEGER NOT NULL, "idBookCopy" INTEGER, "idOrders" INTEGER NOT NULL, status VARCHAR(50) NOT NULL, CONSTRAINT "orderItem_pkey" PRIMARY KEY (id), CONSTRAINT fk_orderitem_order FOREIGN KEY ("idOrders") REFERENCES public.orders(id), CONSTRAINT fk_orderitem_book FOREIGN KEY ("idBook") REFERENCES public.book(id), CONSTRAINT fk_orderitem_bookcopy FOREIGN KEY ("idBookCopy") REFERENCES public.bookCopy(id))]
+	at liquibase.changelog.ChangeSet.execute(ChangeSet.java:785)
+	at liquibase.changelog.visitor.UpdateVisitor.executeAcceptedChange(UpdateVisitor.java:118)
+	at liquibase.changelog.visitor.UpdateVisitor.visit(UpdateVisitor.java:68)
+	at liquibase.changelog.ChangeLogIterator$2.lambda$run$0(ChangeLogIterator.java:110)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.Scope.child(Scope.java:250)
+	at liquibase.changelog.ChangeLogIterator$2.run(ChangeLogIterator.java:100)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.Scope.child(Scope.java:250)
+	at liquibase.Scope.child(Scope.java:254)
+	at liquibase.changelog.ChangeLogIterator.run(ChangeLogIterator.java:74)
+	... 40 common frames omitted
+Caused by: liquibase.exception.DatabaseException: ОШИБКА: отношение "public.bookcopy" не существует [Failed SQL: (0) CREATE TABLE public."orderItem" (id INTEGER GENERATED BY DEFAULT AS IDENTITY NOT NULL, "idBook" INTEGER NOT NULL, "idBookCopy" INTEGER, "idOrders" INTEGER NOT NULL, status VARCHAR(50) NOT NULL, CONSTRAINT "orderItem_pkey" PRIMARY KEY (id), CONSTRAINT fk_orderitem_order FOREIGN KEY ("idOrders") REFERENCES public.orders(id), CONSTRAINT fk_orderitem_book FOREIGN KEY ("idBook") REFERENCES public.book(id), CONSTRAINT fk_orderitem_bookcopy FOREIGN KEY ("idBookCopy") REFERENCES public.bookCopy(id))]
+	at liquibase.executor.jvm.JdbcExecutor$ExecuteStatementCallback.doInStatement(JdbcExecutor.java:468)
+	at liquibase.executor.jvm.JdbcExecutor.execute(JdbcExecutor.java:77)
+	at liquibase.executor.jvm.JdbcExecutor.execute(JdbcExecutor.java:177)
+	at liquibase.database.AbstractJdbcDatabase.execute(AbstractJdbcDatabase.java:1291)
+	at liquibase.database.AbstractJdbcDatabase.executeStatements(AbstractJdbcDatabase.java:1273)
+	at liquibase.changelog.ChangeSet.execute(ChangeSet.java:744)
+	... 56 common frames omitted
+Caused by: org.postgresql.util.PSQLException: ОШИБКА: отношение "public.bookcopy" не существует
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2734)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2421)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:372)
+	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:518)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:435)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:357)
+	at org.postgresql.jdbc.PgStatement.executeCachedSql(PgStatement.java:342)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:318)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:313)
+	at liquibase.executor.jvm.JdbcExecutor$ExecuteStatementCallback.doInStatement(JdbcExecutor.java:462)
+	... 61 common frames omitted
+15:25:49.07 [main] WARN  o.s.c.a.AnnotationConfigApplicationContext-Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/example/bookstore_app/config/SLiquibaseConfig.class]: liquibase.exception.ValidationFailedException: Validation Failed:
+     1 changesets check sum
+          db/changelog/v1/v2.create-tables.xml::create-bookcopy-table::developer was: 9:478eb86a4fae1827feeb9f364e3fd053 but is now: 9:de368416bbd3985f8f3c85fcb31a7e2e
+
+15:25:49.08 [main] ERROR o.e.bookstore_app.test.StartTest-Ошибка при запуске приложения: Error creating bean with name 'liquibase' defined in class path resource [org/example/bookstore_app/config/SLiquibaseConfig.class]: liquibase.exception.ValidationFailedException: Validation Failed:
+     1 changesets check sum
+          db/changelog/v1/v2.create-tables.xml::create-bookcopy-table::developer was: 9:478eb86a4fae1827feeb9f364e3fd053 but is now: 9:de368416bbd3985f8f3c85fcb31a7e2e
+
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/example/bookstore_app/config/SLiquibaseConfig.class]: liquibase.exception.ValidationFailedException: Validation Failed:
+     1 changesets check sum
+          db/changelog/v1/v2.create-tables.xml::create-bookcopy-table::developer was: 9:478eb86a4fae1827feeb9f364e3fd053 but is now: 9:de368416bbd3985f8f3c85fcb31a7e2e
+
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1826)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:607)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1222)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1188)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1123)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:987)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627)
+	at org.springframework.context.annotation.AnnotationConfigApplicationContext.<init>(AnnotationConfigApplicationContext.java:93)
+	at org.example.bookstore_app.view.ApplicationInitializer.initialize(ApplicationInitializer.java:18)
+	at org.example.bookstore_app.test.StartTest.main(StartTest.java:24)
+Caused by: liquibase.exception.CommandExecutionException: liquibase.exception.ValidationFailedException: Validation Failed:
+     1 changesets check sum
+          db/changelog/v1/v2.create-tables.xml::create-bookcopy-table::developer was: 9:478eb86a4fae1827feeb9f364e3fd053 but is now: 9:de368416bbd3985f8f3c85fcb31a7e2e
+
+	at liquibase.command.CommandScope.execute(CommandScope.java:237)
+	at liquibase.Liquibase.lambda$update$0(Liquibase.java:222)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.Liquibase.runInScope(Liquibase.java:1371)
+	at liquibase.Liquibase.update(Liquibase.java:211)
+	at liquibase.Liquibase.update(Liquibase.java:193)
+	at liquibase.integration.spring.SpringLiquibase.performUpdate(SpringLiquibase.java:331)
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:286)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1873)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1822)
+	... 14 common frames omitted
+Caused by: liquibase.exception.ValidationFailedException: Validation Failed:
+     1 changesets check sum
+          db/changelog/v1/v2.create-tables.xml::create-bookcopy-table::developer was: 9:478eb86a4fae1827feeb9f364e3fd053 but is now: 9:de368416bbd3985f8f3c85fcb31a7e2e
+
+	at liquibase.changelog.DatabaseChangeLog.validate(DatabaseChangeLog.java:353)
+	at liquibase.command.core.helpers.DatabaseChangelogCommandStep.run(DatabaseChangelogCommandStep.java:92)
+	at liquibase.command.CommandScope.execute(CommandScope.java:214)
+	... 26 common frames omitted
+15:27:30.38 [main] WARN  o.s.c.a.AnnotationConfigApplicationContext-Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/example/bookstore_app/config/SLiquibaseConfig.class]: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-indexes::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: relation "public.bookCopy" does not exist [Failed SQL: (0) CREATE INDEX idx_bookcopy_book ON public."bookCopy"("idBook")]
+15:27:30.39 [main] ERROR o.e.bookstore_app.test.StartTest-Ошибка при запуске приложения: Error creating bean with name 'liquibase' defined in class path resource [org/example/bookstore_app/config/SLiquibaseConfig.class]: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-indexes::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: relation "public.bookCopy" does not exist [Failed SQL: (0) CREATE INDEX idx_bookcopy_book ON public."bookCopy"("idBook")]
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/example/bookstore_app/config/SLiquibaseConfig.class]: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-indexes::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: relation "public.bookCopy" does not exist [Failed SQL: (0) CREATE INDEX idx_bookcopy_book ON public."bookCopy"("idBook")]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1826)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:607)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1222)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1188)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1123)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:987)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627)
+	at org.springframework.context.annotation.AnnotationConfigApplicationContext.<init>(AnnotationConfigApplicationContext.java:93)
+	at org.example.bookstore_app.view.ApplicationInitializer.initialize(ApplicationInitializer.java:18)
+	at org.example.bookstore_app.test.StartTest.main(StartTest.java:24)
+Caused by: liquibase.exception.CommandExecutionException: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-indexes::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: relation "public.bookCopy" does not exist [Failed SQL: (0) CREATE INDEX idx_bookcopy_book ON public."bookCopy"("idBook")]
+	at liquibase.command.CommandScope.execute(CommandScope.java:237)
+	at liquibase.Liquibase.lambda$update$0(Liquibase.java:222)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.Liquibase.runInScope(Liquibase.java:1371)
+	at liquibase.Liquibase.update(Liquibase.java:211)
+	at liquibase.Liquibase.update(Liquibase.java:193)
+	at liquibase.integration.spring.SpringLiquibase.performUpdate(SpringLiquibase.java:331)
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:286)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1873)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1822)
+	... 14 common frames omitted
+Caused by: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-indexes::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: relation "public.bookCopy" does not exist [Failed SQL: (0) CREATE INDEX idx_bookcopy_book ON public."bookCopy"("idBook")]
+	at liquibase.changelog.ChangeLogIterator.run(ChangeLogIterator.java:122)
+	at liquibase.command.core.AbstractUpdateCommandStep.lambda$doRun$1(AbstractUpdateCommandStep.java:105)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.command.core.AbstractUpdateCommandStep.doRun(AbstractUpdateCommandStep.java:104)
+	at liquibase.command.core.AbstractUpdateCommandStep.lambda$run$0(AbstractUpdateCommandStep.java:63)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.command.core.AbstractUpdateCommandStep.run(AbstractUpdateCommandStep.java:62)
+	at liquibase.command.core.UpdateCommandStep.run(UpdateCommandStep.java:106)
+	at liquibase.command.CommandScope.execute(CommandScope.java:214)
+	... 26 common frames omitted
+Caused by: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-indexes::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: relation "public.bookCopy" does not exist [Failed SQL: (0) CREATE INDEX idx_bookcopy_book ON public."bookCopy"("idBook")]
+	at liquibase.changelog.ChangeSet.execute(ChangeSet.java:785)
+	at liquibase.changelog.visitor.UpdateVisitor.executeAcceptedChange(UpdateVisitor.java:118)
+	at liquibase.changelog.visitor.UpdateVisitor.visit(UpdateVisitor.java:68)
+	at liquibase.changelog.ChangeLogIterator$2.lambda$run$0(ChangeLogIterator.java:110)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.Scope.child(Scope.java:250)
+	at liquibase.changelog.ChangeLogIterator$2.run(ChangeLogIterator.java:100)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.Scope.child(Scope.java:250)
+	at liquibase.Scope.child(Scope.java:254)
+	at liquibase.changelog.ChangeLogIterator.run(ChangeLogIterator.java:74)
+	... 40 common frames omitted
+Caused by: liquibase.exception.DatabaseException: ОШИБКА: relation "public.bookCopy" does not exist [Failed SQL: (0) CREATE INDEX idx_bookcopy_book ON public."bookCopy"("idBook")]
+	at liquibase.executor.jvm.JdbcExecutor$ExecuteStatementCallback.doInStatement(JdbcExecutor.java:468)
+	at liquibase.executor.jvm.JdbcExecutor.execute(JdbcExecutor.java:77)
+	at liquibase.executor.jvm.JdbcExecutor.execute(JdbcExecutor.java:177)
+	at liquibase.database.AbstractJdbcDatabase.execute(AbstractJdbcDatabase.java:1291)
+	at liquibase.database.AbstractJdbcDatabase.executeStatements(AbstractJdbcDatabase.java:1273)
+	at liquibase.changelog.ChangeSet.execute(ChangeSet.java:744)
+	... 56 common frames omitted
+Caused by: org.postgresql.util.PSQLException: ОШИБКА: relation "public.bookCopy" does not exist
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2734)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2421)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:372)
+	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:518)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:435)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:357)
+	at org.postgresql.jdbc.PgStatement.executeCachedSql(PgStatement.java:342)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:318)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:313)
+	at liquibase.executor.jvm.JdbcExecutor$ExecuteStatementCallback.doInStatement(JdbcExecutor.java:462)
+	... 61 common frames omitted
+15:30:13.95 [main] WARN  o.s.c.a.AnnotationConfigApplicationContext-Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'bookCSVService': Unsatisfied dependency expressed through field 'stockService': Error creating bean with name 'stockService': Unsatisfied dependency expressed through field 'bookService': Error creating bean with name 'bookServiceSQL' defined in file [D:\GitHubRepositories\Senla\bookstore_app\bookstore\target\classes\org\example\bookstore_app\service\BookServiceSQL.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'bookDAO': Unsatisfied dependency expressed through field 'sessionFactory': Error creating bean with name 'sessionFactory' defined in org.example.bookstore_app.config.SpringConfig: Unknown mappedBy in: org.example.bookstore_app.model.BookOrderItem.request, referenced property unknown: org.example.bookstore_app.model.Request.orderitem
+15:30:13.96 [main] ERROR o.e.bookstore_app.test.StartTest-Ошибка при запуске приложения: Error creating bean with name 'bookCSVService': Unsatisfied dependency expressed through field 'stockService': Error creating bean with name 'stockService': Unsatisfied dependency expressed through field 'bookService': Error creating bean with name 'bookServiceSQL' defined in file [D:\GitHubRepositories\Senla\bookstore_app\bookstore\target\classes\org\example\bookstore_app\service\BookServiceSQL.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'bookDAO': Unsatisfied dependency expressed through field 'sessionFactory': Error creating bean with name 'sessionFactory' defined in org.example.bookstore_app.config.SpringConfig: Unknown mappedBy in: org.example.bookstore_app.model.BookOrderItem.request, referenced property unknown: org.example.bookstore_app.model.Request.orderitem
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'bookCSVService': Unsatisfied dependency expressed through field 'stockService': Error creating bean with name 'stockService': Unsatisfied dependency expressed through field 'bookService': Error creating bean with name 'bookServiceSQL' defined in file [D:\GitHubRepositories\Senla\bookstore_app\bookstore\target\classes\org\example\bookstore_app\service\BookServiceSQL.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'bookDAO': Unsatisfied dependency expressed through field 'sessionFactory': Error creating bean with name 'sessionFactory' defined in org.example.bookstore_app.config.SpringConfig: Unknown mappedBy in: org.example.bookstore_app.model.BookOrderItem.request, referenced property unknown: org.example.bookstore_app.model.Request.orderitem
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:788)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:768)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:146)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:509)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1459)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:606)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1222)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1188)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1123)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:987)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627)
+	at org.springframework.context.annotation.AnnotationConfigApplicationContext.<init>(AnnotationConfigApplicationContext.java:93)
+	at org.example.bookstore_app.view.ApplicationInitializer.initialize(ApplicationInitializer.java:18)
+	at org.example.bookstore_app.test.StartTest.main(StartTest.java:24)
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'stockService': Unsatisfied dependency expressed through field 'bookService': Error creating bean with name 'bookServiceSQL' defined in file [D:\GitHubRepositories\Senla\bookstore_app\bookstore\target\classes\org\example\bookstore_app\service\BookServiceSQL.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'bookDAO': Unsatisfied dependency expressed through field 'sessionFactory': Error creating bean with name 'sessionFactory' defined in org.example.bookstore_app.config.SpringConfig: Unknown mappedBy in: org.example.bookstore_app.model.BookOrderItem.request, referenced property unknown: org.example.bookstore_app.model.Request.orderitem
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:788)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:768)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:146)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:509)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1459)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:606)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1690)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1635)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:785)
+	... 18 common frames omitted
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'bookServiceSQL' defined in file [D:\GitHubRepositories\Senla\bookstore_app\bookstore\target\classes\org\example\bookstore_app\service\BookServiceSQL.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'bookDAO': Unsatisfied dependency expressed through field 'sessionFactory': Error creating bean with name 'sessionFactory' defined in org.example.bookstore_app.config.SpringConfig: Unknown mappedBy in: org.example.bookstore_app.model.BookOrderItem.request, referenced property unknown: org.example.bookstore_app.model.Request.orderitem
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:804)
+	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:240)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1395)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1232)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:569)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1752)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1635)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:785)
+	... 31 common frames omitted
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'bookDAO': Unsatisfied dependency expressed through field 'sessionFactory': Error creating bean with name 'sessionFactory' defined in org.example.bookstore_app.config.SpringConfig: Unknown mappedBy in: org.example.bookstore_app.model.BookOrderItem.request, referenced property unknown: org.example.bookstore_app.model.Request.orderitem
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:788)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:768)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:146)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:509)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1459)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:606)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1752)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1635)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:913)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791)
+	... 44 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sessionFactory' defined in org.example.bookstore_app.config.SpringConfig: Unknown mappedBy in: org.example.bookstore_app.model.BookOrderItem.request, referenced property unknown: org.example.bookstore_app.model.Request.orderitem
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1826)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:607)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1690)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1635)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:785)
+	... 59 common frames omitted
+Caused by: org.hibernate.AnnotationException: Unknown mappedBy in: org.example.bookstore_app.model.BookOrderItem.request, referenced property unknown: org.example.bookstore_app.model.Request.orderitem
+	at org.hibernate.cfg.OneToOneSecondPass.doSecondPass(OneToOneSecondPass.java:171)
+	at org.hibernate.boot.internal.InFlightMetadataCollectorImpl.processSecondPasses(InFlightMetadataCollectorImpl.java:1653)
+	at org.hibernate.boot.internal.InFlightMetadataCollectorImpl.processSecondPasses(InFlightMetadataCollectorImpl.java:1629)
+	at org.hibernate.boot.model.process.spi.MetadataBuildingProcess.complete(MetadataBuildingProcess.java:295)
+	at org.hibernate.boot.model.process.spi.MetadataBuildingProcess.build(MetadataBuildingProcess.java:86)
+	at org.hibernate.boot.internal.MetadataBuilderImpl.build(MetadataBuilderImpl.java:479)
+	at org.hibernate.boot.internal.MetadataBuilderImpl.build(MetadataBuilderImpl.java:85)
+	at org.hibernate.cfg.Configuration.buildSessionFactory(Configuration.java:709)
+	at org.hibernate.cfg.Configuration.buildSessionFactory(Configuration.java:746)
+	at org.springframework.orm.hibernate5.LocalSessionFactoryBean.buildSessionFactory(LocalSessionFactoryBean.java:616)
+	at org.springframework.orm.hibernate5.LocalSessionFactoryBean.afterPropertiesSet(LocalSessionFactoryBean.java:600)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1873)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1822)
+	... 68 common frames omitted
+15:39:39.82 [main] WARN  o.s.c.a.AnnotationConfigApplicationContext-Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'bookCSVService': Unsatisfied dependency expressed through field 'stockService': Error creating bean with name 'stockService': Unsatisfied dependency expressed through field 'bookService': Error creating bean with name 'bookServiceSQL' defined in file [D:\GitHubRepositories\Senla\bookstore_app\bookstore\target\classes\org\example\bookstore_app\service\BookServiceSQL.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'bookDAO': Unsatisfied dependency expressed through field 'sessionFactory': Error creating bean with name 'sessionFactory' defined in org.example.bookstore_app.config.SpringConfig: Unknown mappedBy in: org.example.bookstore_app.model.BookOrderItem.request, referenced property unknown: org.example.bookstore_app.model.Request.orderitem
+15:39:39.82 [main] ERROR o.e.bookstore_app.test.StartTest-Ошибка при запуске приложения: Error creating bean with name 'bookCSVService': Unsatisfied dependency expressed through field 'stockService': Error creating bean with name 'stockService': Unsatisfied dependency expressed through field 'bookService': Error creating bean with name 'bookServiceSQL' defined in file [D:\GitHubRepositories\Senla\bookstore_app\bookstore\target\classes\org\example\bookstore_app\service\BookServiceSQL.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'bookDAO': Unsatisfied dependency expressed through field 'sessionFactory': Error creating bean with name 'sessionFactory' defined in org.example.bookstore_app.config.SpringConfig: Unknown mappedBy in: org.example.bookstore_app.model.BookOrderItem.request, referenced property unknown: org.example.bookstore_app.model.Request.orderitem
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'bookCSVService': Unsatisfied dependency expressed through field 'stockService': Error creating bean with name 'stockService': Unsatisfied dependency expressed through field 'bookService': Error creating bean with name 'bookServiceSQL' defined in file [D:\GitHubRepositories\Senla\bookstore_app\bookstore\target\classes\org\example\bookstore_app\service\BookServiceSQL.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'bookDAO': Unsatisfied dependency expressed through field 'sessionFactory': Error creating bean with name 'sessionFactory' defined in org.example.bookstore_app.config.SpringConfig: Unknown mappedBy in: org.example.bookstore_app.model.BookOrderItem.request, referenced property unknown: org.example.bookstore_app.model.Request.orderitem
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:788)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:768)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:146)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:509)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1459)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:606)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1222)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1188)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1123)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:987)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627)
+	at org.springframework.context.annotation.AnnotationConfigApplicationContext.<init>(AnnotationConfigApplicationContext.java:93)
+	at org.example.bookstore_app.view.ApplicationInitializer.initialize(ApplicationInitializer.java:18)
+	at org.example.bookstore_app.test.StartTest.main(StartTest.java:24)
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'stockService': Unsatisfied dependency expressed through field 'bookService': Error creating bean with name 'bookServiceSQL' defined in file [D:\GitHubRepositories\Senla\bookstore_app\bookstore\target\classes\org\example\bookstore_app\service\BookServiceSQL.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'bookDAO': Unsatisfied dependency expressed through field 'sessionFactory': Error creating bean with name 'sessionFactory' defined in org.example.bookstore_app.config.SpringConfig: Unknown mappedBy in: org.example.bookstore_app.model.BookOrderItem.request, referenced property unknown: org.example.bookstore_app.model.Request.orderitem
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:788)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:768)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:146)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:509)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1459)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:606)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1690)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1635)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:785)
+	... 18 common frames omitted
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'bookServiceSQL' defined in file [D:\GitHubRepositories\Senla\bookstore_app\bookstore\target\classes\org\example\bookstore_app\service\BookServiceSQL.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'bookDAO': Unsatisfied dependency expressed through field 'sessionFactory': Error creating bean with name 'sessionFactory' defined in org.example.bookstore_app.config.SpringConfig: Unknown mappedBy in: org.example.bookstore_app.model.BookOrderItem.request, referenced property unknown: org.example.bookstore_app.model.Request.orderitem
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:804)
+	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:240)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1395)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1232)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:569)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1752)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1635)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:785)
+	... 31 common frames omitted
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'bookDAO': Unsatisfied dependency expressed through field 'sessionFactory': Error creating bean with name 'sessionFactory' defined in org.example.bookstore_app.config.SpringConfig: Unknown mappedBy in: org.example.bookstore_app.model.BookOrderItem.request, referenced property unknown: org.example.bookstore_app.model.Request.orderitem
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:788)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:768)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:146)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:509)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1459)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:606)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1752)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1635)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:913)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791)
+	... 44 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sessionFactory' defined in org.example.bookstore_app.config.SpringConfig: Unknown mappedBy in: org.example.bookstore_app.model.BookOrderItem.request, referenced property unknown: org.example.bookstore_app.model.Request.orderitem
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1826)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:607)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1690)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1635)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:785)
+	... 59 common frames omitted
+Caused by: org.hibernate.AnnotationException: Unknown mappedBy in: org.example.bookstore_app.model.BookOrderItem.request, referenced property unknown: org.example.bookstore_app.model.Request.orderitem
+	at org.hibernate.cfg.OneToOneSecondPass.doSecondPass(OneToOneSecondPass.java:171)
+	at org.hibernate.boot.internal.InFlightMetadataCollectorImpl.processSecondPasses(InFlightMetadataCollectorImpl.java:1653)
+	at org.hibernate.boot.internal.InFlightMetadataCollectorImpl.processSecondPasses(InFlightMetadataCollectorImpl.java:1629)
+	at org.hibernate.boot.model.process.spi.MetadataBuildingProcess.complete(MetadataBuildingProcess.java:295)
+	at org.hibernate.boot.model.process.spi.MetadataBuildingProcess.build(MetadataBuildingProcess.java:86)
+	at org.hibernate.boot.internal.MetadataBuilderImpl.build(MetadataBuilderImpl.java:479)
+	at org.hibernate.boot.internal.MetadataBuilderImpl.build(MetadataBuilderImpl.java:85)
+	at org.hibernate.cfg.Configuration.buildSessionFactory(Configuration.java:709)
+	at org.hibernate.cfg.Configuration.buildSessionFactory(Configuration.java:746)
+	at org.springframework.orm.hibernate5.LocalSessionFactoryBean.buildSessionFactory(LocalSessionFactoryBean.java:616)
+	at org.springframework.orm.hibernate5.LocalSessionFactoryBean.afterPropertiesSet(LocalSessionFactoryBean.java:600)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1873)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1822)
+	... 68 common frames omitted
+15:41:21.69 [main] WARN  o.s.c.a.AnnotationConfigApplicationContext-Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/example/bookstore_app/config/SLiquibaseConfig.class]: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-indexes::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: relation "public.bookCopy" does not exist [Failed SQL: (0) CREATE INDEX idx_bookcopy_book ON public."bookCopy"("idBook")]
+15:41:21.69 [main] ERROR o.e.bookstore_app.test.StartTest-Ошибка при запуске приложения: Error creating bean with name 'liquibase' defined in class path resource [org/example/bookstore_app/config/SLiquibaseConfig.class]: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-indexes::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: relation "public.bookCopy" does not exist [Failed SQL: (0) CREATE INDEX idx_bookcopy_book ON public."bookCopy"("idBook")]
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/example/bookstore_app/config/SLiquibaseConfig.class]: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-indexes::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: relation "public.bookCopy" does not exist [Failed SQL: (0) CREATE INDEX idx_bookcopy_book ON public."bookCopy"("idBook")]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1826)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:607)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1222)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1188)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1123)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:987)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627)
+	at org.springframework.context.annotation.AnnotationConfigApplicationContext.<init>(AnnotationConfigApplicationContext.java:93)
+	at org.example.bookstore_app.view.ApplicationInitializer.initialize(ApplicationInitializer.java:18)
+	at org.example.bookstore_app.test.StartTest.main(StartTest.java:24)
+Caused by: liquibase.exception.CommandExecutionException: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-indexes::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: relation "public.bookCopy" does not exist [Failed SQL: (0) CREATE INDEX idx_bookcopy_book ON public."bookCopy"("idBook")]
+	at liquibase.command.CommandScope.execute(CommandScope.java:237)
+	at liquibase.Liquibase.lambda$update$0(Liquibase.java:222)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.Liquibase.runInScope(Liquibase.java:1371)
+	at liquibase.Liquibase.update(Liquibase.java:211)
+	at liquibase.Liquibase.update(Liquibase.java:193)
+	at liquibase.integration.spring.SpringLiquibase.performUpdate(SpringLiquibase.java:331)
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:286)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1873)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1822)
+	... 14 common frames omitted
+Caused by: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-indexes::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: relation "public.bookCopy" does not exist [Failed SQL: (0) CREATE INDEX idx_bookcopy_book ON public."bookCopy"("idBook")]
+	at liquibase.changelog.ChangeLogIterator.run(ChangeLogIterator.java:122)
+	at liquibase.command.core.AbstractUpdateCommandStep.lambda$doRun$1(AbstractUpdateCommandStep.java:105)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.command.core.AbstractUpdateCommandStep.doRun(AbstractUpdateCommandStep.java:104)
+	at liquibase.command.core.AbstractUpdateCommandStep.lambda$run$0(AbstractUpdateCommandStep.java:63)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.command.core.AbstractUpdateCommandStep.run(AbstractUpdateCommandStep.java:62)
+	at liquibase.command.core.UpdateCommandStep.run(UpdateCommandStep.java:106)
+	at liquibase.command.CommandScope.execute(CommandScope.java:214)
+	... 26 common frames omitted
+Caused by: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-indexes::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: relation "public.bookCopy" does not exist [Failed SQL: (0) CREATE INDEX idx_bookcopy_book ON public."bookCopy"("idBook")]
+	at liquibase.changelog.ChangeSet.execute(ChangeSet.java:785)
+	at liquibase.changelog.visitor.UpdateVisitor.executeAcceptedChange(UpdateVisitor.java:118)
+	at liquibase.changelog.visitor.UpdateVisitor.visit(UpdateVisitor.java:68)
+	at liquibase.changelog.ChangeLogIterator$2.lambda$run$0(ChangeLogIterator.java:110)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.Scope.child(Scope.java:250)
+	at liquibase.changelog.ChangeLogIterator$2.run(ChangeLogIterator.java:100)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.Scope.child(Scope.java:250)
+	at liquibase.Scope.child(Scope.java:254)
+	at liquibase.changelog.ChangeLogIterator.run(ChangeLogIterator.java:74)
+	... 40 common frames omitted
+Caused by: liquibase.exception.DatabaseException: ОШИБКА: relation "public.bookCopy" does not exist [Failed SQL: (0) CREATE INDEX idx_bookcopy_book ON public."bookCopy"("idBook")]
+	at liquibase.executor.jvm.JdbcExecutor$ExecuteStatementCallback.doInStatement(JdbcExecutor.java:468)
+	at liquibase.executor.jvm.JdbcExecutor.execute(JdbcExecutor.java:77)
+	at liquibase.executor.jvm.JdbcExecutor.execute(JdbcExecutor.java:177)
+	at liquibase.database.AbstractJdbcDatabase.execute(AbstractJdbcDatabase.java:1291)
+	at liquibase.database.AbstractJdbcDatabase.executeStatements(AbstractJdbcDatabase.java:1273)
+	at liquibase.changelog.ChangeSet.execute(ChangeSet.java:744)
+	... 56 common frames omitted
+Caused by: org.postgresql.util.PSQLException: ОШИБКА: relation "public.bookCopy" does not exist
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2734)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2421)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:372)
+	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:518)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:435)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:357)
+	at org.postgresql.jdbc.PgStatement.executeCachedSql(PgStatement.java:342)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:318)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:313)
+	at liquibase.executor.jvm.JdbcExecutor$ExecuteStatementCallback.doInStatement(JdbcExecutor.java:462)
+	... 61 common frames omitted
+15:42:18.99 [main] WARN  o.s.c.a.AnnotationConfigApplicationContext-Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/example/bookstore_app/config/SLiquibaseConfig.class]: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-indexes::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: relation "public.bookCopy" does not exist [Failed SQL: (0) CREATE INDEX idx_bookcopy_book ON public."bookCopy"("idBook")]
+15:42:19.00 [main] ERROR o.e.bookstore_app.test.StartTest-Ошибка при запуске приложения: Error creating bean with name 'liquibase' defined in class path resource [org/example/bookstore_app/config/SLiquibaseConfig.class]: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-indexes::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: relation "public.bookCopy" does not exist [Failed SQL: (0) CREATE INDEX idx_bookcopy_book ON public."bookCopy"("idBook")]
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/example/bookstore_app/config/SLiquibaseConfig.class]: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-indexes::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: relation "public.bookCopy" does not exist [Failed SQL: (0) CREATE INDEX idx_bookcopy_book ON public."bookCopy"("idBook")]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1826)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:607)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1222)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1188)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1123)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:987)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627)
+	at org.springframework.context.annotation.AnnotationConfigApplicationContext.<init>(AnnotationConfigApplicationContext.java:93)
+	at org.example.bookstore_app.view.ApplicationInitializer.initialize(ApplicationInitializer.java:18)
+	at org.example.bookstore_app.test.StartTest.main(StartTest.java:24)
+Caused by: liquibase.exception.CommandExecutionException: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-indexes::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: relation "public.bookCopy" does not exist [Failed SQL: (0) CREATE INDEX idx_bookcopy_book ON public."bookCopy"("idBook")]
+	at liquibase.command.CommandScope.execute(CommandScope.java:237)
+	at liquibase.Liquibase.lambda$update$0(Liquibase.java:222)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.Liquibase.runInScope(Liquibase.java:1371)
+	at liquibase.Liquibase.update(Liquibase.java:211)
+	at liquibase.Liquibase.update(Liquibase.java:193)
+	at liquibase.integration.spring.SpringLiquibase.performUpdate(SpringLiquibase.java:331)
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:286)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1873)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1822)
+	... 14 common frames omitted
+Caused by: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-indexes::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: relation "public.bookCopy" does not exist [Failed SQL: (0) CREATE INDEX idx_bookcopy_book ON public."bookCopy"("idBook")]
+	at liquibase.changelog.ChangeLogIterator.run(ChangeLogIterator.java:122)
+	at liquibase.command.core.AbstractUpdateCommandStep.lambda$doRun$1(AbstractUpdateCommandStep.java:105)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.command.core.AbstractUpdateCommandStep.doRun(AbstractUpdateCommandStep.java:104)
+	at liquibase.command.core.AbstractUpdateCommandStep.lambda$run$0(AbstractUpdateCommandStep.java:63)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.command.core.AbstractUpdateCommandStep.run(AbstractUpdateCommandStep.java:62)
+	at liquibase.command.core.UpdateCommandStep.run(UpdateCommandStep.java:106)
+	at liquibase.command.CommandScope.execute(CommandScope.java:214)
+	... 26 common frames omitted
+Caused by: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v2.create-tables.xml::create-indexes::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: relation "public.bookCopy" does not exist [Failed SQL: (0) CREATE INDEX idx_bookcopy_book ON public."bookCopy"("idBook")]
+	at liquibase.changelog.ChangeSet.execute(ChangeSet.java:785)
+	at liquibase.changelog.visitor.UpdateVisitor.executeAcceptedChange(UpdateVisitor.java:118)
+	at liquibase.changelog.visitor.UpdateVisitor.visit(UpdateVisitor.java:68)
+	at liquibase.changelog.ChangeLogIterator$2.lambda$run$0(ChangeLogIterator.java:110)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.Scope.child(Scope.java:250)
+	at liquibase.changelog.ChangeLogIterator$2.run(ChangeLogIterator.java:100)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.Scope.child(Scope.java:250)
+	at liquibase.Scope.child(Scope.java:254)
+	at liquibase.changelog.ChangeLogIterator.run(ChangeLogIterator.java:74)
+	... 40 common frames omitted
+Caused by: liquibase.exception.DatabaseException: ОШИБКА: relation "public.bookCopy" does not exist [Failed SQL: (0) CREATE INDEX idx_bookcopy_book ON public."bookCopy"("idBook")]
+	at liquibase.executor.jvm.JdbcExecutor$ExecuteStatementCallback.doInStatement(JdbcExecutor.java:468)
+	at liquibase.executor.jvm.JdbcExecutor.execute(JdbcExecutor.java:77)
+	at liquibase.executor.jvm.JdbcExecutor.execute(JdbcExecutor.java:177)
+	at liquibase.database.AbstractJdbcDatabase.execute(AbstractJdbcDatabase.java:1291)
+	at liquibase.database.AbstractJdbcDatabase.executeStatements(AbstractJdbcDatabase.java:1273)
+	at liquibase.changelog.ChangeSet.execute(ChangeSet.java:744)
+	... 56 common frames omitted
+Caused by: org.postgresql.util.PSQLException: ОШИБКА: relation "public.bookCopy" does not exist
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2734)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2421)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:372)
+	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:518)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:435)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:357)
+	at org.postgresql.jdbc.PgStatement.executeCachedSql(PgStatement.java:342)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:318)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:313)
+	at liquibase.executor.jvm.JdbcExecutor$ExecuteStatementCallback.doInStatement(JdbcExecutor.java:462)
+	... 61 common frames omitted
+15:43:01.51 [main] WARN  o.h.e.jdbc.spi.SqlExceptionHelper-SQL Error: 0, SQLState: 42703
+15:43:01.51 [main] ERROR o.h.e.jdbc.spi.SqlExceptionHelper-ОШИБКА: столбец book0_.publicationdate не существует
+  Подсказка: Возможно, предполагалась ссылка на столбец "book0_.publicationDate".
+  Позиция: 146
+15:43:01.52 [main] ERROR o.e.bookstore_app.test.StartTest-Ошибка при запуске приложения: org.hibernate.exception.SQLGrammarException: could not extract ResultSet
+javax.persistence.PersistenceException: org.hibernate.exception.SQLGrammarException: could not extract ResultSet
+	at org.hibernate.internal.ExceptionConverterImpl.convert(ExceptionConverterImpl.java:154)
+	at org.hibernate.query.internal.AbstractProducedQuery.list(AbstractProducedQuery.java:1626)
+	at org.hibernate.query.Query.getResultList(Query.java:165)
+	at org.example.bookstore_app.dao.HibernateAbstractDao.findAll(HibernateAbstractDao.java:45)
+	at org.example.bookstore_app.service.GenericServiceImpl.findAll(GenericServiceImpl.java:46)
+	at org.example.bookstore_app.service.BookServiceSQL.findAll(BookServiceSQL.java:37)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:359)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.transaction.interceptor.TransactionInterceptor$1.proceedWithInvocation(TransactionInterceptor.java:123)
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:388)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:223)
+	at jdk.proxy2/jdk.proxy2.$Proxy60.findAll(Unknown Source)
+	at org.example.bookstore_app.service.StockService.getBooks(StockService.java:44)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:359)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.transaction.interceptor.TransactionInterceptor$1.proceedWithInvocation(TransactionInterceptor.java:123)
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:388)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:728)
+	at org.example.bookstore_app.service.StockService$$SpringCGLIB$$0.getBooks(<generated>)
+	at org.example.bookstore_app.controller.OperationController.initializeTestData(OperationController.java:39)
+	at org.example.bookstore_app.view.ApplicationInitializer.initialize(ApplicationInitializer.java:26)
+	at org.example.bookstore_app.test.StartTest.main(StartTest.java:24)
+Caused by: org.hibernate.exception.SQLGrammarException: could not extract ResultSet
+	at org.hibernate.exception.internal.SQLStateConversionDelegate.convert(SQLStateConversionDelegate.java:103)
+	at org.hibernate.exception.internal.StandardSQLExceptionConverter.convert(StandardSQLExceptionConverter.java:37)
+	at org.hibernate.engine.jdbc.spi.SqlExceptionHelper.convert(SqlExceptionHelper.java:113)
+	at org.hibernate.engine.jdbc.spi.SqlExceptionHelper.convert(SqlExceptionHelper.java:99)
+	at org.hibernate.engine.jdbc.internal.ResultSetReturnImpl.extract(ResultSetReturnImpl.java:67)
+	at org.hibernate.loader.Loader.getResultSet(Loader.java:2322)
+	at org.hibernate.loader.Loader.executeQueryStatement(Loader.java:2075)
+	at org.hibernate.loader.Loader.executeQueryStatement(Loader.java:2037)
+	at org.hibernate.loader.Loader.doQuery(Loader.java:956)
+	at org.hibernate.loader.Loader.doQueryAndInitializeNonLazyCollections(Loader.java:357)
+	at org.hibernate.loader.Loader.doList(Loader.java:2868)
+	at org.hibernate.loader.Loader.doList(Loader.java:2850)
+	at org.hibernate.loader.Loader.listIgnoreQueryCache(Loader.java:2682)
+	at org.hibernate.loader.Loader.list(Loader.java:2677)
+	at org.hibernate.loader.hql.QueryLoader.list(QueryLoader.java:540)
+	at org.hibernate.hql.internal.ast.QueryTranslatorImpl.list(QueryTranslatorImpl.java:400)
+	at org.hibernate.engine.query.spi.HQLQueryPlan.performList(HQLQueryPlan.java:218)
+	at org.hibernate.internal.SessionImpl.list(SessionImpl.java:1459)
+	at org.hibernate.query.internal.AbstractProducedQuery.doList(AbstractProducedQuery.java:1649)
+	at org.hibernate.query.internal.AbstractProducedQuery.list(AbstractProducedQuery.java:1617)
+	... 30 common frames omitted
+Caused by: org.postgresql.util.PSQLException: ОШИБКА: столбец book0_.publicationdate не существует
+  Подсказка: Возможно, предполагалась ссылка на столбец "book0_.publicationDate".
+  Позиция: 146
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2734)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2421)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:372)
+	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:518)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:435)
+	at org.postgresql.jdbc.PgPreparedStatement.executeWithFlags(PgPreparedStatement.java:196)
+	at org.postgresql.jdbc.PgPreparedStatement.executeQuery(PgPreparedStatement.java:139)
+	at org.hibernate.engine.jdbc.internal.ResultSetReturnImpl.extract(ResultSetReturnImpl.java:57)
+	... 45 common frames omitted
+15:45:14.59 [main] WARN  o.h.e.jdbc.spi.SqlExceptionHelper-SQL Error: 0, SQLState: 42703
+15:45:14.59 [main] ERROR o.h.e.jdbc.spi.SqlExceptionHelper-ОШИБКА: столбец book0_.publicationdate не существует
+  Подсказка: Возможно, предполагалась ссылка на столбец "book0_.publicationDate".
+  Позиция: 146
+15:45:14.60 [main] ERROR o.e.bookstore_app.test.StartTest-Ошибка при запуске приложения: org.hibernate.exception.SQLGrammarException: could not extract ResultSet
+javax.persistence.PersistenceException: org.hibernate.exception.SQLGrammarException: could not extract ResultSet
+	at org.hibernate.internal.ExceptionConverterImpl.convert(ExceptionConverterImpl.java:154)
+	at org.hibernate.query.internal.AbstractProducedQuery.list(AbstractProducedQuery.java:1626)
+	at org.hibernate.query.Query.getResultList(Query.java:165)
+	at org.example.bookstore_app.dao.HibernateAbstractDao.findAll(HibernateAbstractDao.java:45)
+	at org.example.bookstore_app.service.GenericServiceImpl.findAll(GenericServiceImpl.java:46)
+	at org.example.bookstore_app.service.BookServiceSQL.findAll(BookServiceSQL.java:37)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:359)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.transaction.interceptor.TransactionInterceptor$1.proceedWithInvocation(TransactionInterceptor.java:123)
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:388)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.JdkDynamicAopProxy.invoke(JdkDynamicAopProxy.java:223)
+	at jdk.proxy2/jdk.proxy2.$Proxy60.findAll(Unknown Source)
+	at org.example.bookstore_app.service.StockService.getBooks(StockService.java:44)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:359)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.transaction.interceptor.TransactionInterceptor$1.proceedWithInvocation(TransactionInterceptor.java:123)
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:388)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:728)
+	at org.example.bookstore_app.service.StockService$$SpringCGLIB$$0.getBooks(<generated>)
+	at org.example.bookstore_app.controller.OperationController.initializeTestData(OperationController.java:39)
+	at org.example.bookstore_app.view.ApplicationInitializer.initialize(ApplicationInitializer.java:26)
+	at org.example.bookstore_app.test.StartTest.main(StartTest.java:24)
+Caused by: org.hibernate.exception.SQLGrammarException: could not extract ResultSet
+	at org.hibernate.exception.internal.SQLStateConversionDelegate.convert(SQLStateConversionDelegate.java:103)
+	at org.hibernate.exception.internal.StandardSQLExceptionConverter.convert(StandardSQLExceptionConverter.java:37)
+	at org.hibernate.engine.jdbc.spi.SqlExceptionHelper.convert(SqlExceptionHelper.java:113)
+	at org.hibernate.engine.jdbc.spi.SqlExceptionHelper.convert(SqlExceptionHelper.java:99)
+	at org.hibernate.engine.jdbc.internal.ResultSetReturnImpl.extract(ResultSetReturnImpl.java:67)
+	at org.hibernate.loader.Loader.getResultSet(Loader.java:2322)
+	at org.hibernate.loader.Loader.executeQueryStatement(Loader.java:2075)
+	at org.hibernate.loader.Loader.executeQueryStatement(Loader.java:2037)
+	at org.hibernate.loader.Loader.doQuery(Loader.java:956)
+	at org.hibernate.loader.Loader.doQueryAndInitializeNonLazyCollections(Loader.java:357)
+	at org.hibernate.loader.Loader.doList(Loader.java:2868)
+	at org.hibernate.loader.Loader.doList(Loader.java:2850)
+	at org.hibernate.loader.Loader.listIgnoreQueryCache(Loader.java:2682)
+	at org.hibernate.loader.Loader.list(Loader.java:2677)
+	at org.hibernate.loader.hql.QueryLoader.list(QueryLoader.java:540)
+	at org.hibernate.hql.internal.ast.QueryTranslatorImpl.list(QueryTranslatorImpl.java:400)
+	at org.hibernate.engine.query.spi.HQLQueryPlan.performList(HQLQueryPlan.java:218)
+	at org.hibernate.internal.SessionImpl.list(SessionImpl.java:1459)
+	at org.hibernate.query.internal.AbstractProducedQuery.doList(AbstractProducedQuery.java:1649)
+	at org.hibernate.query.internal.AbstractProducedQuery.list(AbstractProducedQuery.java:1617)
+	... 30 common frames omitted
+Caused by: org.postgresql.util.PSQLException: ОШИБКА: столбец book0_.publicationdate не существует
+  Подсказка: Возможно, предполагалась ссылка на столбец "book0_.publicationDate".
+  Позиция: 146
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2734)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2421)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:372)
+	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:518)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:435)
+	at org.postgresql.jdbc.PgPreparedStatement.executeWithFlags(PgPreparedStatement.java:196)
+	at org.postgresql.jdbc.PgPreparedStatement.executeQuery(PgPreparedStatement.java:139)
+	at org.hibernate.engine.jdbc.internal.ResultSetReturnImpl.extract(ResultSetReturnImpl.java:57)
+	... 45 common frames omitted
+15:48:06.32 [main] WARN  o.s.c.a.AnnotationConfigApplicationContext-Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/example/bookstore_app/config/SLiquibaseConfig.class]: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v3.initial.xml::insert-sample-books::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: column "publicationDate" of relation "book" does not exist
+  Позиция: 55 [Failed SQL: (0) INSERT INTO public.book (name, author, status, price, "publicationDate", information) VALUES ('Война и мир', 'Лев Толстой', 'OUT_OF_STOCK', '999.99', '1869-01-01', 'Роман-эпопея Льва Толстого')]
+15:48:06.33 [main] ERROR o.e.bookstore_app.test.StartTest-Ошибка при запуске приложения: Error creating bean with name 'liquibase' defined in class path resource [org/example/bookstore_app/config/SLiquibaseConfig.class]: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v3.initial.xml::insert-sample-books::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: column "publicationDate" of relation "book" does not exist
+  Позиция: 55 [Failed SQL: (0) INSERT INTO public.book (name, author, status, price, "publicationDate", information) VALUES ('Война и мир', 'Лев Толстой', 'OUT_OF_STOCK', '999.99', '1869-01-01', 'Роман-эпопея Льва Толстого')]
+org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'liquibase' defined in class path resource [org/example/bookstore_app/config/SLiquibaseConfig.class]: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v3.initial.xml::insert-sample-books::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: column "publicationDate" of relation "book" does not exist
+  Позиция: 55 [Failed SQL: (0) INSERT INTO public.book (name, author, status, price, "publicationDate", information) VALUES ('Война и мир', 'Лев Толстой', 'OUT_OF_STOCK', '999.99', '1869-01-01', 'Роман-эпопея Льва Толстого')]
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1826)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:607)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1222)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1188)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1123)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:987)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627)
+	at org.springframework.context.annotation.AnnotationConfigApplicationContext.<init>(AnnotationConfigApplicationContext.java:93)
+	at org.example.bookstore_app.view.ApplicationInitializer.initialize(ApplicationInitializer.java:18)
+	at org.example.bookstore_app.test.StartTest.main(StartTest.java:24)
+Caused by: liquibase.exception.CommandExecutionException: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v3.initial.xml::insert-sample-books::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: column "publicationDate" of relation "book" does not exist
+  Позиция: 55 [Failed SQL: (0) INSERT INTO public.book (name, author, status, price, "publicationDate", information) VALUES ('Война и мир', 'Лев Толстой', 'OUT_OF_STOCK', '999.99', '1869-01-01', 'Роман-эпопея Льва Толстого')]
+	at liquibase.command.CommandScope.execute(CommandScope.java:237)
+	at liquibase.Liquibase.lambda$update$0(Liquibase.java:222)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.Liquibase.runInScope(Liquibase.java:1371)
+	at liquibase.Liquibase.update(Liquibase.java:211)
+	at liquibase.Liquibase.update(Liquibase.java:193)
+	at liquibase.integration.spring.SpringLiquibase.performUpdate(SpringLiquibase.java:331)
+	at liquibase.integration.spring.SpringLiquibase.afterPropertiesSet(SpringLiquibase.java:286)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1873)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1822)
+	... 14 common frames omitted
+Caused by: liquibase.exception.LiquibaseException: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v3.initial.xml::insert-sample-books::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: column "publicationDate" of relation "book" does not exist
+  Позиция: 55 [Failed SQL: (0) INSERT INTO public.book (name, author, status, price, "publicationDate", information) VALUES ('Война и мир', 'Лев Толстой', 'OUT_OF_STOCK', '999.99', '1869-01-01', 'Роман-эпопея Льва Толстого')]
+	at liquibase.changelog.ChangeLogIterator.run(ChangeLogIterator.java:122)
+	at liquibase.command.core.AbstractUpdateCommandStep.lambda$doRun$1(AbstractUpdateCommandStep.java:105)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.command.core.AbstractUpdateCommandStep.doRun(AbstractUpdateCommandStep.java:104)
+	at liquibase.command.core.AbstractUpdateCommandStep.lambda$run$0(AbstractUpdateCommandStep.java:63)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.command.core.AbstractUpdateCommandStep.run(AbstractUpdateCommandStep.java:62)
+	at liquibase.command.core.UpdateCommandStep.run(UpdateCommandStep.java:106)
+	at liquibase.command.CommandScope.execute(CommandScope.java:214)
+	... 26 common frames omitted
+Caused by: liquibase.exception.MigrationFailedException: Migration failed for changeset db/changelog/v1/v3.initial.xml::insert-sample-books::developer:
+     Reason: liquibase.exception.DatabaseException: ОШИБКА: column "publicationDate" of relation "book" does not exist
+  Позиция: 55 [Failed SQL: (0) INSERT INTO public.book (name, author, status, price, "publicationDate", information) VALUES ('Война и мир', 'Лев Толстой', 'OUT_OF_STOCK', '999.99', '1869-01-01', 'Роман-эпопея Льва Толстого')]
+	at liquibase.changelog.ChangeSet.execute(ChangeSet.java:785)
+	at liquibase.changelog.visitor.UpdateVisitor.executeAcceptedChange(UpdateVisitor.java:118)
+	at liquibase.changelog.visitor.UpdateVisitor.visit(UpdateVisitor.java:68)
+	at liquibase.changelog.ChangeLogIterator$2.lambda$run$0(ChangeLogIterator.java:110)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.Scope.child(Scope.java:250)
+	at liquibase.changelog.ChangeLogIterator$2.run(ChangeLogIterator.java:100)
+	at liquibase.Scope.lambda$child$0(Scope.java:184)
+	at liquibase.Scope.child(Scope.java:193)
+	at liquibase.Scope.child(Scope.java:183)
+	at liquibase.Scope.child(Scope.java:162)
+	at liquibase.Scope.child(Scope.java:250)
+	at liquibase.Scope.child(Scope.java:254)
+	at liquibase.changelog.ChangeLogIterator.run(ChangeLogIterator.java:74)
+	... 40 common frames omitted
+Caused by: liquibase.exception.DatabaseException: ОШИБКА: column "publicationDate" of relation "book" does not exist
+  Позиция: 55 [Failed SQL: (0) INSERT INTO public.book (name, author, status, price, "publicationDate", information) VALUES ('Война и мир', 'Лев Толстой', 'OUT_OF_STOCK', '999.99', '1869-01-01', 'Роман-эпопея Льва Толстого')]
+	at liquibase.executor.jvm.JdbcExecutor$ExecuteStatementCallback.doInStatement(JdbcExecutor.java:468)
+	at liquibase.executor.jvm.JdbcExecutor.execute(JdbcExecutor.java:77)
+	at liquibase.executor.jvm.JdbcExecutor.execute(JdbcExecutor.java:177)
+	at liquibase.database.AbstractJdbcDatabase.execute(AbstractJdbcDatabase.java:1291)
+	at liquibase.database.AbstractJdbcDatabase.executeStatements(AbstractJdbcDatabase.java:1273)
+	at liquibase.changelog.ChangeSet.execute(ChangeSet.java:744)
+	... 56 common frames omitted
+Caused by: org.postgresql.util.PSQLException: ОШИБКА: column "publicationDate" of relation "book" does not exist
+  Позиция: 55
+	at org.postgresql.core.v3.QueryExecutorImpl.receiveErrorResponse(QueryExecutorImpl.java:2734)
+	at org.postgresql.core.v3.QueryExecutorImpl.processResults(QueryExecutorImpl.java:2421)
+	at org.postgresql.core.v3.QueryExecutorImpl.execute(QueryExecutorImpl.java:372)
+	at org.postgresql.jdbc.PgStatement.executeInternal(PgStatement.java:518)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:435)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:357)
+	at org.postgresql.jdbc.PgStatement.executeCachedSql(PgStatement.java:342)
+	at org.postgresql.jdbc.PgStatement.executeWithFlags(PgStatement.java:318)
+	at org.postgresql.jdbc.PgStatement.execute(PgStatement.java:313)
+	at liquibase.executor.jvm.JdbcExecutor$ExecuteStatementCallback.doInStatement(JdbcExecutor.java:462)
+	... 61 common frames omitted
+15:48:54.78 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 4
+15:48:55.66 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 4
+15:49:04.43 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 0
+15:49:07.94 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 1
+15:49:10.74 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 2
+15:49:13.29 [main] ERROR o.e.b.view.MenuController-Произошла ошибка при выполнении команды: IllegalArgumentException Сообщение: org.hibernate.QueryException: could not resolve property: orderItem of: org.example.bookstore_app.model.Request [SELECT DISTINCT r FROM org.example.bookstore_app.model.Request r LEFT JOIN FETCH r.orderItem oi LEFT JOIN FETCH oi.book LEFT JOIN FETCH oi.bookCopy LEFT JOIN FETCH oi.order WHERE oi.book.id = :idBook ORDER BY oi.order.orderDate DESC]
+17:19:22.10 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 1
+17:19:25.15 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 2
+17:19:26.68 [main] ERROR o.e.b.view.MenuController-Произошла ошибка при выполнении команды: IllegalArgumentException Сообщение: org.hibernate.hql.internal.ast.QuerySyntaxException: request is not mapped [SELECT DISTINCT r FROM request r LEFT JOIN FETCH r.orderitem oi LEFT JOIN FETCH oi.book LEFT JOIN FETCH oi.bookcopy LEFT JOIN FETCH oi.order WHERE oi.book.id = :idBook ORDER BY oi.order.orderdate DESC]
+17:19:33.76 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 3
+17:19:42.88 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 0
+17:19:47.16 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 4
+17:19:48.29 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 4
+17:19:48.42 [main] ERROR o.e.b.view.MenuController-Произошла ошибка при выполнении команды: IllegalArgumentException Сообщение: org.hibernate.hql.internal.ast.QuerySyntaxException: bookcopy is not mapped [SELECT bc FROM bookcopy bc JOIN FETCH bc.book]
+17:22:51.87 [main] WARN  o.s.c.a.AnnotationConfigApplicationContext-Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'bookCSVService': Unsatisfied dependency expressed through field 'stockService': Error creating bean with name 'stockService': Unsatisfied dependency expressed through field 'bookService': Error creating bean with name 'bookServiceSQL' defined in file [D:\GitHubRepositories\Senla\bookstore_app\bookstore\target\classes\org\example\bookstore_app\service\BookServiceSQL.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'bookDAO': Unsatisfied dependency expressed through field 'sessionFactory': Error creating bean with name 'sessionFactory' defined in org.example.bookstore_app.config.SpringConfig: Unknown mappedBy in: org.example.bookstore_app.model.BookOrderItem.request, referenced property unknown: org.example.bookstore_app.model.Request.orderitem
+17:22:51.87 [main] ERROR o.e.bookstore_app.test.StartTest-Ошибка при запуске приложения: Error creating bean with name 'bookCSVService': Unsatisfied dependency expressed through field 'stockService': Error creating bean with name 'stockService': Unsatisfied dependency expressed through field 'bookService': Error creating bean with name 'bookServiceSQL' defined in file [D:\GitHubRepositories\Senla\bookstore_app\bookstore\target\classes\org\example\bookstore_app\service\BookServiceSQL.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'bookDAO': Unsatisfied dependency expressed through field 'sessionFactory': Error creating bean with name 'sessionFactory' defined in org.example.bookstore_app.config.SpringConfig: Unknown mappedBy in: org.example.bookstore_app.model.BookOrderItem.request, referenced property unknown: org.example.bookstore_app.model.Request.orderitem
+org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'bookCSVService': Unsatisfied dependency expressed through field 'stockService': Error creating bean with name 'stockService': Unsatisfied dependency expressed through field 'bookService': Error creating bean with name 'bookServiceSQL' defined in file [D:\GitHubRepositories\Senla\bookstore_app\bookstore\target\classes\org\example\bookstore_app\service\BookServiceSQL.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'bookDAO': Unsatisfied dependency expressed through field 'sessionFactory': Error creating bean with name 'sessionFactory' defined in org.example.bookstore_app.config.SpringConfig: Unknown mappedBy in: org.example.bookstore_app.model.BookOrderItem.request, referenced property unknown: org.example.bookstore_app.model.Request.orderitem
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:788)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:768)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:146)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:509)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1459)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:606)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.instantiateSingleton(DefaultListableBeanFactory.java:1222)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingleton(DefaultListableBeanFactory.java:1188)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.preInstantiateSingletons(DefaultListableBeanFactory.java:1123)
+	at org.springframework.context.support.AbstractApplicationContext.finishBeanFactoryInitialization(AbstractApplicationContext.java:987)
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:627)
+	at org.springframework.context.annotation.AnnotationConfigApplicationContext.<init>(AnnotationConfigApplicationContext.java:93)
+	at org.example.bookstore_app.view.ApplicationInitializer.initialize(ApplicationInitializer.java:18)
+	at org.example.bookstore_app.test.StartTest.main(StartTest.java:24)
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'stockService': Unsatisfied dependency expressed through field 'bookService': Error creating bean with name 'bookServiceSQL' defined in file [D:\GitHubRepositories\Senla\bookstore_app\bookstore\target\classes\org\example\bookstore_app\service\BookServiceSQL.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'bookDAO': Unsatisfied dependency expressed through field 'sessionFactory': Error creating bean with name 'sessionFactory' defined in org.example.bookstore_app.config.SpringConfig: Unknown mappedBy in: org.example.bookstore_app.model.BookOrderItem.request, referenced property unknown: org.example.bookstore_app.model.Request.orderitem
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:788)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:768)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:146)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:509)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1459)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:606)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1690)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1635)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:785)
+	... 18 common frames omitted
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'bookServiceSQL' defined in file [D:\GitHubRepositories\Senla\bookstore_app\bookstore\target\classes\org\example\bookstore_app\service\BookServiceSQL.class]: Unsatisfied dependency expressed through constructor parameter 0: Error creating bean with name 'bookDAO': Unsatisfied dependency expressed through field 'sessionFactory': Error creating bean with name 'sessionFactory' defined in org.example.bookstore_app.config.SpringConfig: Unknown mappedBy in: org.example.bookstore_app.model.BookOrderItem.request, referenced property unknown: org.example.bookstore_app.model.Request.orderitem
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:804)
+	at org.springframework.beans.factory.support.ConstructorResolver.autowireConstructor(ConstructorResolver.java:240)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.autowireConstructor(AbstractAutowireCapableBeanFactory.java:1395)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBeanInstance(AbstractAutowireCapableBeanFactory.java:1232)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:569)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1752)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1635)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:785)
+	... 31 common frames omitted
+Caused by: org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'bookDAO': Unsatisfied dependency expressed through field 'sessionFactory': Error creating bean with name 'sessionFactory' defined in org.example.bookstore_app.config.SpringConfig: Unknown mappedBy in: org.example.bookstore_app.model.BookOrderItem.request, referenced property unknown: org.example.bookstore_app.model.Request.orderitem
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:788)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.inject(AutowiredAnnotationBeanPostProcessor.java:768)
+	at org.springframework.beans.factory.annotation.InjectionMetadata.inject(InjectionMetadata.java:146)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor.postProcessProperties(AutowiredAnnotationBeanPostProcessor.java:509)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.populateBean(AbstractAutowireCapableBeanFactory.java:1459)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:606)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.config.DependencyDescriptor.resolveCandidate(DependencyDescriptor.java:254)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1752)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1635)
+	at org.springframework.beans.factory.support.ConstructorResolver.resolveAutowiredArgument(ConstructorResolver.java:913)
+	at org.springframework.beans.factory.support.ConstructorResolver.createArgumentArray(ConstructorResolver.java:791)
+	... 44 common frames omitted
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'sessionFactory' defined in org.example.bookstore_app.config.SpringConfig: Unknown mappedBy in: org.example.bookstore_app.model.BookOrderItem.request, referenced property unknown: org.example.bookstore_app.model.Request.orderitem
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1826)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.doCreateBean(AbstractAutowireCapableBeanFactory.java:607)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.createBean(AbstractAutowireCapableBeanFactory.java:529)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.lambda$doGetBean$0(AbstractBeanFactory.java:339)
+	at org.springframework.beans.factory.support.DefaultSingletonBeanRegistry.getSingleton(DefaultSingletonBeanRegistry.java:373)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.doGetBean(AbstractBeanFactory.java:337)
+	at org.springframework.beans.factory.support.AbstractBeanFactory.getBean(AbstractBeanFactory.java:202)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.doResolveDependency(DefaultListableBeanFactory.java:1690)
+	at org.springframework.beans.factory.support.DefaultListableBeanFactory.resolveDependency(DefaultListableBeanFactory.java:1635)
+	at org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor$AutowiredFieldElement.resolveFieldValue(AutowiredAnnotationBeanPostProcessor.java:785)
+	... 59 common frames omitted
+Caused by: org.hibernate.AnnotationException: Unknown mappedBy in: org.example.bookstore_app.model.BookOrderItem.request, referenced property unknown: org.example.bookstore_app.model.Request.orderitem
+	at org.hibernate.cfg.OneToOneSecondPass.doSecondPass(OneToOneSecondPass.java:171)
+	at org.hibernate.boot.internal.InFlightMetadataCollectorImpl.processSecondPasses(InFlightMetadataCollectorImpl.java:1653)
+	at org.hibernate.boot.internal.InFlightMetadataCollectorImpl.processSecondPasses(InFlightMetadataCollectorImpl.java:1629)
+	at org.hibernate.boot.model.process.spi.MetadataBuildingProcess.complete(MetadataBuildingProcess.java:295)
+	at org.hibernate.boot.model.process.spi.MetadataBuildingProcess.build(MetadataBuildingProcess.java:86)
+	at org.hibernate.boot.internal.MetadataBuilderImpl.build(MetadataBuilderImpl.java:479)
+	at org.hibernate.boot.internal.MetadataBuilderImpl.build(MetadataBuilderImpl.java:85)
+	at org.hibernate.cfg.Configuration.buildSessionFactory(Configuration.java:709)
+	at org.hibernate.cfg.Configuration.buildSessionFactory(Configuration.java:746)
+	at org.springframework.orm.hibernate5.LocalSessionFactoryBean.buildSessionFactory(LocalSessionFactoryBean.java:616)
+	at org.springframework.orm.hibernate5.LocalSessionFactoryBean.afterPropertiesSet(LocalSessionFactoryBean.java:600)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.invokeInitMethods(AbstractAutowireCapableBeanFactory.java:1873)
+	at org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory.initializeBean(AbstractAutowireCapableBeanFactory.java:1822)
+	... 68 common frames omitted
+17:24:20.18 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 1
+17:24:22.28 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 2
+17:24:34.70 [main] ERROR o.e.b.view.MenuController-Произошла ошибка при выполнении команды: IllegalArgumentException Сообщение: org.hibernate.QueryException: could not resolve property: bookcopy of: org.example.bookstore_app.model.BookOrderItem [SELECT DISTINCT r FROM org.example.bookstore_app.model.Request r LEFT JOIN FETCH r.orderitem oi LEFT JOIN FETCH oi.book LEFT JOIN FETCH oi.bookcopy LEFT JOIN FETCH oi.order WHERE oi.book.id = :idBook ORDER BY oi.order.orderdate DESC]
+17:24:44.18 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 1
+17:25:04.00 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 2
+17:25:09.91 [main] ERROR o.e.b.view.MenuController-Произошла ошибка при выполнении команды: IllegalArgumentException Сообщение: org.hibernate.QueryException: could not resolve property: bookcopy of: org.example.bookstore_app.model.BookOrderItem [SELECT DISTINCT r FROM org.example.bookstore_app.model.Request r LEFT JOIN FETCH r.orderitem oi LEFT JOIN FETCH oi.book LEFT JOIN FETCH oi.bookcopy LEFT JOIN FETCH oi.order WHERE oi.book.id = :idBook ORDER BY oi.order.orderdate DESC]
+17:27:19.80 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 1
+17:27:21.90 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 2
+17:27:23.48 [main] ERROR o.e.b.view.MenuController-Произошла ошибка при выполнении команды: IllegalArgumentException Сообщение: org.hibernate.QueryException: could not resolve property: orderdate of: org.example.bookstore_app.model.BookOrder [SELECT DISTINCT r FROM org.example.bookstore_app.model.Request r LEFT JOIN FETCH r.orderitem oi LEFT JOIN FETCH oi.book LEFT JOIN FETCH oi.bookCopy LEFT JOIN FETCH oi.order WHERE oi.book.id = :idBook ORDER BY oi.order.orderdate DESC]
+17:27:45.61 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 2
+17:27:47.05 [main] ERROR o.e.b.view.MenuController-Произошла ошибка при выполнении команды: IllegalArgumentException Сообщение: org.hibernate.QueryException: could not resolve property: orderdate of: org.example.bookstore_app.model.BookOrder [SELECT DISTINCT r FROM org.example.bookstore_app.model.Request r LEFT JOIN FETCH r.orderitem oi LEFT JOIN FETCH oi.book LEFT JOIN FETCH oi.bookCopy LEFT JOIN FETCH oi.order WHERE oi.book.id = :idBook ORDER BY oi.order.orderdate DESC]
+17:29:07.92 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 1
+17:29:09.32 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 2
+17:29:15.33 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 0
+17:29:17.12 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 4
+17:29:18.17 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 4
+17:29:35.80 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 0
+17:29:39.05 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 2
+17:29:40.78 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 1
+17:31:01.30 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 1
+17:31:41.23 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 0
+17:31:45.09 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 0
+17:38:37.62 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 2
+17:38:39.89 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 1
+17:39:17.09 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 3
+17:39:28.76 [main] INFO  o.e.b.view.MenuController-Пользователь выбрал: 0

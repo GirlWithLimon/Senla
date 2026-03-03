@@ -42,7 +42,7 @@ public class RequestDAO extends HibernateAbstractDao<Request, Integer> {
     public Request findByIdOrderItem(int orderItemId) {
         logger.debug("Поиск запроса по orderItemId: {}", orderItemId);
         Session session = getCurrentSession();
-        String hql = "FROM Request r WHERE r.orderItem.id = :orderItemId";
+        String hql = "FROM request r WHERE r.orderitem.id = :orderItemId";
         Query<Request> query = session.createQuery(hql, Request.class);
         query.setParameter("orderItemId", orderItemId);
 
@@ -61,7 +61,7 @@ public class RequestDAO extends HibernateAbstractDao<Request, Integer> {
         logger.debug("Поиск заявок со всеми данными по idBook: {}", idBook);
         Session session = getCurrentSession();
         String hql = "SELECT DISTINCT r FROM Request r " +
-                "LEFT JOIN FETCH r.orderItem oi " +
+                "LEFT JOIN FETCH r.orderitem oi " +
                 "LEFT JOIN FETCH oi.book " +
                 "LEFT JOIN FETCH oi.bookCopy " +
                 "LEFT JOIN FETCH oi.order " +

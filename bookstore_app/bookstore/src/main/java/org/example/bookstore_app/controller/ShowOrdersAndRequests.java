@@ -58,7 +58,7 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests {
         Map<Book, Long> requestCount = stockService.getRequests().stream()
                 .collect(Collectors.groupingBy(
                         request -> {
-                            BookOrderItem orderItem = request.getOrderItem();
+                            BookOrderItem orderItem = request.getOrderitem();
                             return orderItem != null ? orderItem.getBook() : null;
                         },
                         Collectors.counting()
@@ -82,7 +82,7 @@ public class ShowOrdersAndRequests implements IShowOrdersAndRequests {
         Map<Book, Long> requestedBooks = stockService.getRequests().stream()
                 .collect(Collectors.groupingBy(
                         request -> {
-                            BookOrderItem orderItem = request.getOrderItem();
+                            BookOrderItem orderItem = request.getOrderitem();
                             return orderItem != null ? orderItem.getBook() : null;
                         },
                         Collectors.counting()

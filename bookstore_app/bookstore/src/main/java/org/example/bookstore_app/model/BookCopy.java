@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "bookCopy")
+@Table(name = "bookcopy")
 public class BookCopy implements Serializable {
 
     @Id
@@ -13,10 +13,10 @@ public class BookCopy implements Serializable {
     private int id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idBook", nullable = false)
+    @JoinColumn(name = "idbook", nullable = false)
     private Book book;
 
-    @Column(name = "arrivalDate", nullable = false)
+    @Column(name = "arrivaldate", nullable = false)
     private LocalDate arrivalDate;
 
     @Column(name = "sale", nullable = false)
