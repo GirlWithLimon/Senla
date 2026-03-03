@@ -23,7 +23,7 @@
             <column name="price" type="decimal(10,2)">
                 <constraints nullable="false"/>
             </column>
-            <column name="publicationdate" type="date">  <!-- ИСПРАВЛЕНО: было publicationDate -->
+            <column name="publicationdate" type="date">
                 <constraints nullable="false"/>
             </column>
             <column name="information" type="varchar(1000)"/>
@@ -40,12 +40,12 @@
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="idbook" type="int">  <!-- ИСПРАВЛЕНО: было idBook -->
+            <column name="idbook" type="int">
                 <constraints nullable="false"
                              foreignKeyName="fk_bookcopy_book"
                              references="book(id)"/>
             </column>
-            <column name="arrivaldate" type="date">  <!-- ИСПРАВЛЕНО: было arrivalDate -->
+            <column name="arrivaldate" type="date">
                 <constraints nullable="false"/>
             </column>
             <column name="sale" type="boolean" defaultValueBoolean="false">
@@ -67,16 +67,16 @@
             <column name="status" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="orderdate" type="date">  <!-- ИСПРАВЛЕНО: было orderDate -->
+            <column name="orderdate" type="date">
                 <constraints nullable="false"/>
             </column>
-            <column name="customername" type="varchar(255)">  <!-- ИСПРАВЛЕНО: было customerName -->
+            <column name="customername" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="customercontact" type="varchar(255)">  <!-- ИСПРАВЛЕНО: было customerContact -->
+            <column name="customercontact" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="totalprice" type="decimal(10,2)" defaultValueNumeric="0">  <!-- ИСПРАВЛЕНО: было totalPrice -->
+            <column name="totalprice" type="decimal(10,2)" defaultValueNumeric="0">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -92,16 +92,16 @@
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="idbook" type="int">  <!-- ИСПРАВЛЕНО: было idBook -->
+            <column name="idbook" type="int">
                 <constraints nullable="false"
                              foreignKeyName="fk_orderitem_book"
                              references="book(id)"/>
             </column>
-            <column name="idbookcopy" type="int">  <!-- ИСПРАВЛЕНО: было idBookCopy -->
+            <column name="idbookcopy" type="int">
                 <constraints foreignKeyName="fk_orderitem_bookcopy"
                              references="bookcopy(id)"/>
             </column>
-            <column name="idorders" type="int">  <!-- ИСПРАВЛЕНО: было idOrders -->
+            <column name="idorders" type="int">
                 <constraints nullable="false"
                              foreignKeyName="fk_orderitem_order"
                              references="orders(id)"/>
@@ -122,7 +122,7 @@
             <column name="id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="idorderitem" type="int">  <!-- ИСПРАВЛЕНО: было idOrderItem -->
+            <column name="idorderitem" type="int">
                 <constraints nullable="false"
                              unique="true"
                              foreignKeyName="fk_request_orderitem"
@@ -138,19 +138,19 @@
     <changeSet id="create-indexes" author="developer">
         <comment>Create indexes for better performance</comment>
         <createIndex indexName="idx_bookcopy_book" tableName="bookcopy">
-            <column name="idbook"/>  <!-- ИСПРАВЛЕНО: было idBook -->
+            <column name="idbook"/>
         </createIndex>
 
         <createIndex indexName="idx_orderitem_book" tableName="orderitem">
-            <column name="idbook"/>  <!-- ИСПРАВЛЕНО: было idBook -->
+            <column name="idbook"/>
         </createIndex>
 
         <createIndex indexName="idx_orderitem_order" tableName="orderitem">
-            <column name="idorders"/>  <!-- ИСПРАВЛЕНО: было idOrders -->
+            <column name="idorders"/>
         </createIndex>
 
         <createIndex indexName="idx_request_orderitem" tableName="request">
-            <column name="idorderitem"/>  <!-- ИСПРАВЛЕНО: было idOrderItem -->
+            <column name="idorderitem"/>
         </createIndex>
 
         <rollback>

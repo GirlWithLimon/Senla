@@ -5,18 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ed1f8bd2-c593-473c-bd04-9a3059141ded" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/config/SpringConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/config/SpringConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/controller/BooksController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/controller/BooksController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/controller/OperationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/controller/OperationController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/controller/ShowOrdersAndRequests.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/controller/ShowOrdersAndRequests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/dao/RequestDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/dao/RequestDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/model/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/model/Book.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/model/BookCopy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/model/BookCopy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/model/BookOrder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/model/BookOrder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/model/BookOrderItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/model/BookOrderItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/model/Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/model/Request.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/db/changelog/v1/v2.create-tables.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/db/changelog/v1/v2.create-tables.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,17 +33,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.StartTest.executor": "Run",
-    "Maven. [org.apache.maven.plugins:maven-archetype-plugin:RELEASE:generate].executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "task-15",
-    "kotlin-language-version-configured": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.StartTest.executor&quot;: &quot;Run&quot;,
+    &quot;Maven. [org.apache.maven.plugins:maven-archetype-plugin:RELEASE:generate].executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;task-15&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="StartTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.example.bookstore_app.test.StartTest" />
