@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
+
+    <changeSet id="insert-sample-books" author="developer">
+        <comment>Insert sample books</comment>
+        <insert tableName="book">
+            <column name="name" value="Война и мир"/>
+            <column name="author" value="Лев Толстой"/>
+            <column name="status" value="OUT_OF_STOCK"/>
+            <column name="price" value="999.99"/>
+            <column name="publicationdate" value="1869-01-01"/>
+            <column name="information" value="Роман-эпопея Льва Толстого"/>
+        </insert>
+
+        <insert tableName="book">
+            <column name="name" value="Преступление и наказание"/>
+            <column name="author" value="Федор Достоевский"/>
+            <column name="status" value="OUT_OF_STOCK"/>
+            <column name="price" value="799.99"/>
+            <column name="publicationdate" value="1866-01-01"/>
+            <column name="information" value="Роман Федора Достоевского"/>
+        </insert>
+
+        <insert tableName="book">
+            <column name="name" value="Мастер и Маргарита"/>
+            <column name="author" value="Михаил Булгаков"/>
+            <column name="status" value="OUT_OF_STOCK"/>
+            <column name="price" value="899.99"/>
+            <column name="publicationdate" value="1967-01-01"/>
+            <column name="information" value="Роман Михаила Булгакова"/>
+        </insert>
+
+        <rollback>
+            <delete tableName="book">
+                <where>name IN ('Война и мир', 'Преступление и наказание', 'Мастер и Маргарита')</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

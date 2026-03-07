@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
+
+    <changeSet id="create-book-table" author="developer">
+        <comment>Create book table</comment>
+        <createTable tableName="book">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="author" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type="decimal(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="publicationdate" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="information" type="varchar(1000)"/>
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="book"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create-bookcopy-table" author="developer">
+        <comment>Create bookcopy table</comment>
+        <createTable tableName="bookcopy">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="idbook" type="int">
+                <constraints nullable="false"
+                             foreignKeyName="fk_bookcopy_book"
+                             references="book(id)"/>
+            </column>
+            <column name="arrivaldate" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sale" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="bookcopy"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create-orders-table" author="developer">
+        <comment>Create orders table</comment>
+        <createTable tableName="orders">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="status" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="orderdate" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="customername" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="customercontact" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="totalprice" type="decimal(10,2)" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="orders"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create-orderitem-table" author="developer">
+        <comment>Create orderItem table</comment>
+        <createTable tableName="orderitem">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="idbook" type="int">
+                <constraints nullable="false"
+                             foreignKeyName="fk_orderitem_book"
+                             references="book(id)"/>
+            </column>
+            <column name="idbookcopy" type="int">
+                <constraints foreignKeyName="fk_orderitem_bookcopy"
+                             references="bookcopy(id)"/>
+            </column>
+            <column name="idorders" type="int">
+                <constraints nullable="false"
+                             foreignKeyName="fk_orderitem_order"
+                             references="orders(id)"/>
+            </column>
+            <column name="status" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="orderitem"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create-request-table" author="developer">
+        <comment>Create request table</comment>
+        <createTable tableName="request">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="idorderitem" type="int">
+                <constraints nullable="false"
+                             unique="true"
+                             foreignKeyName="fk_request_orderitem"
+                             references="orderitem(id)"/>
+            </column>
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="request"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create-indexes" author="developer">
+        <comment>Create indexes for better performance</comment>
+        <createIndex indexName="idx_bookcopy_book" tableName="bookcopy">
+            <column name="idbook"/>
+        </createIndex>
+
+        <createIndex indexName="idx_orderitem_book" tableName="orderitem">
+            <column name="idbook"/>
+        </createIndex>
+
+        <createIndex indexName="idx_orderitem_order" tableName="orderitem">
+            <column name="idorders"/>
+        </createIndex>
+
+        <createIndex indexName="idx_request_orderitem" tableName="request">
+            <column name="idorderitem"/>
+        </createIndex>
+
+        <rollback>
+            <dropIndex indexName="idx_bookcopy_book" tableName="bookcopy"/>
+            <dropIndex indexName="idx_orderitem_book" tableName="orderitem"/>
+            <dropIndex indexName="idx_orderitem_order" tableName="orderitem"/>
+            <dropIndex indexName="idx_request_orderitem" tableName="request"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

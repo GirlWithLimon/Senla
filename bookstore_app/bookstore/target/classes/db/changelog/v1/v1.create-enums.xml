@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
+
+    <changeSet id="create-enum-types" author="developer">
+        <comment>Create enum types for PostgreSQL</comment>
+        <sql dbms="postgresql" endDelimiter=";">
+            DO $$ BEGIN
+            CREATE TYPE book_status AS ENUM ('IN_STOCK', 'OUT_OF_STOCK');
+            EXCEPTION
+            WHEN duplicate_object THEN null;
+            END $$;
+
+            DO $$ BEGIN
+            CREATE TYPE order_status AS ENUM ('NEW', 'IN_PROCESS', 'PARTIALLY_COMPLETED', 'COMPLETED', 'CANCELLED');
+            EXCEPTION
+            WHEN duplicate_object THEN null;
+            END $$;
+
+            DO $$ BEGIN
+            CREATE TYPE order_item_status AS ENUM ('NEW', 'PENDING', 'COMPLETED', 'CANCELLED');
+            EXCEPTION
+            WHEN duplicate_object THEN null;
+            END $$;
+        </sql>
+
+        <rollback>
+            <sql>
+                DROP TYPE IF EXISTS order_item_status;
+                DROP TYPE IF EXISTS order_status;
+                DROP TYPE IF EXISTS book_status;
+            </sql>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
