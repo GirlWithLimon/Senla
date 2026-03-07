@@ -6,8 +6,19 @@
   <component name="ChangeListManager">
     <list default="true" id="ed1f8bd2-c593-473c-bd04-9a3059141ded" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/logs/bookstore.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/bookstore.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/config/SpringConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/config/SpringConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/config/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/config/WebConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/controller/ImportExportService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/controller/ImportExportService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/dao/RequestDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/dao/RequestDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/dto/BookOrderDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/dto/BookOrderDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/model/Book.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/model/Book.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/model/BookCopy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/model/BookCopy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/model/BookOrder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/model/BookOrder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/model/BookOrderItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/model/BookOrderItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/model/Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/model/Request.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/service/StockService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/service/StockService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,7 +57,7 @@
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Smart Tomcat.Tom">
     <configuration name="StartTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.example.bookstore_app.test.StartTest" />
       <module name="bookstore" />
@@ -60,6 +71,36 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Tom" type="com.poratu.idea.plugins.tomcat">
+      <predefined_log_file enabled="true" id="Tomcat Localhost Log" />
+      <predefined_log_file enabled="true" id="Tomcat Access Log" />
+      <predefined_log_file id="Tomcat Catalina Log" />
+      <predefined_log_file id="Tomcat Manager Log" />
+      <predefined_log_file id="Tomcat Host Manager Log" />
+      <option name="catalinaBase" value="C:\Program Files\Apache Software Foundation\Tomcat 11.0" />
+      <option name="contextPath" value="" />
+      <option name="docBase" value="C:\Program Files\Apache Software Foundation\Tomcat 11.0" />
+      <option name="envOptions">
+        <map />
+      </option>
+      <option name="extraClassPath" value="" />
+      <option name="tomcatInfo">
+        <TomcatInfo>
+          <option name="name" value="Apache Tomcat/11.0.18" />
+          <option name="path" value="C:/Program Files/Apache Software Foundation/Tomcat 11.0" />
+          <option name="version" value="11.0.18.0" />
+        </TomcatInfo>
+      </option>
+      <option name="vmOptions" value="" />
+      <module name="bookstore" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.StartTest" />
+      <item itemvalue="Smart Tomcat.Tom" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.StartTest" />

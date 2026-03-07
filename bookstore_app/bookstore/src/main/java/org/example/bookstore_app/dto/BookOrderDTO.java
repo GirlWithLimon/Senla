@@ -3,9 +3,6 @@ package org.example.bookstore_app.dto;
 import org.example.bookstore_app.model.Book;
 import org.example.bookstore_app.model.OrderStatus;
 
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import java.time.LocalDate;
 
 public class BookOrderDTO {

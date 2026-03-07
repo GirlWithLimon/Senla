@@ -1,6 +1,6 @@
 package org.example.bookstore_app.model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;

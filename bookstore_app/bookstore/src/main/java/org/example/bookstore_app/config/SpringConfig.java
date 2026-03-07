@@ -9,7 +9,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.example.bookstore_app.model.*;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -59,7 +58,7 @@ public class SpringConfig {
         hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         hibernateProperties.setProperty("hibernate.show_sql", "true");
         hibernateProperties.setProperty("hibernate.format_sql", "true");
-        hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "none");
+        hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "update"); // Изменено с "none" на "update" для автоматического создания таблиц
         hibernateProperties.setProperty("hibernate.current_session_context_class",
                 "org.springframework.orm.hibernate5.SpringSessionContext");
 
