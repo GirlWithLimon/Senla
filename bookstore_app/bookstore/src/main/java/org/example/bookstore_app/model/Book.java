@@ -68,7 +68,7 @@ public class Book implements Serializable {
         this.status = BookStatus.OUT_OF_STOCK;
     }
 
-    // Геттеры и сеттеры (как в исходном коде)
+    // Геттеры и сеттеры
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
