@@ -58,7 +58,6 @@ public class SpringConfig {
         hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         hibernateProperties.setProperty("hibernate.show_sql", "true");
         hibernateProperties.setProperty("hibernate.format_sql", "true");
-        hibernateProperties.setProperty("hibernate.hbm2ddl.auto", "update"); // Изменено с "none" на "update" для автоматического создания таблиц
         hibernateProperties.setProperty("hibernate.current_session_context_class",
                 "org.springframework.orm.hibernate5.SpringSessionContext");
 
