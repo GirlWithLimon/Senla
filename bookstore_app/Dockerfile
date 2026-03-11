@@ -1,5 +1,11 @@
-FROM maven:3.9.6-eclipse-temurin-25 AS builder
+FROM eclipse-temurin:25-jdk AS builder
+
+RUN apt-get update && \
+    apt-get install -y maven && \
+    apt-get clean
+
 WORKDIR /app
+
 COPY pom.xml .
 COPY bookstore/pom.xml ./bookstore/
 RUN mvn dependency:go-offline -B
