@@ -6,9 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="ed1f8bd2-c593-473c-bd04-9a3059141ded" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/config/WebAppInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/config/WebAppInitializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/config/WebConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/bookstore_app/config/WebConfig.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,11 +44,14 @@
   &quot;keyToString&quot;: {
     &quot;Application.StartTest.executor&quot;: &quot;Run&quot;,
     &quot;Maven. [org.apache.maven.plugins:maven-archetype-plugin:RELEASE:generate].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.bookstore [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.bookstore [package].executor&quot;: &quot;Run&quot;,
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;Smart Tomcat.Tom.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;task-16&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;task-17&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
