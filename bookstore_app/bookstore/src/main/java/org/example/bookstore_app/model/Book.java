@@ -1,6 +1,6 @@
 package org.example.bookstore_app.model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
@@ -68,7 +68,7 @@ public class Book implements Serializable {
         this.status = BookStatus.OUT_OF_STOCK;
     }
 
-    // Геттеры и сеттеры (как в исходном коде)
+    // Геттеры и сеттеры
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
