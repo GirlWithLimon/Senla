@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
+
+    <changeSet id="add-default-users" author="developer">
+        <comment>Add default users (user1 and admin)</comment>
+
+        <insert tableName="users">
+            <column name="username" value="user1"/>
+            <column name="password" value="$2a$10$4Z6HhsogdvqVCDwFEPax4uiyTZ/q6lcEjI6szLjg8tggsrDR/5hc6"/>
+            <column name="role" value="ROLE_USER"/>
+            <column name="enabled" value="true"/>
+        </insert>
+
+        <insert tableName="users">
+            <column name="username" value="admin"/>
+            <column name="password" value="$2a$10$l0D9mPjbMz6GH9f18LWluu2SkVidXa.m9diByv6Jv2OkVCHe0eGMe"/>
+            <column name="role" value="ROLE_ADMIN"/>
+            <column name="enabled" value="true"/>
+        </insert>
+
+        <rollback>
+            <delete tableName="users">
+                <where>username IN ('user1', 'admin')</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
