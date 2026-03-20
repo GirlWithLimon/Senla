@@ -14,4 +14,5 @@
     <!-- Затем добавляем начальные данные -->
     <include file="changelog/v1/v3.initial.xml" relativeToChangelogFile="true"/>
 
+    <include file="changelog/v1/v4.create-users-table.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>
