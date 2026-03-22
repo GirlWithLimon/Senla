@@ -5,13 +5,10 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
 
-    <!-- Сначала создаем enum типы -->
     <include file="changelog/v1/v1.create-enums.xml" relativeToChangelogFile="true"/>
-
-    <!-- Потом создаем таблицы (теперь enum типы уже существуют) -->
     <include file="changelog/v1/v2.create-tables.xml" relativeToChangelogFile="true"/>
-
-    <!-- Затем добавляем начальные данные -->
     <include file="changelog/v1/v3.initial.xml" relativeToChangelogFile="true"/>
 
+    <include file="changelog/v1/v4.create-users-table.xml" relativeToChangelogFile="true"/>
+    <include file="changelog/v1/v5.add-default-users.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>
