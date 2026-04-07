@@ -33,7 +33,7 @@ public class TransferProducer {
         this.objectMapper = objectMapper;
     }
 
-    @Scheduled(fixedDelay = 200)
+    @Scheduled(fixedDelay = 200, initialDelay = 5000)
     @Transactional
     public void generateAndSend() {
         try {

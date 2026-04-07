@@ -7,7 +7,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
@@ -20,6 +20,7 @@ spring:
         enable.idempotence: true
         acks: all
         retries: 2147483647
-        max.in.flight.requests.per.connection: 5
-        transaction.timeout.ms: 30000
-      transactional-id: producer-1
+        max.in.flight.requests.per.connection: 1
+        delivery.timeout.ms: 120000
+        request.timeout.ms: 30000
+        partitioner.class: org.apache.kafka.clients.producer.RoundRobinPartitioner

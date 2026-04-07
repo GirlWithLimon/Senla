@@ -4,6 +4,11 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_AUTOPURGE_SNAPRETAINCOUNT: 3
+      ZOOKEEPER_AUTOPURGE_PURGEINTERVAL: 1
+    volumes:
+      - zookeeper-data:/var/lib/zookeeper/data
+      - zookeeper-log:/var/lib/zookeeper/log
     networks:
       - bank-network
 
@@ -19,10 +24,20 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
+      KAFKA_NUM_PARTITIONS: 3
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 3
+      KAFKA_MIN_INSYNC_REPLICAS: 2
     ports:
       - "9092:9092"
+    volumes:
+      - kafka1-data:/var/lib/kafka/data
     networks:
       - bank-network
+    healthcheck:
+      test: ["CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:9092"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
 
   kafka2:
     image: confluentinc/cp-kafka:7.5.0
@@ -31,15 +46,22 @@ services:
     environment:
       KAFKA_BROKER_ID: 2
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:9093
-      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
     ports:
-      - "9093:9093"
+      - "9093:9092"
+    volumes:
+      - kafka2-data:/var/lib/kafka/data
     networks:
       - bank-network
+    healthcheck:
+      test: ["CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:9092"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
 
   kafka3:
     image: confluentinc/cp-kafka:7.5.0
@@ -48,34 +70,49 @@ services:
     environment:
       KAFKA_BROKER_ID: 3
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka3:9094
-      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9094
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka3:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 3
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 3
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
     ports:
-      - "9094:9094"
+      - "9094:9092"
+    volumes:
+      - kafka3-data:/var/lib/kafka/data
     networks:
       - bank-network
+    healthcheck:
+      test: ["CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:9092"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
 
   kafka-init:
     image: confluentinc/cp-kafka:7.5.0
     depends_on:
-      - kafka1
-      - kafka2
-      - kafka3
-    entrypoint: [ "/bin/sh", "-c" ]
+      kafka1:
+        condition: service_healthy
+      kafka2:
+        condition: service_healthy
+      kafka3:
+        condition: service_healthy
+    entrypoint: ["/bin/sh", "-c"]
     command: |
       "
-      echo 'Waiting for Kafka brokers...'
-      while ! kafka-broker-api-versions --bootstrap-server kafka1:9092 --version >/dev/null 2>&1; do
-        sleep 2
-      done
-      echo 'Creating topic transfers...'
+      echo 'Waiting for all Kafka brokers...'
+      sleep 15
+      
+      echo 'Creating topic transfers with 3 partitions, replication factor 3...'
       kafka-topics --create --if-not-exists --topic transfers \
-        --bootstrap-server kafka1:9092 --partitions 3 --replication-factor 3 \
-        --config retention.ms=300000
-      echo 'Topic created.'
+        --bootstrap-server kafka1:9092 \
+        --partitions 3 \
+        --replication-factor 3 \
+        --config retention.ms=300000 \
+        --config min.insync.replicas=2
+      
+      echo 'Topic details:'
+      kafka-topics --describe --topic transfers --bootstrap-server kafka1:9092
+      echo 'Topic created successfully.'
       "
     networks:
       - bank-network
@@ -92,68 +129,50 @@ services:
       - postgres-data:/var/lib/postgresql/data
     networks:
       - bank-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d bank"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   producer:
     build: ./producer
     depends_on:
-      - kafka1
-      - kafka2
-      - kafka3
-      - postgres
+      kafka1:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/bank
       SPRING_DATASOURCE_USERNAME: user
       SPRING_DATASOURCE_PASSWORD: password
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka1:9092,kafka2:9093,kafka3:9094
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka1:9092,kafka2:9092,kafka3:9092
     networks:
       - bank-network
 
-  consumer1:
+  consumer:
     build: ./consumer
     depends_on:
-      - kafka1
-      - kafka2
-      - kafka3
-      - postgres
+      kafka1:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/bank
       SPRING_DATASOURCE_USERNAME: user
       SPRING_DATASOURCE_PASSWORD: password
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka1:9092,kafka2:9093,kafka3:9094
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka1:9092,kafka2:9092,kafka3:9092
     networks:
       - bank-network
-
-  consumer2:
-    build: ./consumer
-    depends_on:
-      - kafka1
-      - kafka2
-      - kafka3
-      - postgres
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/bank
-      SPRING_DATASOURCE_USERNAME: user
-      SPRING_DATASOURCE_PASSWORD: password
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka1:9092,kafka2:9093,kafka3:9094
-    networks:
-      - bank-network
-
-  consumer3:
-    build: ./consumer
-    depends_on:
-      - kafka1
-      - kafka2
-      - kafka3
-      - postgres
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/bank
-      SPRING_DATASOURCE_USERNAME: user
-      SPRING_DATASOURCE_PASSWORD: password
-      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka1:9092,kafka2:9093,kafka3:9094
-    networks:
-      - bank-network
+    deploy:
+      replicas: 3
 
 volumes:
+  zookeeper-data:
+  zookeeper-log:
+  kafka1-data:
+  kafka2-data:
+  kafka3-data:
   postgres-data:
 
 networks:
