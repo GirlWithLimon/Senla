@@ -7,6 +7,8 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class TransferListener {
 
@@ -18,17 +20,15 @@ public class TransferListener {
         this.transferProcessor = transferProcessor;
     }
 
-    @KafkaListener(topics = "transfers", groupId = "${spring.kafka.consumer.group-id}", concurrency = "1")
-    public void listen(ConsumerRecord<String, String> record, Acknowledgment ack) {
-        String json = record.value();
-        log.info("Received message from partition {} offset {}: {}",
-                record.partition(), record.offset(), json);
-        try {
-            transferProcessor.processTransfer(json);
-            ack.acknowledge();
-            log.info("Message acknowledged");
-        } catch (Exception e) {
-            log.error("Error processing message, will not commit offset", e);
+    @KafkaListener(topics = "transfers", groupId = "${spring.kafka.consumer.group-id}")
+    public void listen(List<ConsumerRecord<String, String>> records, Acknowledgment ack) {
+        for (ConsumerRecord<String, String> record : records) {
+            try {
+                transferProcessor.processTransfer(record.value());
+            } catch (Exception e) {
+                log.error("Error processing message", e);
+            }
         }
+        ack.acknowledge();
     }
 }

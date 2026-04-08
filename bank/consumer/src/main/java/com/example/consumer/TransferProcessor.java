@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
 @Service
@@ -37,48 +36,49 @@ public class TransferProcessor {
         try {
             transfer = objectMapper.readValue(json, Transfer.class);
         } catch (Exception e) {
-            log.error("Failed to parse JSON: {}", json, e);
+            log.error("Ошибка парсинга JSON: {}", json, e);
             return;
         }
 
         String transferId = transfer.getId();
-        log.info("Processing transfer {}", transferId);
+        log.info("Процесс передачи {}", transferId);
 
         if (transferRepository.existsById(transferId)) {
-            log.info("Transfer {} already processed, skipping", transferId);
+            log.info("Передача {} уже в процессе, пропускаем", transferId);
             return;
         }
-
-        Optional<Account> fromOpt = accountRepository.findById(transfer.getFromAccountId());
-        Optional<Account> toOpt = accountRepository.findById(transfer.getToAccountId());
+        Transfer record = new Transfer(
+                transferId,
+                transfer.getFromAccountId(),
+                transfer.getToAccountId(),
+                transfer.getAmount(),
+                "В процессе"
+        );
+        transferRepository.save(record);
+        Optional<Account> fromOpt = accountRepository.findByIdWithLock(transfer.getFromAccountId());
+        Optional<Account> toOpt = accountRepository.findByIdWithLock(transfer.getToAccountId());
 
         if (fromOpt.isEmpty() || toOpt.isEmpty()) {
-            log.error("Account not found for transfer {}: from={}, to={}",
+            log.error("Аккаунт не найден для передачи {}: из={}, в={}",
                     transferId, transfer.getFromAccountId(), transfer.getToAccountId());
+            transferRepository.updateStatus(transferId, "Ошибка, аккаунт не найден!");
             return;
         }
 
         Account from = fromOpt.get();
         if (from.getBalance().compareTo(transfer.getAmount()) < 0) {
-            log.error("Insufficient funds for transfer {}: account {} balance {} < amount {}",
+            log.error("Недостаточно средств для перевода {}: аккаунт {} баланс {} < суммы {}",
                     transferId, from.getId(), from.getBalance(), transfer.getAmount());
+            transferRepository.updateStatus(transferId, "Ошибка, недостаточно средств!");
             return;
         }
 
-        Transfer errorRecord = new Transfer(
-                transferId,
-                transfer.getFromAccountId(),
-                transfer.getToAccountId(),
-                transfer.getAmount(),
-                "error"
-        );
-        transferRepository.save(errorRecord);
-
         try {
             performTransferAndUpdateStatus(transfer);
-            log.info("Transfer {} processed successfully", transferId);
+            log.info("Процесс перевода {} прошел успешно", transferId);
         } catch (Exception e) {
-            log.error("Transaction failed for transfer {} (record saved with error status)", transferId, e);
+            log.error("Перевод {} не удался", transferId, e);
+            transferRepository.updateStatus(transferId, "Ошибка: " + e.getMessage());
         }
     }
 
@@ -86,6 +86,6 @@ public class TransferProcessor {
     protected void performTransferAndUpdateStatus(Transfer transfer) {
         accountRepository.updateBalance(transfer.getFromAccountId(), transfer.getAmount().negate());
         accountRepository.updateBalance(transfer.getToAccountId(), transfer.getAmount());
-        transferRepository.updateStatus(transfer.getId(), "ready");
+        transferRepository.updateStatus(transfer.getId(), "выполнен");
     }
 }

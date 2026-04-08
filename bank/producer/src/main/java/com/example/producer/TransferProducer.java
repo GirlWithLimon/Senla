@@ -34,12 +34,11 @@ public class TransferProducer {
     }
 
     @Scheduled(fixedDelay = 200, initialDelay = 5000)
-    @Transactional
     public void generateAndSend() {
         try {
             List<Long> accountIds = new ArrayList<>(accountInitializer.getAccountMap().keySet());
             if (accountIds.size() < 2) {
-                log.warn("Not enough accounts to generate transfer");
+                log.warn("Недостаточно учетных записей для осуществления перевода");
                 return;
             }
             long fromId = accountIds.get(random.nextInt(accountIds.size()));
@@ -58,11 +57,10 @@ public class TransferProducer {
             transfer.setAmount(amount);
 
             String json = objectMapper.writeValueAsString(transfer);
-            String key = String.valueOf(transferId.hashCode());
-            kafkaTemplate.send("transfers", key, json);
-            log.info("Sent transfer {}: from {} to {} amount {}", transferId, fromId, toId, amount);
+            kafkaTemplate.send("transfers", json);
+            log.info("Установка проводника {}: из {} в {} суммы {}", transferId, fromId, toId, amount);
         } catch (Exception e) {
-            log.error("Failed to send transfer", e);
+            log.error("Ошибка при установке проводника", e);
             throw new RuntimeException(e);
         }
     }

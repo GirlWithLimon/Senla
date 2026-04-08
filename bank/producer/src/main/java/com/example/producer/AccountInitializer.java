@@ -32,13 +32,13 @@ public class AccountInitializer implements ApplicationRunner {
                 accounts.add(acc);
             }
             accountRepository.saveAll(accounts);
-            System.out.println("Created 1000 accounts");
+            System.out.println("Создано 1000 аккаунтов");
         }
         List<Account> allAccounts = accountRepository.findAll();
         for (Account acc : allAccounts) {
             accountMap.put(acc.getId(), acc);
         }
-        System.out.println("Loaded " + accountMap.size() + " accounts into memory");
+        System.out.println("Загружено " + accountMap.size() + " аккаунтов в память");
     }
 
     public Map<Long, Account> getAccountMap() {

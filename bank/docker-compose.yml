@@ -6,9 +6,6 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
       ZOOKEEPER_AUTOPURGE_SNAPRETAINCOUNT: 3
       ZOOKEEPER_AUTOPURGE_PURGEINTERVAL: 1
-    volumes:
-      - zookeeper-data:/var/lib/zookeeper/data
-      - zookeeper-log:/var/lib/zookeeper/log
     networks:
       - bank-network
 
@@ -29,8 +26,6 @@ services:
       KAFKA_MIN_INSYNC_REPLICAS: 2
     ports:
       - "9092:9092"
-    volumes:
-      - kafka1-data:/var/lib/kafka/data
     networks:
       - bank-network
     healthcheck:
@@ -53,8 +48,6 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
     ports:
       - "9093:9092"
-    volumes:
-      - kafka2-data:/var/lib/kafka/data
     networks:
       - bank-network
     healthcheck:
@@ -77,8 +70,6 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 2
     ports:
       - "9094:9092"
-    volumes:
-      - kafka3-data:/var/lib/kafka/data
     networks:
       - bank-network
     healthcheck:
@@ -98,11 +89,10 @@ services:
         condition: service_healthy
     entrypoint: ["/bin/sh", "-c"]
     command: |
-      "
       echo 'Waiting for all Kafka brokers...'
-      sleep 15
+      sleep 30
       
-      echo 'Creating topic transfers with 3 partitions, replication factor 3...'
+      echo 'Creating topic transfers with 3 partitions...'
       kafka-topics --create --if-not-exists --topic transfers \
         --bootstrap-server kafka1:9092 \
         --partitions 3 \
@@ -113,7 +103,6 @@ services:
       echo 'Topic details:'
       kafka-topics --describe --topic transfers --bootstrap-server kafka1:9092
       echo 'Topic created successfully.'
-      "
     networks:
       - bank-network
 
@@ -168,11 +157,6 @@ services:
       replicas: 3
 
 volumes:
-  zookeeper-data:
-  zookeeper-log:
-  kafka1-data:
-  kafka2-data:
-  kafka3-data:
   postgres-data:
 
 networks:
