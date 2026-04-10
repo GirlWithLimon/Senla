@@ -74,7 +74,9 @@ public class TransferProcessor {
         }
 
         try {
-            performTransferAndUpdateStatus(transfer);
+            accountRepository.updateBalance(transfer.getFromAccountId(), transfer.getAmount().negate());
+            accountRepository.updateBalance(transfer.getToAccountId(), transfer.getAmount());
+            transferRepository.updateStatus(transfer.getId(), "выполнен");
             log.info("Процесс перевода {} прошел успешно", transferId);
         } catch (Exception e) {
             log.error("Перевод {} не удался", transferId, e);
@@ -84,8 +86,6 @@ public class TransferProcessor {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     protected void performTransferAndUpdateStatus(Transfer transfer) {
-        accountRepository.updateBalance(transfer.getFromAccountId(), transfer.getAmount().negate());
-        accountRepository.updateBalance(transfer.getToAccountId(), transfer.getAmount());
-        transferRepository.updateStatus(transfer.getId(), "выполнен");
+
     }
 }
