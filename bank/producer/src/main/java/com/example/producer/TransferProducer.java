@@ -32,7 +32,7 @@ public class TransferProducer {
         this.accountInitializer = accountInitializer;
         this.objectMapper = objectMapper;
     }
-
+    @Transactional
     @Scheduled(fixedDelay = 200, initialDelay = 5000)
     public void generateAndSend() {
         try {

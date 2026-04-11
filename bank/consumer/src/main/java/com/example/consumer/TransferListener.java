@@ -21,12 +21,12 @@ public class TransferListener {
     }
 
     @KafkaListener(topics = "transfers", groupId = "${spring.kafka.consumer.group-id}")
-    public void listen(List<ConsumerRecord<String, String>> records, Acknowledgment ack) {
-        for (ConsumerRecord<String, String> record : records) {
+    public void listen(List<String> messages, Acknowledgment ack) {
+        for (String message : messages) {
             try {
-                transferProcessor.processTransfer(record.value());
+                transferProcessor.processTransfer(message);
             } catch (Exception e) {
-                log.error("Error processing message", e);
+                log.error("Ошибка при обработке: {}", message, e);
             }
         }
         ack.acknowledge();

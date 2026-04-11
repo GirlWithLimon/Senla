@@ -26,6 +26,7 @@ spring:
         fetch.max.wait.ms: 500
     listener:
       ack-mode: manual_immediate
+      type: batch
 
 logging:
   level:
