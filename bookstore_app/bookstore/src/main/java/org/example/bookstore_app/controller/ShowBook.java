@@ -81,7 +81,9 @@ public class ShowBook implements IShowBook {
 
         System.out.println("Книги по id:");
         sortedBooks.forEach(book ->
-                System.out.println(book.getId() + " - " + book.getName() + " " + book.getAuthor()));
+                System.out.println(book.getId() + " - "
+                        + book.getName() + " "
+                        + book.getAuthor()));
     }
 
     @Override
@@ -194,19 +196,6 @@ public class ShowBook implements IShowBook {
                         book.getAuthor() + " - " + book.getPrice() + " руб.");
             }
         }
-    }
-
-
-
-     public boolean isOldBook(BookCopy bookCopy) {
-        LocalDate thresholdDate = LocalDate.now().minusMonths(config.getMonthsForOldBook());
-        return bookCopy.getArrivalDate().isBefore(thresholdDate);
-    }
-
-    public long getOldBooksCount() {
-        return stockService.getBooksCopy().stream()
-                .filter(this::isOldBook)
-                .count();
     }
 
 }

@@ -223,7 +223,7 @@
             <version>1.17.8</version>
             <scope>test</scope>
         </dependency>
-    </dependencies> 
+    </dependencies>
 
     <build>
         <finalName>bookstore</finalName>
