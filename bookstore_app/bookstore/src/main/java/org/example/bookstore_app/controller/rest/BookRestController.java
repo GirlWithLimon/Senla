@@ -46,6 +46,7 @@ public class BookRestController {
         Book book = stockService.getBooksById(id);
         if (book == null) {
             throw new BookNotFoundException("Книга с ID " + id + " не найдена");
+
         }
 
         return ResponseEntity.ok(convertToDTO(book));

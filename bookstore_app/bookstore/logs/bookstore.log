@@ -1654,3 +1654,119 @@ Caused by: java.lang.IllegalStateException: No ServletContext set
 	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
 	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.lambda$instantiate$0(SimpleInstantiationStrategy.java:171)
 	... 20 common frames omitted
+11:28:53.43 [main] ERROR o.e.b.e.GlobalExceptionHandler-Book not found: Книга с ID 1 не найдена
+11:29:59.76 [main] ERROR o.e.b.e.GlobalExceptionHandler-Book not found: Книга с ID 1 не найдена
+11:36:41.76 [main] ERROR o.e.b.e.GlobalExceptionHandler-Invalid JSON format: Required request body is missing: public org.springframework.http.ResponseEntity<org.example.bookstore_app.dto.BookResponseDTO> org.example.bookstore_app.controller.rest.BookRestController.createBook(org.example.bookstore_app.dto.BookRequestDTO)
+11:44:17.08 [main] ERROR o.e.b.e.GlobalExceptionHandler-Validation error: {name=Название книги обязательно}
+11:46:17.02 [main] ERROR o.e.b.e.GlobalExceptionHandler-Validation error: {name=Название книги обязательно}
+11:46:52.88 [main] ERROR o.e.b.e.GlobalExceptionHandler-Validation error: {name=Название книги обязательно}
+11:51:24.74 [main] ERROR o.e.b.e.GlobalExceptionHandler-Validation error: {name=Название книги обязательно}
+11:52:31.10 [main] ERROR o.e.b.e.GlobalExceptionHandler-Validation error: {name=Название книги обязательно}
+11:56:12.43 [main] WARN  o.s.web.servlet.PageNotFound-No mapping for POST /1
+11:56:12.45 [main] ERROR o.e.b.e.GlobalExceptionHandler-Internal server error: No endpoint POST /1.
+org.springframework.web.servlet.NoHandlerFoundException: No endpoint POST /1.
+	at org.springframework.web.servlet.DispatcherServlet.noHandlerFound(DispatcherServlet.java:1305)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1067)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:914)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:547)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at org.springframework.test.web.servlet.TestDispatcherServlet.service(TestDispatcherServlet.java:72)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:614)
+	at org.springframework.mock.web.MockFilterChain$ServletFilterProxy.doFilter(MockFilterChain.java:165)
+	at org.springframework.mock.web.MockFilterChain.doFilter(MockFilterChain.java:132)
+	at org.springframework.test.web.servlet.MockMvc.perform(MockMvc.java:201)
+	at testforcontrollers.TestBookRestController.putBookGood(TestBookRestController.java:189)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:104)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:565)
+	at org.junit.platform.commons.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:728)
+	at org.junit.jupiter.engine.execution.MethodInvocation.proceed(MethodInvocation.java:60)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$ValidatingInvocation.proceed(InvocationInterceptorChain.java:131)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.intercept(TimeoutExtension.java:156)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestableMethod(TimeoutExtension.java:147)
+	at org.junit.jupiter.engine.extension.TimeoutExtension.interceptTestMethod(TimeoutExtension.java:86)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker$ReflectiveInterceptorCall.lambda$ofVoidMethod$0(InterceptingExecutableInvoker.java:103)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.lambda$invoke$0(InterceptingExecutableInvoker.java:93)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain$InterceptedInvocation.proceed(InvocationInterceptorChain.java:106)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.proceed(InvocationInterceptorChain.java:64)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.chainAndInvoke(InvocationInterceptorChain.java:45)
+	at org.junit.jupiter.engine.execution.InvocationInterceptorChain.invoke(InvocationInterceptorChain.java:37)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:92)
+	at org.junit.jupiter.engine.execution.InterceptingExecutableInvoker.invoke(InterceptingExecutableInvoker.java:86)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.lambda$invokeTestMethod$7(TestMethodTestDescriptor.java:218)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.invokeTestMethod(TestMethodTestDescriptor.java:214)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:139)
+	at org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor.execute(TestMethodTestDescriptor.java:69)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:151)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1604)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.invokeAll(SameThreadHierarchicalTestExecutorService.java:41)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$6(NodeTestTask.java:155)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$8(NodeTestTask.java:141)
+	at org.junit.platform.engine.support.hierarchical.Node.around(Node.java:137)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.lambda$executeRecursively$9(NodeTestTask.java:139)
+	at org.junit.platform.engine.support.hierarchical.ThrowableCollector.execute(ThrowableCollector.java:73)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.executeRecursively(NodeTestTask.java:138)
+	at org.junit.platform.engine.support.hierarchical.NodeTestTask.execute(NodeTestTask.java:95)
+	at org.junit.platform.engine.support.hierarchical.SameThreadHierarchicalTestExecutorService.submit(SameThreadHierarchicalTestExecutorService.java:35)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestExecutor.execute(HierarchicalTestExecutor.java:57)
+	at org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine.execute(HierarchicalTestEngine.java:54)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:198)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:169)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:93)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.lambda$execute$0(EngineExecutionOrchestrator.java:58)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.withInterceptedStreams(EngineExecutionOrchestrator.java:141)
+	at org.junit.platform.launcher.core.EngineExecutionOrchestrator.execute(EngineExecutionOrchestrator.java:57)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:103)
+	at org.junit.platform.launcher.core.DefaultLauncher.execute(DefaultLauncher.java:85)
+	at org.junit.platform.launcher.core.DelegatingLauncher.execute(DelegatingLauncher.java:47)
+	at org.junit.platform.launcher.core.SessionPerRequestLauncher.execute(SessionPerRequestLauncher.java:63)
+	at com.intellij.junit5.JUnit5IdeaTestRunner.startRunnerWithArgs(JUnit5IdeaTestRunner.java:66)
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater$1.execute(IdeaTestRunner.java:38)
+	at com.intellij.rt.execution.junit.TestsRepeater.repeat(TestsRepeater.java:11)
+	at com.intellij.rt.junit.IdeaTestRunner$Repeater.startRunnerWithArgs(IdeaTestRunner.java:35)
+	at com.intellij.rt.junit.JUnitStarter.prepareStreamsAndStart(JUnitStarter.java:237)
+	at com.intellij.rt.junit.JUnitStarter.main(JUnitStarter.java:58)
+14:05:32.26 [main] ERROR o.e.b.e.GlobalExceptionHandler-Book not found: Книга с ID 1 не найдена
+14:06:31.58 [main] ERROR o.e.b.e.GlobalExceptionHandler-Book not found: Книга с ID 1 не найдена
+14:07:37.32 [main] ERROR o.e.b.e.GlobalExceptionHandler-Book not found: Книга с ID 1 не найдена
+14:09:02.23 [main] ERROR o.e.b.e.GlobalExceptionHandler-Book not found: Книга с ID 1 не найдена
+14:09:25.27 [main] ERROR o.e.b.e.GlobalExceptionHandler-Book not found: Книга с ID 1 не найдена
+14:11:28.48 [main] ERROR o.e.b.e.GlobalExceptionHandler-Validation error: {name=Название книги обязательно}
+14:13:04.44 [main] ERROR o.e.b.e.GlobalExceptionHandler-Validation error: {name=Название книги обязательно}
+14:17:24.84 [main] ERROR o.e.b.e.GlobalExceptionHandler-Validation error: {name=Название книги обязательно}
+14:18:31.97 [main] ERROR o.e.b.e.GlobalExceptionHandler-Book not found: Книга с ID 1 не найдена
+14:18:32.06 [main] ERROR o.e.b.e.GlobalExceptionHandler-Validation error: {name=Название книги обязательно}
+14:18:32.10 [main] ERROR o.e.b.e.GlobalExceptionHandler-Book not found: Книга с ID 1 не найдена
+14:18:32.16 [main] ERROR o.e.b.e.GlobalExceptionHandler-Validation error: {name=Название книги обязательно}
+14:19:34.90 [main] ERROR o.e.b.e.GlobalExceptionHandler-Book not found: Книга с ID 1 не найдена
+14:19:34.98 [main] ERROR o.e.b.e.GlobalExceptionHandler-Validation error: {name=Название книги обязательно}
+14:19:35.01 [main] ERROR o.e.b.e.GlobalExceptionHandler-Book not found: Книга с ID 1 не найдена
+14:19:35.06 [main] ERROR o.e.b.e.GlobalExceptionHandler-Validation error: {name=Название книги обязательно}
+14:50:37.74 [main] ERROR o.e.b.e.GlobalExceptionHandler-Book not found: Книга с ID 1 не найдена
+14:52:20.60 [main] ERROR o.e.b.e.GlobalExceptionHandler-Book not found: Книга с ID 1 не найдена
+14:52:41.99 [main] ERROR o.e.b.e.GlobalExceptionHandler-Book not found: Книга с ID 1 не найдена
+14:53:39.23 [main] ERROR o.e.b.e.GlobalExceptionHandler-Book not found: Книга с ID 1 не найдена
+14:53:39.32 [main] ERROR o.e.b.e.GlobalExceptionHandler-Validation error: {name=Название книги обязательно}
+14:53:39.36 [main] ERROR o.e.b.e.GlobalExceptionHandler-Book not found: Книга с ID 1 не найдена
+14:53:39.39 [main] ERROR o.e.b.e.GlobalExceptionHandler-Book not found: Книга с ID 1 не найдена
+14:53:39.50 [main] ERROR o.e.b.e.GlobalExceptionHandler-Validation error: {name=Название книги обязательно}
